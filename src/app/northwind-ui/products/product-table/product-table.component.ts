@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject, AfterViewInit, inject, OnDestroy, ContentChild, ElementRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Product } from './models/products';
+import { ProductModel } from '../../../utilities/models/product';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -35,13 +35,23 @@ import { ConfirmDeleteDirective } from '../../../utilities/directives/safe-link/
 })
 export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild(MatPaginator, {static: true})
-  paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set paginator(mp: MatPaginator) {
+    if (mp) {
+      this.dataSource.paginator = mp;
+    }
+  }
+
+  @ViewChild(MatSort) set sort(ms: MatSort) {
+    if (ms) {
+      this.dataSource.sort = ms;
+    }
+  }
+  //paginator!: MatPaginator;
   
-  @ViewChild(MatSort, {static: true}) sort!: MatSort;
   @ContentChild('h1') title!: ElementRef<HTMLElement>;
 
   isLoading: boolean = false;
+  isChildActive: boolean = false;
 
 
   displayedColumns: string[] = [
@@ -54,9 +64,9 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
     'delete'
   ];
 
-  products$!: Observable<Product[]>;
-  products: Product[] = [];
-  dataSource: MatTableDataSource<Product> = new MatTableDataSource();
+  products$!: Observable<ProductModel[]>;
+  products: ProductModel[] = [];
+  dataSource: MatTableDataSource<ProductModel> = new MatTableDataSource();
   errorMessage:any;
   productID!:number;
   stars:string[] = [];
@@ -90,8 +100,6 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productsList = this.products$.subscribe(data => {
       this.isLoading = false;
       this.dataSource.data = data;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
     });
   }
 
@@ -103,74 +111,32 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
     if(this.productsList) this.productsList.unsubscribe();
   }
 
-  getProducts(): Observable<Product[]> {
+  getProducts(): Observable<ProductModel[]> {
     return this._productsService.getProducts().pipe(
       map(products => products),
     );
   }
   
-  closeDialog($event:boolean){
+ /* closeDialog($event:boolean){
     this.isOpenDialog = $event;
   }
 
   AddDialog(){
     this.isOpenDialog = true;
   }
+    */
 
   onSelectProductDetails(productId:string){
     this.router.navigate(['/products', 'details', productId], {
       queryParams: { isEdit: true }
     });
-    this.isOpenDialog = true;
   }
 
   onSelectNewProductDetails(){
-    this.router.navigate(['/products', 'details', 'new']);
-    this.isOpenDialog = true;
+    this.router.navigate(['/products', 'details', 'new']);;
   }
 
-/*  openDialog(): void {
-    const dialogRef = this.dialog.open(ProductTableDetailComponent, {
-      data: this.products$
-    });
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.maxWidth = 100;
-    dialogConfig.maxHeight = 500;
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed test');
-    });
-  }
-
-
-  deleteProduct(product:Product){
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '450px',
-      data: product
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-          this.getProducts();
-    });
-  }
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      data: this.products$
-    });
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.maxWidth = 500;
-    dialogConfig.maxHeight = 500;
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed test');
-    });
-  }
-*/
-
-  addRating(products:Product[]):void {
+  addRating(products:ProductModel[]):void {
   }
 
   deleteProduct($event:any){

@@ -1,0 +1,7 @@
+    @if(summary$ | async; as summary){
+        <div>
+        <p>Total products: {{ summary.total }}</p>
+        <p>Average price: {{ summary.avgPrice | number:'1.2-2' }}</p>
+        <p>Discontinued: {{ summary.discontinuedCount }}</p>
+        </div>
+    }
