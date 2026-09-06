@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import{Product} from '../models/products';
 
 import { ProductModel } from '../../../../utilities/models/product';
 import { ProductsService }from '../../../../utilities/services/product-table/products.service';
@@ -32,7 +31,7 @@ import { MatInputModule } from '@angular/material/input';
 export class ProductTableDetailComponent implements OnInit{
   productForm!:FormGroup;
   errorMessage!:string;
-  ratedProduct!:Product;
+  ratedProduct!:ProductModel;
   isEdit!:boolean;
   productId!:string;
   updateProduct!:ProductModel;

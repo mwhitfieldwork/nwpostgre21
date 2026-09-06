@@ -53,6 +53,11 @@ displayedColumns: string[] = [
 ];
 
 ngAfterViewInit(): void {
+  /* no subscribe in ngOnInit, no unsubscribe in ngOnDestroy, 
+  no subscription variable — the async pipe subscribes when 
+  he template renders and unsubscribes automatically when the 
+  component is destroyed. 
+  */
   this.orderList = this._orderHistoryService.get()
   .pipe(
     map(orders => {

@@ -9,6 +9,7 @@ import { Error404Component } from './shared/error/error404/error404.component';
 import { Error500Component } from './shared/error/error500/error500.component';
 import { TerritoryMapComponent } from './northwind-ui/territory-map/territory-map.component';
 import { DashboardResolver } from './utilities/resolvers/dashboard-resolver.resolver';
+import { ProductSummaryComponent } from './northwind-ui/products/product-summary/product-summary.component';
 
 export const routes: Routes = [
 
@@ -31,7 +32,8 @@ export const routes: Routes = [
     component: ProductTableComponent,
     children: [
       { path: 'details/new', component: ProductTableDetailComponent },
-      { path: 'details/:id', component: ProductTableDetailComponent }
+      { path: 'details/:id', component: ProductTableDetailComponent },
+      { path: 'summary', component: ProductSummaryComponent }
     ]
   },
 
