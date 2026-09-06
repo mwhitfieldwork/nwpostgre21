@@ -11,6 +11,7 @@ import { filter, map, take } from 'rxjs/operators';
 import { ProductsService } from '../../../utilities/services/product-table/products.service';
 import { ProductTableDetailComponent } from "./product-table-detail/product-table-detail.component";
 import { ConfirmDeleteDirective } from '../../../utilities/directives/safe-link/confirmDelete.directive';
+import { RatingComponent } from "../../../shared/rating/rating.component";
 
 
 @Component({
@@ -22,16 +23,17 @@ import { ConfirmDeleteDirective } from '../../../utilities/directives/safe-link/
     ],
     standalone: true,
     imports: [
-        FormsModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        ReactiveFormsModule,
-        RouterOutlet,
-        RouterLink,
-        ProductTableDetailComponent,
-        ConfirmDeleteDirective
-    ]
+    FormsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    ReactiveFormsModule,
+    RouterOutlet,
+    RouterLink,
+    ProductTableDetailComponent,
+    ConfirmDeleteDirective,
+    RatingComponent
+]
 })
 export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 

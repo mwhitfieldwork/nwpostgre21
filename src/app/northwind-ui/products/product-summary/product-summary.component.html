@@ -1,7 +1,12 @@
-    @if(summary$ | async; as summary){
+@if(summary$ | async; as summary){
+  <h1>Product Details</h1>
+  <div id="main-wrapper">
+        <article>Product Edit Form</article>
         <div>
-        <p>Total products: {{ summary.total }}</p>
-        <p>Average price: {{ summary.avgPrice | number:'1.2-2' }}</p>
-        <p>Discontinued: {{ summary.discontinuedCount }}</p>
+            <p>Total products: {{ summary.total }}</p>
+            <p>Average price: {{ summary.avgPrice | number:'1.2-2' }}</p>
+            <p>Discontinued: {{ summary.discontinuedCount }}</p>
         </div>
-    }
+        <button class="btn btn-secondary" (click)="goBack()">Back</button>
+    </div>
+}

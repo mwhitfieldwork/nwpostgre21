@@ -1,6 +1,7 @@
 
   <div id="main-wrapper">
-    <div>
+    <article  class="product-classification">Product Edit Form</article>
+    <div class="product-info-container">
       <form [formGroup]="productForm" cdkFocusInitial>
         <div class="form-group">
           <mat-form-field  class="custom-field">
@@ -79,17 +80,22 @@
                 </select> -->
               </div>
 
-              @if (isEdit) {
-                <button class="btn btn-success"
-                  (click)="update(productForm)"
-                  [disabled]="!productForm.valid"
-                >Update</button>
-              }
-              @if (!isEdit) {
-                <button class="btn btn-success"
-                  (click)="create(productForm)"
-                >Add</button>
-              }
+              <section class="nav-actions">
+                <div class="crud-btns">
+                    @if (isEdit) {
+                      <button class="btn btn-success"
+                        (click)="update(productForm)"
+                        [disabled]="!productForm.valid"
+                      >Update</button>
+                    }
+                    @if (!isEdit) {
+                      <button class="btn btn-success"
+                        (click)="create(productForm)"
+                      >Add</button>
+                    }
+                </div>
+                <button class="btn btn-secondary" (click)="goBack()">Back</button>
+              </section>
             </form>
           </div>
         </div>

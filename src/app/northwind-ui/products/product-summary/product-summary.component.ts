@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ProductsService } from '../../../utilities/services/product-table/products.service';
 import { map } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 @Component({
   selector: 'app-product-summary',
   imports: [CommonModule],
@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 })
 export class ProductSummaryComponent {
   private productsService = inject(ProductsService);
+
+  constructor(private location: Location) {}
 
   /*
   No ngOnInit, no ngOnDestroy, no subscription variable — 
@@ -25,4 +27,6 @@ export class ProductSummaryComponent {
       discontinuedCount: products.filter(p => p.discontinued).length
     }))
   );
+
+  goBack() { this.location.back(); }
 }
