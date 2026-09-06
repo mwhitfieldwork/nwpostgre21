@@ -8,7 +8,7 @@ import { ProductsService }from '../../../../utilities/services/product-table/pro
 import { Category } from '../../../../utilities/models/category';
 import { fromEvent,Observable, throwError } from 'rxjs';
 import { catchError, map, pluck } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { StockCategoryService } from '../../../../utilities/services/category-stock/category-stock.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,7 +44,9 @@ export class ProductTableDetailComponent implements OnInit{
   constructor(private fb:FormBuilder,
               private route:ActivatedRoute,
               private router:Router,
-              private _productsService: ProductsService) { }
+              private _productsService: ProductsService,
+              private location: Location
+            ) { }
 
   ngOnInit(): void {
     this.route.queryParams.pipe(pluck('isEdit')).subscribe(isEdit => {
@@ -72,6 +74,7 @@ export class ProductTableDetailComponent implements OnInit{
     this.productForm.get('productname')?.valueChanges.subscribe( x => console.log(x));
 
   }
+    goBack() { this.location.back(); }
 
 
   getCategories():Observable<Category[]>{
@@ -137,6 +140,7 @@ export class ProductTableDetailComponent implements OnInit{
     this.router.navigate(['/products']);
   }
 }
+
 function ngAfterViewInit() {
   throw new Error('Function not implemented.');
 }

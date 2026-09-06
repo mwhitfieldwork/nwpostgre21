@@ -4,10 +4,22 @@
   
    #main-wrapper {
       background-color:#fff;
-      padding:20px 20px 0 20px;
       width:80%;
       max-width:1200px;
-      margin: 0 auto;
+      margin: 50px auto;
+
+    .product-info-container{
+        padding: 40px;
+    }
+
+    .product-classification {
+        font-size: 16px;
+        font-family: roboto, sans-serif;
+        margin-bottom: 20px;
+        background-color: #313334;
+        color: #fff;
+        padding: 10px;
+      }
   }
   
   .table-mat{
