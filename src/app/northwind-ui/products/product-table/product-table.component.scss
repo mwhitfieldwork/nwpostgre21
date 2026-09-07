@@ -1,65 +1,77 @@
+/* Background */
 ::ng-deep .mat-sidenav-content {
-    background-color: #f3f6f8; /* Change to your desired color */
-  }
-  
-   #main-wrapper {
-      background-color:#fff;
-      width:80%;
-      max-width:1200px;
-      margin: 50px auto;
+  background-color: #f3f6f8;
+}
 
-    .product-info-container{
-        padding: 40px;
-    }
+/* Product Name column — wide */
+::ng-deep .cdk-column-displayName {
+  flex: 3 !important;
+  min-width: 250px;
+}
 
-    .product-classification {
-        font-size: 16px;
-        font-family: roboto, sans-serif;
-        margin-bottom: 20px;
-        background-color: #313334;
-        color: #fff;
-        padding: 10px;
-      }
-  }
-  
-  .table-mat{
-      width:100%;
-      padding:1%;
-  }
-  
-  .table-mat tr:nth-child(even){
-     background-color: #f3f6f7; 
-  }
-  
-  .table-mat tr{
-      display:flex;
-  }
-  
-  .table-mat td, .table-mat th{    
-      display:flex; 
-      flex-grow: 1;
-      width:25%;
-      padding:10px 5px;
-  }
-  
-  @media screen and (max-width:595px){
-      .main-wrapper {
-          margin:0;
-          padding:0;
-      }
-  
-      .btn-success {
-          display:none;
-      }
-  
-      .table-mat td:nth-child(2), 
-      .table-mat th:nth-child(2),
-      .table-mat td:nth-child(3), 
-      .table-mat th:nth-child(3),
-      .table-mat td:nth-child(4), 
-      .table-mat th:nth-child(4)
-      {
-          display:none;
-      }
+/* Middle columns */
+::ng-deep .cdk-column-quantity,
+::ng-deep .cdk-column-unitPrice,
+::ng-deep .cdk-column-rating {
+  flex: 1 !important;
+}
+
+/* Actions column — far right, grouped */
+::ng-deep .cdk-column-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px;
+  flex: 0 0 120px !important;
+}
+
+/* Wrapper */
+#main-wrapper {
+  background-color:#fff;
+  width:80%;
+  max-width:1200px;
+  margin: 50px auto;
+
+  .product-info-container {
+    padding: 40px;
   }
 
+  .product-classification {
+    font-size: 16px;
+    font-family: roboto, sans-serif;
+    margin-bottom: 20px;
+    background-color: #313334;
+    color: #fff;
+    padding: 10px;
+  }
+}
+
+/* Remove old flex table rules */
+.table-mat {
+  width:100%;
+  padding:1%;
+}
+
+.table-mat tr:nth-child(even){
+  background-color: #f3f6f7;
+}
+
+/* Mobile hiding rules stay fine */
+@media screen and (max-width:595px){
+  .main-wrapper {
+    margin:0;
+    padding:0;
+  }
+
+  .btn-success {
+    display:none;
+  }
+
+  .table-mat td:nth-child(2),
+  .table-mat th:nth-child(2),
+  .table-mat td:nth-child(3),
+  .table-mat th:nth-child(3),
+  .table-mat td:nth-child(4),
+  .table-mat th:nth-child(4) {
+    display:none;
+  }
+}

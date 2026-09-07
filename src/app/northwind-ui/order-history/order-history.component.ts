@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { CustomNumberPipe } from '../../utilities/pipes/custom-number/custom-number.pipe';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { RatingComponent } from '../../shared/rating/rating.component';
+import { RowDisplayFactory } from '../../utilities/factories/row-display.factory';
 
 @Component({
     selector: 'app-order-history',
@@ -42,6 +43,8 @@ paginator!: MatPaginator;
 
 @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
+private rowFactory = inject(RowDisplayFactory);
+private statuses = ['Shipped', 'Pending', 'Processing'];
 
 displayedColumns: string[] = [
    'select',
@@ -60,16 +63,7 @@ ngAfterViewInit(): void {
   */
   this.orderList = this._orderHistoryService.get()
   .pipe(
-    map(orders => {
-      const statuses = ['Shipped', 'Pending', 'Processing'];
-
-      return orders.map((order, index) => ({
-        ...order,
-        pkID: index + 1,
-        status: statuses[Math.floor(Math.random() * statuses.length)],
-        rating: Math.floor(Math.random() * 81) + 20
-      }));
-    })
+    map(orders => this.rowFactory.createMany(orders, this.statuses))
   )
   .subscribe((data) => {
     this.dataSource.data = data;
