@@ -12,6 +12,7 @@ import { ProductsService } from '../../../utilities/services/product-table/produ
 import { ProductTableDetailComponent } from "./product-table-detail/product-table-detail.component";
 import { ConfirmDeleteDirective } from '../../../utilities/directives/safe-link/confirmDelete.directive';
 import { RatingComponent } from "../../../shared/rating/rating.component";
+import { RowDisplayFactory } from '../../../utilities/factories/row-display.factory';
 
 
 @Component({
@@ -51,6 +52,8 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   //paginator!: MatPaginator;
   
   @ContentChild('h1') title!: ElementRef<HTMLElement>;
+  private rowFactory = inject(RowDisplayFactory);
+  private statuses = ['In Stock', 'Low Stock', 'Backordered'];
 
   isLoading: boolean = false;
   isChildActive: boolean = false;
@@ -60,7 +63,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
     'displayName',
     'quantity',
     'price',
-    'discontinued',
+    //'discontinued',
     'rating',
     'edit',
     'delete'
@@ -115,18 +118,9 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getProducts(): Observable<ProductModel[]> {
     return this._productsService.getProducts().pipe(
-      map(products => products),
+      map(products => this.rowFactory.createMany(products, this.statuses))
     );
   }
-  
- /* closeDialog($event:boolean){
-    this.isOpenDialog = $event;
-  }
-
-  AddDialog(){
-    this.isOpenDialog = true;
-  }
-    */
 
   onSelectProductDetails(productId:string){
     this.router.navigate(['/products', 'details', productId], {
