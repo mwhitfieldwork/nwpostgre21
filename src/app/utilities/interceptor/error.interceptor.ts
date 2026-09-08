@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ToastsService } from '../utilities/services/toasts.service';
+import { ToastsService } from '../services/toasts.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

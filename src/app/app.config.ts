@@ -4,8 +4,9 @@ import { authConfig } from './auth.config';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { ErrorInterceptor } from './interceptor/error.interceptor';
+import { ErrorInterceptor } from './utilities/interceptor/error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { loadingInterceptor } from './utilities/interceptor/loader.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -14,6 +15,7 @@ provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
+        loadingInterceptor,
         (req, next) => {
           const interceptor = new ErrorInterceptor();
           return interceptor.intercept(req, { handle: next });
