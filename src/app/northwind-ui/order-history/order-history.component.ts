@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
-import { map, Subscription } from 'rxjs';
+import { map, Subscription, tap } from 'rxjs';
 import { OrderHistoryService } from '../../utilities/services/orders/order-history.service';
 import { OrderDetails } from '../../utilities/models/order-detail';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -9,7 +9,7 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormsModule } from '@angular/forms';
 import { CustomNumberPipe } from '../../utilities/pipes/custom-number/custom-number.pipe';
-import { DecimalPipe, NgClass } from '@angular/common';
+import { CommonModule, DecimalPipe, NgClass } from '@angular/common';
 import { RatingComponent } from '../../shared/rating/rating.component';
 import { RowDisplayFactory } from '../../utilities/factories/row-display.factory';
 
@@ -25,12 +25,13 @@ import { RowDisplayFactory } from '../../utilities/factories/row-display.factory
         CustomNumberPipe,
         DecimalPipe,
         RatingComponent,
-        NgClass
+        NgClass,
+        CommonModule
     ],
     templateUrl: './order-history.component.html',
     styleUrl: './order-history.component.scss'
 })
-export class OrderHistoryComponent implements AfterViewInit {
+export class OrderHistoryComponent {
 
 private _orderHistoryService = inject(OrderHistoryService)
 orderList!:Subscription;
@@ -38,10 +39,17 @@ dataSource: MatTableDataSource<OrderDetails> = new MatTableDataSource();
 selection = new SelectionModel<OrderDetails>(true, []);
 orderHistory: OrderDetails[] = [];
 
-@ViewChild(MatPaginator, {static: true})
-paginator!: MatPaginator;
+//@ViewChild(MatPaginator, {static: true})
+//paginator!: MatPaginator;
+//@ViewChild(MatSort, {static: true}) sort!: MatSort;
 
-@ViewChild(MatSort, {static: true}) sort!: MatSort;
+@ViewChild(MatPaginator) set paginator(mp: MatPaginator) {
+  if (mp) this.dataSource.paginator = mp;
+}
+
+@ViewChild(MatSort) set sort(ms: MatSort) {
+  if (ms) this.dataSource.sort = ms;
+}
 
 private rowFactory = inject(RowDisplayFactory);
 private statuses = ['Shipped', 'Pending', 'Processing'];
@@ -55,28 +63,34 @@ displayedColumns: string[] = [
   'status'
 ];
 
-ngAfterViewInit(): void {
-  /* no subscribe in ngOnInit, no unsubscribe in ngOnDestroy, 
-  no subscription variable — the async pipe subscribes when 
-  he template renders and unsubscribes automatically when the 
-  component is destroyed. 
-  */
-  this.orderList = this._orderHistoryService.get()
-  .pipe(
-    map(orders => this.rowFactory.createMany(orders, this.statuses))
-  )
-  .subscribe((data) => {
-    this.dataSource.data = data;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    console.log(data);
-  });
-}
+ /*ngAfterViewInit(): void {
+    no subscribe in ngOnInit, no unsubscribe in ngOnDestroy, 
+    no subscription variable — the async pipe subscribes when 
+    he template renders and unsubscribes automatically when the 
+    component is destroyed. 
+    
+    this.orderList = this._orderHistoryService.get()
+    .pipe(
+      map(orders => this.rowFactory.createMany(orders, this.statuses))
+    )
+    .subscribe((data) => {
+      this.dataSource.data = data;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      console.log(data);
+    });
+  }
 
   ngonDestroy(): void {
     if(this.orderList) this.orderList.unsubscribe();
   }
+*/
 
+  orders$ = this._orderHistoryService.get().pipe(
+    map(orders => this.rowFactory.createMany(orders, this.statuses)),
+    tap(rows => this.dataSource.data = rows)
+  );
+  
   addToEmailList(order:OrderDetails){
     this.orderHistory.push(order);
     //console.log(this.orderHistory, "Order added to email");

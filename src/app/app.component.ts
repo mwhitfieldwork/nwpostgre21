@@ -13,22 +13,24 @@ import { Authentication } from './utilities/models/authentication';
 import { UserSessionService } from './utilities/services/user-session/user-session.service';
 import { Visitor } from './utilities/models/visitor.model';
 import { DUMMY_USERS } from './utilities/models/DUMMY_USERS';
+import { LoadingSpinnerComponent } from "./shared/loader/site-wide-loader";
 @Component({
     selector: 'app-root',
     standalone: true,
     imports: [
-        RouterOutlet,
-        NavComponent,
-        MatSidenavModule,
-        MatListModule,
-        MatToolbarModule,
-        MatIconModule,
-        RouterLink,
-        DisplayLinkDirective,
-        NgClass,
-        RouterLinkActive,
-        UsersComponent
-    ],
+    RouterOutlet,
+    NavComponent,
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
+    MatIconModule,
+    RouterLink,
+    DisplayLinkDirective,
+    NgClass,
+    RouterLinkActive,
+    UsersComponent,
+    LoadingSpinnerComponent
+],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
