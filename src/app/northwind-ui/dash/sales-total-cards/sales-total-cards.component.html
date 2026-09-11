@@ -1,6 +1,6 @@
 <section class="dashboard-cards row ">
   <div class="col d-flex">
-    @for(total of salesData; track total.orderId; let i = $index;) {
+    @for(total of salesTotals; track total.orderId; let i = $index;) {
       <div class="dashboard-card h-100 w-100 total-orders">
         <article class="d-block gap-3">
           <h3 class="text-uppercase text-secondary">Total Orders</h3>

@@ -11,6 +11,11 @@ import { Drivers } from '../../utilities/models/drivers';
 import { BarChartComponent } from "./bar-chart/bar-chart.component";
 import { SalesTotalCardsComponent } from "./sales-total-cards/sales-total-cards.component";
 import { DatePickerFilterComponent } from "../../shared/date-picker-filter/date-picker-filter.component";
+import { DashboardService } from '../../utilities/services/dashboard/dashboard.service';
+import { map } from 'rxjs';
+import { SalesTotal } from '../../utilities/models/salesTotal';
+
+
 @Component({
     selector: 'app-dash',
     standalone: true,
@@ -35,19 +40,19 @@ export class DashComponent implements OnInit {
   backpackAverage:number = 1234.09;
   averageSaleCost:number = 23468.09;
   basicCost:number = 1180.09;
+  salesTotals: SalesTotal[] = [];
+
   drivers: Drivers[] = [
     {id:1, name: 'Water', cost: 185.2},
     {id:2, name: 'Coal', cost: 41.3},
     {id:3, name: 'Gas', cost: 12.2},
   ]
   private  _userSessionService = inject(UserSessionService);
+  private _dashService = inject(DashboardService)
   
   //the type for this property can only be one of the three 
   //specified union types
   currentStatus!: 'online' | 'offline'| 'unknown' 
-
-  //signal Effects
-  currentStatus_signal = signal<'online' | 'offline'| 'unknown'>('online')
   
   data: any;
   //isLoading = true;
@@ -66,6 +71,17 @@ export class DashComponent implements OnInit {
     });
   }
 
+  onDateRangeSelected(dateRange: { beginningDate: Date; endingDate: Date }) {
+    console.log('Selected date range:', dateRange);
+    this._dashService.getSalesTotals(dateRange.beginningDate.toISOString(), dateRange.endingDate.toISOString())
+    .subscribe({
+        next: (salesTotals) => {
+          this.salesTotals = salesTotals;
+          console.log('parent got:', salesTotals)
+        },
+        error: (err) => console.error(err)
+    })
+  }
 
 }
 

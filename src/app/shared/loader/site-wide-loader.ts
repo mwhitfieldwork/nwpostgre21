@@ -7,33 +7,34 @@ import { LoadingService } from '../../utilities/singletons/application-loader';
   selector: 'app-loading-spinner',
   standalone: true,
   imports: [CommonModule],
-  template: `
+  template:`
     @if (loadingService.isLoading$ | async) {
-      <div class="spinner-overlay">
-        <div class="spinner"></div>
+      <div class="loading-bar-container">
+        <div class="loading-bar"></div>
       </div>
     }
   `,
   styles: [`
-    .spinner-overlay {
+    .loading-bar-container {
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: 1px; /* match your header height */
+      left: 0;
+      right: 0;
+      height: 3px;
+      overflow: hidden;
+      background: transparent;
       z-index: 9999;
     }
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 5px solid #ccc;
-      border-top-color: #333;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    .loading-bar {
+      height: 100%;
+      width: 0%;
+      background: #b5ad3f;
+      animation: loading-grow 1.5s ease-out forwards;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @keyframes loading-grow {
+      0% { width: 0%; }
+      80% { width: 90%; }
+      100% { width: 90%; }
     }
   `]
 })

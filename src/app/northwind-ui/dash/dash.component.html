@@ -1,8 +1,9 @@
 
 <div class="dashboard-container row p-3">
 
-    <app-date-picker-filter></app-date-picker-filter>
-    <app-sales-total-cards></app-sales-total-cards>
+    <app-date-picker-filter 
+    (dateRangeSelected)="onDateRangeSelected($event)"></app-date-picker-filter>
+    <app-sales-total-cards [salesTotals]="salesTotals"></app-sales-total-cards>
 
     <section class="detail-information row">
 
