@@ -19,8 +19,12 @@
     </mat-date-range-input>
 
     <!-- The actual datepicker -->
-    <mat-date-range-picker #rangePicker></mat-date-range-picker>
-
+    <mat-date-range-picker #rangePicker>
+        <mat-date-range-picker-actions>
+            <button mat-button matDateRangePickerCancel>Cancel</button>
+            <button mat-button matDateRangePickerApply (click)="onApply()">Apply</button>
+        </mat-date-range-picker-actions>        
+    </mat-date-range-picker>
     </form>
 </div>
 

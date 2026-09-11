@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { DashboardService } from '../../../utilities/services/dashboard/dashboard.service';
 import { SalesTotal } from '../../../utilities/models/salesTotal';
 import { CurrencyPipe } from '@angular/common';
@@ -10,7 +10,8 @@ import { CurrencyPipe } from '@angular/common';
     templateUrl: './sales-total-cards.component.html',
     styleUrl: './sales-total-cards.component.scss'
 })
-export class SalesTotalCardsComponent implements OnInit {
+export class SalesTotalCardsComponent implements OnInit, OnChanges {
+@Input() salesTotals: SalesTotal[] = [];
 private _dashboardService = inject(DashboardService);
 
 salesData:SalesTotal[] = [];
@@ -25,6 +26,14 @@ icons = [
   'truck'
 ];
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['salesTotals'] && this.salesTotals.length === 0) {
+      this.beginningDate = new Date('1996-07-12').toISOString();
+      this.endingDate   = new Date('1997-07-12').toISOString();
+      this.getSalesTotals();
+    }
+  }
+
 ngOnInit() {
   this.getSalesTotals();
 }
@@ -32,11 +41,9 @@ ngOnInit() {
 getSalesTotals(){
   this._dashboardService.getSalesTotals(this.beginningDate, this.endingDate).subscribe({
     next: (data) => {
-      console.log('Sales Totals:', data);
-      this.salesData = data;
+      this.salesTotals = data;
     },
     error: (error) => {
-      console.error('Error fetching sales totals:', error);
     }
   });
 }
