@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, inject, OnInit, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -6,8 +6,8 @@ import { ProductModel } from '../../../../utilities/models/product';
 import { ProductsService }from '../../../../utilities/services/product-table/products.service';
 
 import { Category } from '../../../../utilities/models/category';
-import { fromEvent,Observable, throwError } from 'rxjs';
-import { catchError, map, pluck } from 'rxjs/operators';
+import { fromEvent, Observable, Subject, throwError } from 'rxjs';
+import { catchError, map, takeUntil } from 'rxjs/operators';
 import { CommonModule, Location } from '@angular/common';
 import { StockCategoryService } from '../../../../utilities/services/category-stock/category-stock.service';
 import { MatSelectModule } from '@angular/material/select';
@@ -28,7 +28,7 @@ import { MatInputModule } from '@angular/material/input';
     templateUrl: './product-table-detail.component.html',
     styleUrl: './product-table-detail.component.scss'
 })
-export class ProductTableDetailComponent implements OnInit{
+export class ProductTableDetailComponent implements OnInit, OnDestroy {
   productForm!:FormGroup;
   errorMessage!:string;
   ratedProduct!:ProductModel;
@@ -38,6 +38,7 @@ export class ProductTableDetailComponent implements OnInit{
   categories!:Category[];
   categories$!:Observable<Category[]>;
   private _categoryService = inject(StockCategoryService)
+  private destroy$ = new Subject<void>();
 
   @Output() closeDialog = new EventEmitter<boolean>();
 
@@ -49,11 +50,12 @@ export class ProductTableDetailComponent implements OnInit{
             ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.pipe(pluck('isEdit')).subscribe(isEdit => {
+    this.route.queryParams.
+    pipe(map(params => params['isEdit']), 
+    takeUntil(this.destroy$))
+    .subscribe(isEdit => {
       this.isEdit = isEdit === 'true'; 
     });
-
-    console.log(this.isEdit, 'This be edit');
 
     this.categories$ = this.getCategories();
     this.productForm = this.fb.group({
@@ -70,18 +72,22 @@ export class ProductTableDetailComponent implements OnInit{
     if(this.isEdit){
       this.callExistingProduct();
     }
-
-    this.productForm.get('productname')?.valueChanges.subscribe( x => console.log(x));
-
   }
-    goBack() { this.location.back(); }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  goBack() { 
+    this.location.back(); 
+  }
 
 
   getCategories():Observable<Category[]>{
     return this._categoryService.getCategories().pipe(
-      catchError((error, caught) => {
-        console.log(error);
-        return throwError(error);
+      catchError((error) => {
+        return throwError(() => error);
       })
     );
   }
@@ -91,7 +97,7 @@ export class ProductTableDetailComponent implements OnInit{
       "productName": productForm.value.productname,
       "quantityPerUnit": productForm.value.quantity,
       "unitPrice": productForm.value.unitPrice,
-      "CategoryId": productForm.value.category}
+      "CategoryId": Number(productForm.value.category)}
 
     this._productsService.updateProduct(productUpdate, this.productId).subscribe(product => {
       console.log(product);
@@ -103,9 +109,8 @@ export class ProductTableDetailComponent implements OnInit{
     console.log(payload.value);
 
     let newProduct = {
-      categoryId: 1,
+      categoryId: Number(payload.value.category),
       discontinued: false,
-      productId: 0,
       productName: payload.value.productname,
       quantityPerUnit: payload.value.quantity,
       reorderLevel: 0,
@@ -114,7 +119,7 @@ export class ProductTableDetailComponent implements OnInit{
       unitsInStock: 0,
       unitsOnOrder: 0
     }
-
+    console.log(newProduct, '---- new PRODuct');
     this._productsService.createProduct(newProduct).subscribe(product => {
       console.log(product); 
       this.router.navigate(['/products']);
@@ -131,17 +136,12 @@ export class ProductTableDetailComponent implements OnInit{
       this.productForm.get('quantity')?.setValue(this.ratedProduct.quantityPerUnit);
       this.productForm.get('unitPrice')?.setValue(this.ratedProduct.unitPrice);
     },
-    error => this.errorMessage = <any>error)
-    
+    error => this.errorMessage = error?.message ?? 'Failed to load product')
   }
 
   closeDialogBox(){
     //this.closeDialog.emit(false);
     this.router.navigate(['/products']);
   }
-}
-
-function ngAfterViewInit() {
-  throw new Error('Function not implemented.');
 }
 
