@@ -1,5 +1,5 @@
 import { Inject, inject, Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, of, BehaviorSubject, throwError, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap, map, take } from 'rxjs/operators'
 import { ProductModel } from '../../../utilities/models/product';
@@ -19,6 +19,8 @@ const httpOptions = {
 })
 export class ProductsService {
 private _http = inject(HttpClient);
+private refreshSource = new Subject<void>();
+refresh$ = this.refreshSource.asObservable();
 
   url:string = environment.apiUrl + '/api';
   errorMessage:any;
@@ -26,9 +28,8 @@ private _http = inject(HttpClient);
   getProducts(): Observable<ProductModel[]> {
     var response = this._http.get<ProductModel[]>(`${this.url}/Product`)
       .pipe(
-        map(products => products.slice(0, 10)), 
+        map(products =>  products.sort((a, b) => b.productId - a.productId)), 
         tap(items => {
-          //console.log(this.url)
         }),
         catchError(this.handleError),
       )
@@ -50,12 +51,10 @@ private _http = inject(HttpClient);
   }
 
   getProduct(productId: string): Observable<ProductModel> {
-    //let url = `${this.url}/Productw/${productId}`; fake 404 error
     let url = `${this.url}/Product/${productId}`;
     var response = this._http.get<ProductModel>(url)
       .pipe(
         tap(item => {
-          //console.log(item)
         }),
         catchError(this.handleError),
       )
@@ -94,6 +93,10 @@ private _http = inject(HttpClient);
       }
     });
 
+  }
+
+  notifyProductsChanged() {
+    this.refreshSource.next();
   }
 
   private handleError(error: Response) {

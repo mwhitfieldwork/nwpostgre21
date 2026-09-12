@@ -1,6 +1,7 @@
 import { OrderDetails } from "./order-detail";
 
 export interface ProductModel {
+    productId:number;
     categoryId: number;
     discontinued?: boolean;
     productName: string;
