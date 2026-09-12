@@ -93,14 +93,17 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
   }
 
   update(productForm: FormGroup){
-    var productUpdate = {...this.updateProduct, "productId": this.productId,
+    var productUpdate = {...this.ratedProduct, 
+      "productId": Number(this.productId),
       "productName": productForm.value.productname,
       "quantityPerUnit": productForm.value.quantity,
       "unitPrice": productForm.value.unitPrice,
       "CategoryId": Number(productForm.value.category)}
 
+    console.log(productUpdate, '--- Produ Update');
+
     this._productsService.updateProduct(productUpdate, this.productId).subscribe(product => {
-      console.log(product);
+      this._productsService.notifyProductsChanged();
       this.router.navigate(['/products']);
     })
   }
@@ -121,16 +124,16 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
     }
     console.log(newProduct, '---- new PRODuct');
     this._productsService.createProduct(newProduct).subscribe(product => {
-      console.log(product); 
+      this._productsService.notifyProductsChanged();
       this.router.navigate(['/products']);
     });
   }
 
   callExistingProduct(){
-    const prodId = this.route.snapshot.paramMap.get('id') ?? '';
+    this.productId = this.route.snapshot.paramMap.get('id') ?? '';
     //const prodId = '999' //force 500;
 
-    this._productsService.getProduct(prodId).subscribe(product => { 
+    this._productsService.getProduct(this.productId).subscribe(product => { 
       this.ratedProduct = product;
       this.productForm.get('productname')?.setValue(this.ratedProduct.productName)
       this.productForm.get('quantity')?.setValue(this.ratedProduct.quantityPerUnit);

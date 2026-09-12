@@ -7,7 +7,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig} from '@angular/material/dialog'
 import {FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray, ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map, startWith, switchMap, take } from 'rxjs/operators';
 import { ProductsService } from '../../../utilities/services/product-table/products.service';
 import { ProductTableDetailComponent } from "./product-table-detail/product-table-detail.component";
 import { ConfirmDeleteDirective } from '../../../utilities/directives/safe-link/confirmDelete.directive';
@@ -98,7 +98,10 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.products$ = this.getProducts();
+    this.products$ = this._productsService.refresh$.pipe(
+      startWith(undefined),
+      switchMap(() => this.getProducts())
+    );
   }
 
   ngAfterViewInit(): void {
