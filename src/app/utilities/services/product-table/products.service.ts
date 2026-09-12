@@ -5,6 +5,7 @@ import { catchError, tap, map, take } from 'rxjs/operators'
 import { ProductModel } from '../../../utilities/models/product';
 import { environment } from '../../../../environments/environment';
 import { Category } from '../../../utilities/models/category';
+import { ProductCreateModel } from '../../models/productNew';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -63,7 +64,7 @@ private _http = inject(HttpClient);
   }
 
 
-  createProduct(product: ProductModel): Observable<ProductModel> {
+  createProduct(product: ProductCreateModel): Observable<ProductModel> {
     let url = `${this.url}/Product/AddProduct`;
     let newProduct = JSON.stringify(product)
     var response = this._http.post<ProductModel>(url, newProduct, httpOptions);
