@@ -13,6 +13,8 @@ import { ProductTableDetailComponent } from "./product-table-detail/product-tabl
 import { ConfirmDeleteDirective } from '../../../utilities/directives/safe-link/confirmDelete.directive';
 import { RatingComponent } from "../../../shared/rating/rating.component";
 import { RowDisplayFactory } from '../../../utilities/factories/row-display.factory';
+import { UserSessionService } from '../../../utilities/services/user-session/user-session.service';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
@@ -33,7 +35,8 @@ import { RowDisplayFactory } from '../../../utilities/factories/row-display.fact
     RouterLink,
     ProductTableDetailComponent,
     ConfirmDeleteDirective,
-    RatingComponent
+    RatingComponent,
+    AsyncPipe
 ]
 })
 export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -53,6 +56,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   
   @ContentChild('h1') title!: ElementRef<HTMLElement>;
   private rowFactory = inject(RowDisplayFactory);
+  private _userSessionService = inject(UserSessionService);
   private statuses = ['In Stock', 'Low Stock', 'Backordered'];
 
   isLoading: boolean = false;
@@ -95,6 +99,10 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
       });
       */
     }
+
+  get user$() {
+    return this._userSessionService.user$;
+  }
 
   ngOnInit(): void {
     this.isLoading = true;

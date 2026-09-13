@@ -3,54 +3,87 @@
       <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
   </div>
 }@else {
-<div class="sales-shell">
-    <form [formGroup]="categorySalesForm" class="controls">
-  
-      <mat-form-field appearance="fill" class="field">
-        <mat-label>Category</mat-label>
-        <mat-select formControlName="category_name">
-          <mat-option value="">— choose —</mat-option>
-          <mat-option *ngFor="let c of categories" [value]="c.categoryName">
-            {{ c.categoryName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill" class="field">
-        <mat-label>Year</mat-label>
-        <mat-select formControlName="category_year">
-          <mat-option value="">— choose —</mat-option>
-          <mat-option value="2022">2022</mat-option>
-          <mat-option value="2023">2023</mat-option>
-          <mat-option value="2024">2024</mat-option>
-        </mat-select>
-      </mat-form-field>
-      
-  
-    </form>
-  @if(data.length){
-    <div class="chart-wrap">
-        <canvas
-          baseChart
-          [data]="donutChartData"
-          [options]="donutChartOptions"
-          type="doughnut">
-        </canvas>
-      </div>
-    
-      <ng-template #empty>
-        <div class="empty-state">
-          <span>No data yet — pick a category & year above.</span>
-        </div>
-      </ng-template>
+  <div class="sales-shell">
+        @if((user$ | async)?.admin){
+          <div class="edit-categories">
+            <button  class="btn btn-primary" (click)="editCategoriesGraphViewToggle()">Graphs</button>
+              <button class="btn btn-secondary"  (click)="editCategoriesEditableToggle()">Edit</button>
+          </div>
+        }
 
-  }
-  @else {
-    <ng-template #empty>
-        <div class="empty-state">
-          <span>No data yet — pick a category & year above.</span>
-        </div>
-      </ng-template>
-  }
-</div>
+        @if(!isEditable){
+          <form [formGroup]="categorySalesForm" class="controls">
+            <mat-form-field appearance="fill" class="field">
+              <mat-label>Category</mat-label>
+              <mat-select formControlName="category_name">
+                <mat-option value="">— choose —</mat-option>
+                @for(category of categories; track category.categoryId){
+                  <mat-option [value]="category.categoryName">
+                    {{ category.categoryName }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+        
+            <mat-form-field appearance="fill" class="field">
+              <mat-label>Year</mat-label>
+              <mat-select formControlName="category_year">
+                <mat-option value="">— choose —</mat-option>
+                <mat-option value="2022">2022</mat-option>
+                <mat-option value="2023">2023</mat-option>
+                <mat-option value="2024">2024</mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+          </form>
+          @if(data.length){
+            <div class="chart-wrap">
+                <canvas
+                  baseChart
+                  [data]="donutChartData"
+                  [options]="donutChartOptions"
+                  type="doughnut">
+                </canvas>
+              </div>
+            
+              <ng-template #empty>
+                <div class="empty-state">
+                  <span>No data yet — pick a category & year above.</span>
+                </div>
+              </ng-template>
+          }@else {
+          <ng-template #empty>
+              <div class="empty-state">
+                <span>No data yet — pick a category & year above.</span>
+              </div>
+          </ng-template>
+          }
+        }@else {
+          <p>Edit the categories and change the names</p>
+            <form [formGroup]="categorySalesEditForm" class="controls"  (ngSubmit)="update(categorySalesEditForm)">
+              <mat-form-field appearance="fill" class="field">
+                <mat-label>Categories</mat-label>
+                <mat-select formControlName="category_selections">
+                  <mat-option value="">— choose —</mat-option>
+                  @for(product of salesData; track product.productName){
+                    <mat-option [value]="product.productId">
+                      {{ product.productName }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            <mat-form-field  class="custom-field">
+              <mat-label>Product name</mat-label>
+              <input matInput type="text" formControlName="productName" />
+            </mat-form-field>
+            <mat-form-field  class="custom-field">
+              <mat-label>Total purchase</mat-label>            
+              <input matInput type="text" formControlName="totalPurchase"/>
+              </mat-form-field>
+
+              <button class="btn btn-success" type="submit">Update </button>
+            </form>
+        }
+  </div>
 }
+

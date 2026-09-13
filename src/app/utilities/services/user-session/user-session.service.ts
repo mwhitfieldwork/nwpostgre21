@@ -10,16 +10,15 @@ import { environment } from '../../../../environments/environment';
 })
 export class UserSessionService {
   private _http = inject(HttpClient);
-  private userSubject = new BehaviorSubject<User | null>(null);
-  public user$: Observable<User | null> = this.userSubject.asObservable();
+  private userSubject = new BehaviorSubject<Authentication | null>(null);
+  public user$: Observable<Authentication | null> = this.userSubject.asObservable();
 
   url:string = environment.apiUrl;
   errorMessage:any;
   
-  public get currentUser(): User | null {
-    console.log(this.userSubject.getValue(), "User Gotten")
-    return this.userSubject.getValue();
-  }
+public get currentUser(): Authentication | null {
+  return this.userSubject.getValue();
+}
 
   setUser(id:string): void {
       localStorage.setItem('user', JSON.stringify(id)); 
@@ -30,7 +29,7 @@ export class UserSessionService {
     var response = this._http.get<Authentication>(url)
       .pipe(
         tap(item => {
-          console.log(item, "This is the USER!!")
+          this.userSubject.next(item);
         }),
         catchError(this.handleError),
       )

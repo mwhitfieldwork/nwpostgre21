@@ -6,6 +6,7 @@ import { ProductModel } from '../../../utilities/models/product';
 import { environment } from '../../../../environments/environment';
 import { Category } from '../../../utilities/models/category';
 import { ProductCreateModel } from '../../models/productNew';
+import { CategorySale } from '../../models/categorySale';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -79,6 +80,15 @@ refresh$ = this.refreshSource.asObservable();
     return response;
   }
 
+
+  
+  updateSalesDashboardProduct(product: ProductModel, productId:string): Observable<ProductModel> {
+    let url = `${this.url}/Product/${productId}`;
+    let newProduct = JSON.stringify(product)
+    console.log(url);
+    var response = this._http.put<ProductModel>(url, newProduct, httpOptions);
+    return response;
+  }
 
   deleteProduct(id:number): void {
     let url = `${this.url}/Product/${id}`;
