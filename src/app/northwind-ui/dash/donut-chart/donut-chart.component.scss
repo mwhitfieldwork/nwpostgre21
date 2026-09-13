@@ -30,3 +30,21 @@ select {
 .sales-shell {
     border:unset !important
 }
+
+.edit-categories{
+    display: flex;
+    justify-content: end;
+
+    .btn {
+        margin-right:5px;
+    }
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+
+  .full-width {
+    width: 90%;
+  }
+}

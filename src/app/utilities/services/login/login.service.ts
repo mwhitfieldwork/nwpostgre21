@@ -38,28 +38,29 @@ export class LoginService {
     this._oauthService.logOut();
   }
 
-get identityClaims(){
-  return this._oauthService.getIdentityClaims();
-}
+  get identityClaims(){
+    return this._oauthService.getIdentityClaims();
+  }
 
 
-get accessToken(){
-  return this._oauthService.getAccessToken();
-}
+  get accessToken(){
+    return this._oauthService.getAccessToken();
+  }
 
-exchangeGoogleCode(code: string): Observable<any> {
-  const url = `${this.url}/api/Login/GoogleCallback`;
-  return this._http.post(url, { code }, httpOptions);
-}
+  exchangeGoogleCode(code: string): Observable<any> {
+    const url = `${this.url}/api/Login/GoogleCallback`;
+    return this._http.post(url, { code }, httpOptions);
+  }
 
-get userProfile() {
-  const url = "https://www.googleapis.com/oauth2/v2/userinfo";
-  return this._http.get(url, {
-    headers:{
-      Authorization: `Bearer ${this.accessToken}`
-    }
-  })
-}
+  get userProfile() {
+    const url = "https://www.googleapis.com/oauth2/v2/userinfo";
+    return this._http.get(url, {
+      headers:{
+        Authorization: `Bearer ${this.accessToken}`
+      }
+    })
+  }
+  
   createUser(authentication: Authentication): Observable<any> {
     let url = `${this.url}/api/Login/AddUser`;
     let newLogin = JSON.stringify(authentication)
