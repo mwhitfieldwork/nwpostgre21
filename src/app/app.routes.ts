@@ -10,6 +10,7 @@ import { Error500Component } from './shared/error/error500/error500.component';
 import { TerritoryMapComponent } from './northwind-ui/territory-map/territory-map.component';
 import { DashboardResolver } from './utilities/resolvers/dashboard-resolver.resolver';
 import { ProductSummaryComponent } from './northwind-ui/products/product-summary/product-summary.component';
+import { AdminUserPanelComponent } from './admin/admin-user-panel/admin-user-panel.component';
 
 export const routes: Routes = [
 
@@ -25,6 +26,10 @@ export const routes: Routes = [
   { 
     path: 'territories', 
     component: TerritoryMapComponent
+  },
+  { 
+    path: 'admin', 
+    component: AdminUserPanelComponent
   },
   // Products + children
   { 
