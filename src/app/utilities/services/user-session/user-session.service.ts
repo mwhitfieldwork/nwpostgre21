@@ -43,6 +43,12 @@ public get currentUser(): Authentication | null {
       catchError(this.handleError),
     );
   }
+
+  updateAdminUser(user: AdminUser): Observable<AdminUser> {
+    return this._http.post<AdminUser>(`${this.url}/api/Admin`, user).pipe(
+      catchError(this.handleError),
+    );
+  }
   
   private handleError(error: Response) {
     console.error(error);

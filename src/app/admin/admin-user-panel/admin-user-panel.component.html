@@ -15,7 +15,7 @@
 		</option>
 	</select>
 
-	<form [formGroup]="userForm" (ngSubmit)="$event.preventDefault()">
+	<form [formGroup]="userForm" (ngSubmit)="updateUser(userForm)">
 		<label for="first-name">First name</label>
 		<input id="first-name" type="text" formControlName="firstName" />
 		<small *ngIf="userForm.controls.firstName.invalid && userForm.controls.firstName.touched">

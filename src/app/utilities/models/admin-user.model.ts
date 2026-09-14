@@ -3,6 +3,6 @@ export interface AdminUser {
   username: string;
   firstname: string;
   lastname: string | null;
-  isAdmin: boolean;
+  admin: boolean;
   occupation: string;
 }
