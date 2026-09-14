@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminUser } from '../../utilities/models/admin-user.model';
 import { UserSessionService } from '../../utilities/services/user-session/user-session.service';
 
@@ -63,7 +63,41 @@ export class AdminUserPanelComponent implements OnInit {
       firstName: user.firstname,
       occupation: user.occupation,
       username: user.username,
-      isAdmin: user.isAdmin,
+      isAdmin: user.admin,
+    });
+  }
+
+  updateUser(form: FormGroup): void {
+    if (!this.selectedUser || form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    const updatedUser: AdminUser = {
+      ...this.selectedUser,
+      firstname: form.value.firstName,
+      occupation: form.value.occupation,
+      username: form.value.username,
+      admin: form.value.isAdmin,
+    };
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.userSessionService.updateAdminUser(updatedUser).subscribe({
+      next: savedUser => {
+        const userIndex = this.users.findIndex(user => user.pkid === savedUser.pkid);
+        if (userIndex >= 0) {
+          this.users[userIndex] = savedUser;
+          this.users = [...this.users];
+        }
+        this.selectedUser = savedUser;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Unable to update user.';
+        this.isLoading = false;
+      },
     });
   }
 
