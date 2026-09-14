@@ -1,0 +1,28 @@
+.admin-user-panel {
+	display: grid;
+	gap: 0.75rem;
+	max-width: 32rem;
+}
+
+form {
+	display: grid;
+	gap: 0.5rem;
+}
+
+input,
+select,
+button {
+	font: inherit;
+	padding: 0.5rem;
+}
+
+.checkbox-label {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+small,
+.error {
+	color: #b42318;
+}

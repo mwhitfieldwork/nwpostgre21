@@ -3,6 +3,7 @@ import { Authentication } from '../../models/authentication';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user.model'
+import { AdminUser } from '../../models/admin-user.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -35,6 +36,12 @@ public get currentUser(): Authentication | null {
       )
 
     return response
+  }
+
+  getAdminUsers(): Observable<AdminUser[]> {
+    return this._http.get<AdminUser[]>(`${this.url}/api/Admin/users`).pipe(
+      catchError(this.handleError),
+    );
   }
   
   private handleError(error: Response) {

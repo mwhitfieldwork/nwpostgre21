@@ -1,0 +1,44 @@
+<section class="admin-user-panel">
+	<h2>Manage users</h2>
+
+	<p *ngIf="isLoading">Loading users...</p>
+	<p *ngIf="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
+
+	<label for="user-select">Existing user</label>
+	<select id="user-select" 
+    [(ngModel)]="selectedUserId"
+    (ngModelChange)="selectUser($event)"
+    [disabled]="isLoading">
+		<option value="">Select a user</option>
+		<option *ngFor="let user of users" [value]="user.pkid">
+			{{ user.firstname }} ({{ user.username }})
+		</option>
+	</select>
+
+	<form [formGroup]="userForm" (ngSubmit)="$event.preventDefault()">
+		<label for="first-name">First name</label>
+		<input id="first-name" type="text" formControlName="firstName" />
+		<small *ngIf="userForm.controls.firstName.invalid && userForm.controls.firstName.touched">
+			First name is required.
+		</small>
+
+		<label for="occupation">Occupation</label>
+		<input id="occupation" type="text" formControlName="occupation" />
+		<small *ngIf="userForm.controls.occupation.invalid && userForm.controls.occupation.touched">
+			Occupation is required.
+		</small>
+
+		<label for="username">Username</label>
+		<input id="username" type="email" formControlName="username" />
+		<small *ngIf="userForm.controls.username.invalid && userForm.controls.username.touched">
+			Enter a valid username email address.
+		</small>
+
+		<label class="checkbox-label" for="admin-flag">
+			<input id="admin-flag" type="checkbox" formControlName="isAdmin" />
+			Administrator
+		</label>
+
+		<button type="submit" [disabled]="!selectedUser || userForm.invalid">Update user</button>
+	</form>
+</section>
