@@ -45,7 +45,9 @@ export class AppComponent implements OnInit {
   private _router = inject(Router);
   private  _userSessionService = inject(UserSessionService);
 
-
+  toggleSidenav() {
+    this.isCollapsed = !this.isCollapsed;
+  }
 
   ngOnInit(): void {
     this._router.events

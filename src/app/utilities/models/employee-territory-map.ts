@@ -14,4 +14,5 @@ export interface EmployeeTerritoryMap {
   title: string | null;
   photoPath: string | null;
   territories: TerritoryMap[];
+  expanded?:boolean;
 }

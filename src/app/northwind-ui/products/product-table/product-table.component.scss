@@ -1,44 +1,63 @@
 /* Background */
+:host {
+  display: block;
+  width: 100%;
+}
+
+/*
 ::ng-deep .mat-sidenav-content {
   background-color: #f3f6f8;
 }
 
-/* Product Name column — wide */
+
 ::ng-deep .cdk-column-displayName {
   flex: 3 !important;
-  min-width: 250px;
+  max-width: 250px;
 }
 
-/* Middle columns */
+
 ::ng-deep .cdk-column-quantity,
-::ng-deep .cdk-column-unitPrice,
+::ng-deep .cdk-column-price,  
 ::ng-deep .cdk-column-rating {
   flex: 1 !important;
 }
 
-/* Actions column — far right, grouped */
 ::ng-deep .cdk-column-actions {
   display: flex !important;
   justify-content: flex-end !important;
   gap: 12px;
   flex: 0 0 120px !important;
 }
+*/
 
 /* Wrapper */
 #main-wrapper {
   background-color:#fff;
-  width:80%;
-  max-width:1200px;
-  margin: 50px auto;
+  width:95%;
+  margin-top:50px;
+  margin-left:25px;
 
-  .product-info-container {
-    padding: 40px;
+  mat-table {
+    tr {
+      display: flex;
+    }
+
+    td, th {  
+      flex: 1 1 0;
+    }
+
+    td:first-of-type, th:first-of-type {
+      flex: 2 1 0;
+    }
+
+    .cdk-column-rating {
+      flex: 1.5 1 0;
+    }    
   }
 
   .product-classification {
     font-size: 16px;
     font-family: roboto, sans-serif;
-    margin-bottom: 20px;
     background-color: #313334;
     color: #fff;
     padding: 10px;

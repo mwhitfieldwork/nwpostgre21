@@ -67,7 +67,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
     'displayName',
     'quantity',
     'price',
-    //'discontinued',
+    'discontinued',
     'rating',
     'edit',
     'delete'
