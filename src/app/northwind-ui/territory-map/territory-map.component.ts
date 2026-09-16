@@ -1,7 +1,7 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { GoogleMap, MapMarker, MapInfoWindow } from '@angular/google-maps';
-import { EmployeeTerritoryMap } from '../../utilities/models/employee-territory-map';
+import { EmployeeTerritoryMap, TerritoryMap } from '../../utilities/models/employee-territory-map';
 import { EmployeeTerritoryMapService } from '../../utilities/services/employee-territory-details/employee-territory-map.service';
 import { AsyncPipe } from '@angular/common';
 
@@ -14,14 +14,6 @@ interface TerritoryMarker {
   options: google.maps.MarkerOptions;
   employeeName: string | null;
   employeeTitle: string | null;
-}
-
-interface Employee {
-  employeeId: number | null;
-  firstName: string | null;
-  lastName: string | null;
-  title: string | null;
-  photoPath: string | null;
 }
 
 const REGION_COLORS: Record<number, string> = {
@@ -45,7 +37,7 @@ export class TerritoryMapComponent {
   zoom = 4;
 
   selectedMarker: TerritoryMarker | null = null;
-  employees: Employee[] = [];
+  employees: EmployeeTerritoryMap[] = [];
   @ViewChild(GoogleMap) map!: GoogleMap;
   selectedEmployeeId: number | null = null;
   markers: TerritoryMarker[] = [];
@@ -159,24 +151,49 @@ private buildMarkers(groups: EmployeeTerritoryMap[]): TerritoryMarker[] {
       firstName: group.firstName,
       lastName: group.lastName,
       title: group.title,
-      photoPath: group.photoPath
+      photoPath: group.photoPath,
+      territories:group.territories
     }));
+
+    console.log(this.employees, '---employeez')
     
   }
 
   focusEmployeeOnMap(employeeId: number| null): void {
-  this.selectedEmployeeId = employeeId;
+    const emp = this.employees.find(e => e.employeeId === employeeId);
+    if (!emp) return;
 
-  const employeeMarkers = this.markers.filter(m => m.employeeId === employeeId);
-  if (!employeeMarkers.length || !this.map?.googleMap) return;
+    emp.expanded = !emp.expanded;
+    this.selectedEmployeeId = employeeId;
 
-  if (employeeMarkers.length === 1) {
-    this.map.googleMap.panTo(employeeMarkers[0].position);
-    this.map.googleMap.setZoom(12);
-  } else {
-    const bounds = new google.maps.LatLngBounds();
-    employeeMarkers.forEach(m => bounds.extend(m.position));
-    this.map.googleMap.fitBounds(bounds);
+    const employeeMarkers = this.markers.filter(m => m.employeeId === employeeId);
+    if (!employeeMarkers.length || !this.map?.googleMap) return;
+
+    if (employeeMarkers.length === 1) {
+      this.map.googleMap.panTo(employeeMarkers[0].position);
+      this.map.googleMap.setZoom(12);
+      this.map.googleMap?.setMapTypeId('roadmap');
+    } else {
+      const bounds = new google.maps.LatLngBounds();
+      employeeMarkers.forEach(m => bounds.extend(m.position));
+      this.map.googleMap.fitBounds(bounds);
+    }
   }
-}
+
+  focusTerritoryOnMap(territory: TerritoryMap, event: Event) {
+    event.stopPropagation(); // prevent the row's expand/collapse click from also firing
+
+    if (territory.latitude == null || territory.longitude == null) {
+      return; // no valid coordinates to zoom to
+    }
+
+    const position: google.maps.LatLngLiteral = { 
+      lat: territory.latitude, 
+      lng: territory.longitude 
+    };
+
+    this.map.googleMap?.panTo(position);
+    this.map.googleMap?.setZoom(17);
+    this.map.googleMap?.setMapTypeId('roadmap');
+  }  
 }

@@ -15,6 +15,7 @@ export interface Employee {
     extension?: string;
     notes?: string;
     reportsTo?: string;
-    photo?: string;
-    isDeleted?: boolean
+    photoPath?: string;
+    isDeleted?: boolean;
+    expanded:boolean;
 }

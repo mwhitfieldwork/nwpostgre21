@@ -1,27 +1,6 @@
-  <h1>Employee Territories </h1>
+  <!-- <h1>Employee Territories </h1> -->
 <section class="territory-map">
-  <div class="employee-table-container">
-    <table class="employee-table">
-      <thead>
-        <tr>
-          <th class="col-photo"></th>
-          <th>Employee</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (employee of employees; track employee.employeeId) {
-          <tr (click)="focusEmployeeOnMap(employee.employeeId)"
-    [class.selected]="employee.employeeId === selectedEmployeeId">
-            <td class="col-photo">
-              <img [src]="employee.photoPath" [alt]="employee.firstName" width="30" height="30" style="border-radius:50%;"/>
-            </td>
-            <td>{{ employee.firstName }} {{ employee.lastName }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-
+  <article class="geolocation-header">Geolocation Table</article>
   <google-map [center]="center" [zoom]="zoom" [options]="mapOptions" height="600px" width="100%">
     @for (marker of (markers$ | async) ?? []; track marker.territoryId) {
       <map-marker
@@ -46,4 +25,45 @@
       }
     </map-info-window>
   </google-map>
+
+  <div class="employee-table-container">
+  <table class="employee-table">
+    <thead>
+      <tr>
+        <th class="col-photo"></th>
+        <th>Employee</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (emp of employees; track emp.employeeId) {
+        <tr class="employee-row" (click)="focusEmployeeOnMap(emp.employeeId)">
+          <td class="toggle-cell">
+            <span class="toggle-icon">{{ emp.expanded ? '−' : '+' }}</span>
+          </td>
+          <td>
+            <img [src]="emp.photoPath" class="employee-photo" />
+          </td>
+          <td>{{ emp.firstName }}</td>
+          <td>{{ emp.lastName }}</td>
+          <td>{{ emp.title }}</td>
+        </tr>
+        @if (emp.expanded) {
+          <tr class="detail-row">
+            <td colspan="5">
+              <div class="territory-container">
+                @for (t of emp.territories; track t.territoryId) {
+                  <div class="territory-row" (click)="focusTerritoryOnMap(t, $event)">
+                    <span class="territory-field">{{ t.territoryId }}</span>
+                    <span class="territory-field">{{ t.territoryDescription }}</span>
+                    <span class="territory-field">{{ t.regionDescription }}</span>
+                  </div>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+  </div>
 </section>
