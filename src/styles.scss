@@ -170,3 +170,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     opacity: 0.65;
   }
 }
+
+.grit-snackbar-success .mdc-snackbar__surface {
+  background-color: #43a047 !important;
+  color: white !important;
+}
+
+.grit-snackbar-warning .mdc-snackbar__surface {
+  background-color: #fb8c00 !important;
+  color: white !important;
+}

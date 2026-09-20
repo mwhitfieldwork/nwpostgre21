@@ -15,21 +15,21 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
 
-        if (error.status === 404) {
-          const shown = this.toast.show('Page not found');
+      if (error.status === 404) {
+        const shown = this.toast.show('Page not found', 'warning');
 
-          if (!shown) {
-            this.router.navigate(['/404']);
-          }
+        if (!shown) {
+          this.router.navigate(['/404']);
         }
+      }
 
-        else if (error.status === 500) {
-          const shown = this.toast.show('Internal server error');
+      else if (error.status === 500) {
+        const shown = this.toast.show('Internal server error', 'warning');
 
-          if (!shown) {
-            this.router.navigate(['/500']);
-          }
+        if (!shown) {
+          this.router.navigate(['/500']);
         }
+      }
 
         return throwError(() => error);
       })

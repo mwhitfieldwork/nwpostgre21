@@ -7,6 +7,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ErrorInterceptor } from './utilities/interceptor/error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { loadingInterceptor } from './utilities/interceptor/loader.interceptor';
+import { successToastInterceptor } from './utilities/interceptor/success-toast.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -16,6 +17,7 @@ provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(
       withInterceptors([
         loadingInterceptor,
+        successToastInterceptor,
         (req, next) => {
           const interceptor = new ErrorInterceptor();
           return interceptor.intercept(req, { handle: next });
