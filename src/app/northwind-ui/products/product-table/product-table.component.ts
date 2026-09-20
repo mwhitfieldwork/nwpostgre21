@@ -15,6 +15,11 @@ import { RatingComponent } from "../../../shared/rating/rating.component";
 import { RowDisplayFactory } from '../../../utilities/factories/row-display.factory';
 import { UserSessionService } from '../../../utilities/services/user-session/user-session.service';
 import { AsyncPipe } from '@angular/common';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ProductInvoice } from '../../../utilities/models/productInvoice';
+
 
 
 @Component({
@@ -36,7 +41,8 @@ import { AsyncPipe } from '@angular/common';
     ProductTableDetailComponent,
     ConfirmDeleteDirective,
     RatingComponent,
-    AsyncPipe
+    AsyncPipe,
+    MatCheckboxModule
 ]
 })
 export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -64,6 +70,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   displayedColumns: string[] = [
+      'select',
     'displayName',
     'quantity',
     'price',
@@ -75,7 +82,9 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   products$!: Observable<ProductModel[]>;
   products: ProductModel[] = [];
+  productInvoiceList: ProductModel[] = [];
   dataSource: MatTableDataSource<ProductModel> = new MatTableDataSource();
+  selection = new SelectionModel<ProductModel>(true, []);
   errorMessage:any;
   productID!:number;
   stars:string[] = [];
@@ -83,21 +92,16 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   starList:any[]  = [];
   productsList!:Subscription;
   isEdit: boolean = false;
-  isOpenDialog:boolean = false
+  isOpenDialog:boolean = false;
+  id?: string | null;
+  updatedList:ProductModel[] = [];
+  emailInvoice!: ProductInvoice;
+  isEmailable:boolean = false;
 
   constructor(
     private _productsService: ProductsService, 
     private router:Router,
     private dialog: MatDialog) { 
-      /*
-      afterRender(() => { //triggers after anything changes, anywhere in the app
-        console.log(this.title.nativeElement.textContent);
-      });
-
-      afterNextRender(() => { //triggers next after anything changes in the app
-        console.log(this.title.nativeElement.textContent);
-      });
-      */
     }
 
   get user$() {
@@ -109,7 +113,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.products$ = this._productsService.refresh$.pipe(
       startWith(undefined),
       switchMap(() => this.getProducts())
-    );
+    );     
   }
 
   ngAfterViewInit(): void {
@@ -149,6 +153,64 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   deleteProduct($event:any){
     console.log($event, 'TESTTTTTT');
   }
+
+  addToEmailList(selectedProduct: ProductModel) {
+    this.productInvoiceList = [...this.productInvoiceList, selectedProduct];
+    this.isEmailable = true;
+  }
+
+  getEmailInvoice() {
+    const userId = this._userSessionService.userId;
+    if (!userId) {
+      console.error("User ID missing");
+      return;
+    }
+
+    this._userSessionService.getUser(userId).subscribe(user => {
+      this.emailInvoice = {
+        userEmail: user.username,
+        products: this.productInvoiceList
+      };
+
+      console.log(this.emailInvoice, "------invoiceeee");
+
+      // Optional: send invoice
+       this._productsService.createProductInvoice(this.emailInvoice).subscribe(invoice =>
+        console.log(invoice)
+        
+       )
+    });
+  }
+
+
+  removeFromEmailList(row:ProductModel){
+    const index = this.products.findIndex(item => item.productId === row.productId);
+    if (index !== -1) {
+        this.products.splice(index, 1);
+    }
+  }
+
+  onCheckboxChange(event: MatCheckboxChange, row: any): void {
+    if (event.checked) {
+        this.addToEmailList(row);
+    } else {
+        this.removeFromEmailList(row);
+    }
+  }
+
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }  
 }
 
 

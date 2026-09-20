@@ -1,6 +1,10 @@
+<div class="admin-panel-container">
+<header>
+	<h1>Manage Users</h1>
+	<p>Granting admin rights empowers selected users to manage system settings, oversee data workflows, and perform high‑level actions with full accountability.</p>
+</header>
+<article class="admin-header">Administration Table</article>
 <section class="admin-user-panel">
-	<h2>Manage users</h2>
-
 	<p *ngIf="isLoading">Loading users...</p>
 	<p *ngIf="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
 
@@ -42,3 +46,5 @@
 		<button type="submit" [disabled]="!selectedUser || userForm.invalid">Update user</button>
 	</form>
 </section>
+
+</div>

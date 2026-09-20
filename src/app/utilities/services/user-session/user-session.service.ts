@@ -16,7 +16,16 @@ export class UserSessionService {
 
   url:string = environment.apiUrl;
   errorMessage:any;
-  
+  userId?:string;
+
+constructor() {
+  const stored = localStorage.getItem('user');
+  if (stored) {
+    this.userSubject.next(JSON.parse(stored));
+    this.userId = stored
+  }
+}  
+
 public get currentUser(): Authentication | null {
   return this.userSubject.getValue();
 }

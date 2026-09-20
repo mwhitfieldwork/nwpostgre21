@@ -193,7 +193,7 @@ private buildMarkers(groups: EmployeeTerritoryMap[]): TerritoryMarker[] {
     };
 
     this.map.googleMap?.panTo(position);
-    this.map.googleMap?.setZoom(17);
+    this.map.googleMap?.setZoom(19);
     this.map.googleMap?.setMapTypeId('roadmap');
   }  
 }
