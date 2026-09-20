@@ -19,36 +19,37 @@ export class BarChartComponent {
       {
         label: 'Green Trend',
         data: [95, 98, 92, 100, 105, 102, 110],
-        backgroundColor: '#e6c9f5',
-        tension: 0.4,
-        borderWidth: 3
+        backgroundColor: '#FF0000'
       },
       {
         label: 'Red Trend',
         data: [85, 88, 90, 87, 92, 95, 93],
-        backgroundColor: '#c4a2f3',
-        tension: 0.4,
-        borderWidth: 3
+        backgroundColor: '#00A2FF'
       },
       {
         label: 'Blue Trend',
-        data: [75, 80, 78, 82, 85, 88, 90], 
-        backgroundColor: '#a855f7',
-        tension: 0.4,
-        borderWidth: 3
+        data: [75, 80, 78, 82, 85, 88, 90],
+        backgroundColor: '#dadd32'
+      },
+      {
+        label: 'Contrast Trend',
+        data: [40, 42, 38, 45, 47, 50, 52],
+        backgroundColor: '#bfa939'
       }
     ]
   };
-  
+
+
+    
   public weeklyChartOptions: ChartOptions = {
     responsive: true,
     scales: {
-      y: {
-        min: 70,
-        max: 110,
+      x: {
+        stacked: true,
         grid: { display: false }
       },
-      x: {
+      y: {
+        stacked: true,
         grid: { display: false }
       }
     },
@@ -56,6 +57,8 @@ export class BarChartComponent {
       legend: { display: false }
     }
   };
+
+
   
   public monthlyAreaData = {
     labels: Array.from({ length: 10 }, (_, i) => `Jul ${i + 1}`),

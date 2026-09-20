@@ -7,6 +7,7 @@ import { environment } from '../../../../environments/environment';
 import { Category } from '../../../utilities/models/category';
 import { ProductCreateModel } from '../../models/productNew';
 import { CategorySale } from '../../models/categorySale';
+import { ProductInvoice } from '../../models/productInvoice';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -24,6 +25,7 @@ private refreshSource = new Subject<void>();
 refresh$ = this.refreshSource.asObservable();
 
   url:string = environment.apiUrl + '/api';
+  noapiurl:string = environment.apiUrl;
   errorMessage:any;
 
   getProducts(): Observable<ProductModel[]> {
@@ -71,6 +73,14 @@ refresh$ = this.refreshSource.asObservable();
     console.log(url);
     return response;
   }
+
+  createProductInvoice(invoice: ProductInvoice): Observable<ProductInvoice> {
+    let url = `${this.noapiurl}/Invoice`;
+    let newInvoice = JSON.stringify(invoice)
+    var response = this._http.post<ProductInvoice>(url, newInvoice, httpOptions);
+    console.log(url);
+    return response;
+  }  
 
   updateProduct(product: ProductModel, productId:string): Observable<ProductModel> {
     let url = `${this.url}/Product/${productId}`;

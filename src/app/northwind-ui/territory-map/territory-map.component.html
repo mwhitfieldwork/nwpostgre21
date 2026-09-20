@@ -1,5 +1,9 @@
   <!-- <h1>Employee Territories </h1> -->
 <section class="territory-map">
+  <header>
+    <h1>Sales Rep Territories</h1>
+    <p>Selecting a sales rep’s row enables you to choose specific locations for inspection, ensuring precise and targeted evaluations..</p>
+  </header>
   <article class="geolocation-header">Geolocation Table</article>
   <google-map [center]="center" [zoom]="zoom" [options]="mapOptions" height="600px" width="100%">
     @for (marker of (markers$ | async) ?? []; track marker.territoryId) {
