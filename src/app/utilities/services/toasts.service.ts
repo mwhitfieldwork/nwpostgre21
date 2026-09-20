@@ -7,7 +7,7 @@ export class ToastsService {
 
   private snackbar = inject(MatSnackBar);
 
-  show(message: string): Promise<boolean> {
+  show(message: string, type: 'success' | 'warning' = 'success'): Promise<boolean> {
     return new Promise(resolve => {
       try {
         // Example: using Angular Material Snackbar
@@ -15,7 +15,7 @@ export class ToastsService {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
-          panelClass: ['grit-snackbar']
+          panelClass: ['grit-snackbar', `grit-snackbar-${type}`]
         });
 
         // Snackbar fires an event when it's fully opened
