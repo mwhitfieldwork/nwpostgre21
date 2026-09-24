@@ -3,14 +3,20 @@
 
     <app-date-picker-filter 
     (dateRangeSelected)="onDateRangeSelected($event)"></app-date-picker-filter>
-    <app-sales-total-cards [salesTotals]="salesTotals"></app-sales-total-cards>
+    <app-sales-total-cards  
+    [beginningDate]="beginningDate" 
+    [endingDate]="endingDate">
+    </app-sales-total-cards>
 
     <section class="detail-information row">
 
         <div class="col">
             <mat-card class="p-3 mb-4">
                 <article class="chart">
-                    <app-bar-chart></app-bar-chart>
+                    <app-bar-chart 
+                    [beginningDate]="beginningDate" 
+                    [endingDate]="endingDate"
+                    ></app-bar-chart>
                 </article>
             </mat-card>
         </div>

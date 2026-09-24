@@ -1,44 +1,73 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+import { DashboardService } from '../../../utilities/services/dashboard/dashboard.service';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 @Component({
     selector: 'app-bar-chart',
     standalone: true,
-    imports: [BaseChartDirective],
+    imports: [BaseChartDirective, AsyncPipe],
     templateUrl: './bar-chart.component.html',
     styleUrl: './bar-chart.component.scss'
 })
 export class BarChartComponent {
-  public weeklyChartData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [
-      {
-        label: 'Green Trend',
-        data: [95, 98, 92, 100, 105, 102, 110],
-        backgroundColor: '#FF0000'
-      },
-      {
-        label: 'Red Trend',
-        data: [85, 88, 90, 87, 92, 95, 93],
-        backgroundColor: '#00A2FF'
-      },
-      {
-        label: 'Blue Trend',
-        data: [75, 80, 78, 82, 85, 88, 90],
-        backgroundColor: '#dadd32'
-      },
-      {
-        label: 'Contrast Trend',
-        data: [40, 42, 38, 45, 47, 50, 52],
-        backgroundColor: '#bfa939'
-      }
-    ]
-  };
 
+  @Input() beginningDate = '1996-07-04';
+  @Input() endingDate = '1998-05-06';
+
+  private _dashboardService = inject(DashboardService);
+  private colors = ['#FF0000', '#00A2FF', '#dadd32', '#bfa939', '#673AB7', '#2ecc71', '#ff8c00', '#8e8e8e'];
+
+  public weeklyChartData$: Observable<ChartData<'bar'>> = this.loadWeeklyChart();
+
+  // Runs whenever the parent passes in new dates
+  ngOnChanges() {
+    this.weeklyChartData$ = this.loadWeeklyChart();
+  }
+
+  private loadWeeklyChart(): Observable<ChartData<'bar'>> {
+    return this._dashboardService
+      .getSalesByDateRange(this.beginningDate, this.endingDate)
+      .pipe(
+        switchMap(rows => rows.length ? of(rows) : this._dashboardService.getAllSales()),
+        map(rows => {
+          const categories = [...new Set(rows.map(r => r.categoryName))].sort();
+
+          const datasets = categories.map((category, i) => {
+            const totals = new Array(7).fill(0);
+
+            rows
+              .filter(r => r.categoryName === category)
+              .forEach(r => {
+                // getDay() is Sun=0...Sat=6; this shifts it to Mon=0...Sun=6
+                const day = (new Date(r.orderDate).getDay() + 6) % 7;
+                totals[day] += r.lineTotal;
+              });
+
+            return {
+              label: category,
+              data: totals.map(t => Math.round(t)),
+              backgroundColor: this.colors[i % this.colors.length],
+            };
+          });
+
+          return {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets,
+          };
+        }),
+        catchError(err => {
+          console.error('Weekly chart failed to load', err);
+          return of({ labels: [], datasets: [] } as ChartData<'bar'>);
+        })
+        
+      );
+  }
 
     
   public weeklyChartOptions: ChartOptions = {
