@@ -1,4 +1,5 @@
 <div class="chart-container">
+  @if (weeklyChartData$ | async; as weeklyData) {
   <div class="kpi-container">
     <div class="kpi-card">
       <h2>5,689</h2>
@@ -17,10 +18,21 @@
   </div>
   
   <div class="chart-card">
+    @if(weeklyData.datasets.length){
     <canvas baseChart height="400"
-      [data]="weeklyChartData"
+      [data]="weeklyData"
       [options]="weeklyChartOptions"
       chartType="line">
     </canvas>
-  </div>  
+  } @else {
+    <p class="text-secondary text-center my-5">
+      No sales found for this date range.
+    </p>
+  }
+  </div> 
+  } @else {
+    <div class="loading-container">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
+  } 
 </div>

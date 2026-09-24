@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { DonutChartComponent } from "./donut-chart/donut-chart.component";
 import { OrderHistoryComponent } from "../order-history/order-history.component";
@@ -34,6 +34,9 @@ import { SalesTotal } from '../../utilities/models/salesTotal';
     styleUrl: './dash.component.scss'
 })
 export class DashComponent implements OnInit {
+  beginningDate:string = '1996-07-04';
+  endingDate:string  = '1998-05-06';
+  
   totalOrders:number = 12873;
   averageOrderPrice:number = 5433.32;
   averageTicketPrice:number = 708.12;
@@ -81,6 +84,9 @@ export class DashComponent implements OnInit {
         },
         error: (err) => console.error(err)
     })
+
+    this.beginningDate = dateRange.beginningDate.toISOString()
+    this.endingDate = dateRange.endingDate.toISOString()
   }
 
 }

@@ -1,51 +1,71 @@
-import { Component, inject, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnInit} from '@angular/core';
 import { DashboardService } from '../../../utilities/services/dashboard/dashboard.service';
-import { SalesTotal } from '../../../utilities/models/salesTotal';
-import { CurrencyPipe } from '@angular/common';
+import { DashboardCard } from '../../../utilities/models/dashboard-card';
+import { AsyncPipe, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
     selector: 'app-sales-total-cards',
     standalone: true,
-    imports: [CurrencyPipe],
+    imports: [AsyncPipe, CurrencyPipe, DecimalPipe],
     templateUrl: './sales-total-cards.component.html',
     styleUrl: './sales-total-cards.component.scss'
 })
-export class SalesTotalCardsComponent implements OnInit, OnChanges {
-@Input() salesTotals: SalesTotal[] = [];
+export class SalesTotalCardsComponent  {
 private _dashboardService = inject(DashboardService);
 
-salesData:SalesTotal[] = [];
-beginningDate = new Date('1996-07-12').toISOString();
-endingDate   = new Date('1997-07-12').toISOString();
-totalCardLabels = ['Total Orders', 'Average Order Goal', 'Backpack Total', 'Average Sale Cost'];
+@Input() beginningDate = '1996-07-04';
+@Input() endingDate = '1998-05-06';
 
-icons = [
-  'archive',
-  'bag',
-  'cart',
-  'truck'
-];
+cards$: Observable<DashboardCard[]> = this.loadCards();
+isLoading:boolean = false;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['salesTotals'] && this.salesTotals.length === 0) {
-      this.beginningDate = new Date('1996-07-12').toISOString();
-      this.endingDate   = new Date('1997-07-12').toISOString();
-      this.getSalesTotals();
-    }
-  }
-
-ngOnInit() {
-  this.getSalesTotals();
+ngOnChanges() {
+  this.cards$ = this.loadCards();
 }
 
-getSalesTotals(){
-  this._dashboardService.getSalesTotals(this.beginningDate, this.endingDate).subscribe({
-    next: (data) => {
-      this.salesTotals = data;
-    },
-    error: (error) => {
+
+  icons = ['archive', 'bag', 'cart', 'truck'];
+
+private loadCards(): Observable<DashboardCard[]> {
+    return this._dashboardService
+      .getSalesByDateRange(this.beginningDate, this.endingDate)
+      .pipe(
+        // If the range is empty, fall back to all sales and remember that we did
+        switchMap(rows =>
+          rows.length
+            ? of({ rows, isFallback: false })
+            : this._dashboardService.getAllSales().pipe(map(all => ({ rows: all, isFallback: true })))
+        ),
+        map(({ rows, isFallback }) => {
+          const latestMonth = rows
+            .map(r => r.orderDate.slice(0, 7))
+            .reduce((max, m) => (m > max ? m : max), '');
+
+          const monthRows = rows.filter(r => r.orderDate.startsWith(latestMonth));
+
+          const byCountry = new Map<string, number>();
+          rows.forEach(r => {
+            const country = r.customerCountry ?? 'Unknown';
+            byCountry.set(country, (byCountry.get(country) ?? 0) + r.lineTotal);
+          });
+          const [topCountry, topCountrySales] = [...byCountry.entries()]
+            .sort((a, b) => b[1] - a[1])[0] ?? ['None', 0];
+
+          const rangeLabel = 'All time';
+
+          return [
+            { title: 'New Orders', subtitle: latestMonth, value: new Set(monthRows.map(r => r.orderId)).size, isCurrency: false },
+            { title: 'This Month', subtitle: latestMonth, value: monthRows.reduce((s, r) => s + r.lineTotal, 0), isCurrency: true },
+            { title: 'Overall Sales', subtitle: rangeLabel, value: rows.reduce((s, r) => s + r.lineTotal, 0), isCurrency: true },
+            { title: 'Top Country', subtitle: topCountry, value: topCountrySales, isCurrency: true },
+          ];
+        }),
+        catchError(err => {
+          console.error('Sales cards failed to load', err);
+          return of([]);
+        })
+      );
     }
-  });
-}
 
 }

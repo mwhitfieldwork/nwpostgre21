@@ -177,6 +177,10 @@
     justify-content: center; // horizontal centering (optional)
     position: relative;  
   }
+
+  .col:last-of-type {
+    padding-right:unset;
+  }
   
   mat-card {
     flex: 1;
