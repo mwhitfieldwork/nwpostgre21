@@ -78,7 +78,7 @@ export class DashComponent implements OnInit {
       this.isLoading.set(false);
     });
 
-    this.welcomeName = this._userSessionService.currentUser!.firstname;
+    //this.welcomeName = this._userSessionService.currentUser!.firstname;
   }
 
   onDateRangeSelected(date: Date) {
