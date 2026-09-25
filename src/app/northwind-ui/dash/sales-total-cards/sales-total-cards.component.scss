@@ -7,12 +7,20 @@
     display: flex;
   }
 
+  .top-cards {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  }
+
   .dashboard-card{
     margin:10px;
     padding:15px;
     border-radius: $card-radius;
     width: 100%;
     display: flex;
+      flex: 1;          // expands evenly
+  min-width: 0;
     justify-content: space-between;
     box-shadow: 0 4px 10px rgba(38, 43, 69, 0.06);
     transition: transform $transition-speed ease, box-shadow $transition-speed ease;

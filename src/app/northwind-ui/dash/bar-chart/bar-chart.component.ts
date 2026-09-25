@@ -17,8 +17,8 @@ Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, L
 })
 export class BarChartComponent {
 
-  @Input() beginningDate = '1996-07-04';
-  @Input() endingDate = '1998-05-06';
+  @Input() beginningDate:Date= new Date();
+  @Input() endingDate:Date= new Date();
 
   private _dashboardService = inject(DashboardService);
   private colors = ['#FF0000', '#00A2FF', '#dadd32', '#bfa939', '#673AB7', '#2ecc71', '#ff8c00', '#8e8e8e'];
@@ -32,7 +32,7 @@ export class BarChartComponent {
 
   private loadWeeklyChart(): Observable<ChartData<'bar'>> {
     return this._dashboardService
-      .getSalesByDateRange(this.beginningDate, this.endingDate)
+      .getSalesByDateRange(this.beginningDate.toISOString(), this.endingDate.toISOString())
       .pipe(
         switchMap(rows => rows.length ? of(rows) : this._dashboardService.getAllSales()),
         map(rows => {
@@ -57,7 +57,7 @@ export class BarChartComponent {
           });
 
           return {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
             datasets,
           };
         }),

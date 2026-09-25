@@ -1,6 +1,7 @@
 <section class="dashboard-cards row ">
   <div class="col d-flex">
     @if(cards$ | async; as cards){    
+      <div class="top-cards">
           @for (card of (cards$ | async) ?? []; track card.title; let i = $index) {
               <div class="dashboard-card h-100 w-100 total-orders">
                 <article class="d-block gap-3">
@@ -49,6 +50,7 @@
                 }
             </div>
           }
+      </div>
     }@else {
         <div class="loading-container">
           <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
