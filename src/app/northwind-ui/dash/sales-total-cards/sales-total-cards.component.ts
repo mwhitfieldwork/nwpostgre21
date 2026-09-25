@@ -14,8 +14,8 @@ import { catchError, map, Observable, of, switchMap } from 'rxjs';
 export class SalesTotalCardsComponent  {
 private _dashboardService = inject(DashboardService);
 
-@Input() beginningDate = '1996-07-04';
-@Input() endingDate = '1998-05-06';
+@Input() beginningDate:Date= new Date();
+@Input() endingDate:Date= new Date();
 
 cards$: Observable<DashboardCard[]> = this.loadCards();
 isLoading:boolean = false;
@@ -29,7 +29,7 @@ ngOnChanges() {
 
 private loadCards(): Observable<DashboardCard[]> {
     return this._dashboardService
-      .getSalesByDateRange(this.beginningDate, this.endingDate)
+      .getSalesByDateRange(this.beginningDate.toISOString(), this.endingDate.toISOString())
       .pipe(
         // If the range is empty, fall back to all sales and remember that we did
         switchMap(rows =>
@@ -55,7 +55,7 @@ private loadCards(): Observable<DashboardCard[]> {
           const rangeLabel = 'All time';
 
           return [
-            { title: 'New Orders', subtitle: latestMonth, value: new Set(monthRows.map(r => r.orderId)).size, isCurrency: false },
+            //{ title: 'New Orders', subtitle: latestMonth, value: new Set(monthRows.map(r => r.orderId)).size, isCurrency: false },
             { title: 'This Month', subtitle: latestMonth, value: monthRows.reduce((s, r) => s + r.lineTotal, 0), isCurrency: true },
             { title: 'Overall Sales', subtitle: rangeLabel, value: rows.reduce((s, r) => s + r.lineTotal, 0), isCurrency: true },
             { title: 'Top Country', subtitle: topCountry, value: topCountrySales, isCurrency: true },

@@ -1,13 +1,25 @@
 
 <div class="dashboard-container row p-3">
+    <div class="dashboard-header">
+        <div class="sales-info-panel">
+            <header class="sales-info-heading">
+                <h1>Welcome, {{welcomeName}}</h1>
+                <p>Choose from a date from 1996 - 1998 to see the Northwind data update in the data visualizations.</p>
+            </header>
+            <app-sales-total-cards  
+            [beginningDate]="beginningDate" 
+            [endingDate]="endingDate">
+            </app-sales-total-cards>
+        </div>
 
-    <app-date-picker-filter 
-    (dateRangeSelected)="onDateRangeSelected($event)"></app-date-picker-filter>
-    <app-sales-total-cards  
-    [beginningDate]="beginningDate" 
-    [endingDate]="endingDate">
-    </app-sales-total-cards>
 
+        <mat-calendar
+        (selectedChange)="onDateRangeSelected($event)"
+        [minDate]="min"
+        [maxDate]="max">
+        </mat-calendar>
+
+    </div>
     <section class="detail-information row">
 
         <div class="col">
@@ -21,16 +33,6 @@
             </mat-card>
         </div>
 
-        <div class="col">
-            <mat-card class="p-3 mb-4">
-                <article class="chart">
-                    <app-donut-chart></app-donut-chart>
-                </article>
-            </mat-card>
-        </div>
-    </section>
-
-    <section class="basic-information row">
         <div class="col">
         <app-card-basic class="overall-sales">
             <div content-header>
@@ -59,6 +61,16 @@
                 </article>                
             </div>
         </app-card-basic>
+        </div>
+    </section>
+
+    <section class="basic-information row">
+        <div class="col">
+            <mat-card class="p-3 mb-4">
+                <article class="chart">
+                    <app-donut-chart></app-donut-chart>
+                </article>
+            </mat-card>
         </div>
         <div class="col">
             <app-card-basic class="verified-savings">
