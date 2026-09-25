@@ -6,15 +6,16 @@ import { UserSessionService } from '../../utilities/services/user-session/user-s
 import { ActivatedRoute } from '@angular/router';
 import { TooltipDirective } from '../../utilities/directives/tooltip/tooltip.directive';
 import { CardBasicComponent } from '../../shared/card-basic/card-basic.component';
-import { CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { Drivers } from '../../utilities/models/drivers';
 import { BarChartComponent } from "./bar-chart/bar-chart.component";
 import { SalesTotalCardsComponent } from "./sales-total-cards/sales-total-cards.component";
 import { DatePickerFilterComponent } from "../../shared/date-picker-filter/date-picker-filter.component";
 import { DashboardService } from '../../utilities/services/dashboard/dashboard.service';
-import { map } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { SalesTotal } from '../../utilities/models/salesTotal';
 import { MatCalendar } from '@angular/material/datepicker';
+import { SalesOverview } from '../../utilities/models/sales-overview';
 
 
 @Component({
@@ -30,7 +31,10 @@ import { MatCalendar } from '@angular/material/datepicker';
     BarChartComponent,
     SalesTotalCardsComponent,
     DatePickerFilterComponent,
-    MatCalendar
+    MatCalendar,
+    DatePipe,
+    AsyncPipe,
+    DecimalPipe
 ],
     templateUrl: './dash.component.html',
     styleUrl: './dash.component.scss'
@@ -66,7 +70,7 @@ export class DashComponent implements OnInit {
   //isLoading = true;
 
   isLoading = signal(true);
-
+  overview$: Observable<SalesOverview> = this.loadSalesOverview();
 
   constructor(private route: ActivatedRoute) {}
 
@@ -81,12 +85,14 @@ export class DashComponent implements OnInit {
     this.welcomeName = this._userSessionService.currentUser!.firstname;
   }
 
-onDateSelected(date: Date) {
+  onDateSelected(date: Date) {
   const beginningDate = new Date(date);
   beginningDate.setHours(0, 0, 0, 0);
-
+  
   const endingDate = new Date(date);
   endingDate.setHours(23, 59, 59, 999);
+
+  this.overview$ = this.loadSalesOverview();
 
   this.beginningDate = beginningDate;
   this.endingDate = endingDate;
@@ -101,6 +107,65 @@ onDateSelected(date: Date) {
         error: (err) => console.error(err)
     })
   }
+
+  loadSalesOverview(): Observable<SalesOverview>{
+    return this._dashService
+      .getSalesByDateRange(this.beginningDate.toISOString(), this.endingDate.toISOString())
+      .pipe(
+        switchMap(rows => rows.length ? of(rows) : this._dashService.getAllSales()),
+        map(rows => {
+          const months = rows.map(r => r.orderDate.slice(0, 7));
+          const latestMonth = months.reduce((max, m) => (m > max ? m : max), '');
+          const sinceDate = rows
+            .map(r => r.orderDate.slice(0, 10))
+            .reduce((min, d) => (d < min ? d : min), rows[0]?.orderDate.slice(0, 10) ?? '');
+
+          // Add up units and sales per category
+          const byCategory = new Map<string, { units: number; sales: number }>();
+          rows.forEach(r => {
+            const current = byCategory.get(r.categoryName) ?? { units: 0, sales: 0 };
+            current.units += r.quantity;
+            current.sales += r.lineTotal;
+            byCategory.set(r.categoryName, current);
+          });
+
+          const topCategories = [...byCategory.entries()]
+            .map(([name, t]) => ({ name, ...t }))
+            .sort((a, b) => b.sales - a.sales)
+            .slice(0, 3);
+
+          const overallSales =  rows
+            .slice(0, 20)                    
+            .map(r => r.unitPrice)           
+            .reduce((sum, price) => sum + price, 0);  
+
+          const topUnits = [...rows]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 3)
+
+
+          return {
+            total: rows.reduce((s, r) => s + r.lineTotal, 0),
+            sinceDate,
+            thisMonth: rows
+              .filter(r => r.orderDate.startsWith(latestMonth))
+              .reduce((s, r) => s + r.lineTotal, 0),
+            topCategories,
+            overallSales,
+            topUnits
+          };
+        }),
+        catchError(err => {
+          console.error('Overview failed to load', err);
+          return of({ total: 0, 
+            sinceDate: '', 
+            thisMonth: 0, 
+            topCategories: [], 
+            overallSales:0,
+            topUnits:[] });
+        })
+      );
+  }  
 
 }
 

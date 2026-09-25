@@ -6,8 +6,10 @@
   <div class="sales-shell">
         @if((user$ | async)?.admin){
           <div class="edit-categories">
-            <button  class="btn btn-primary" (click)="editCategoriesGraphViewToggle()">Graphs</button>
-              <button class="btn btn-secondary"  (click)="editCategoriesEditableToggle()">Edit</button>
+            <button  class="btn btn-primary" 
+            (click)="editCategoriesGraphViewToggle()">Graphs</button>
+              <button class="btn btn-secondary"  
+              (click)="editCategoriesEditableToggle()">Edit</button>
           </div>
         }
 

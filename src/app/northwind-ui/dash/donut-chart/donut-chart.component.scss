@@ -3,12 +3,12 @@
     height:300px;
 }
 
-.chart-wrap,
+/*.chart-wrap,
 .chart-wrap * {
     overflow: visible !important;
     border-radius: 0 !important;
     width:400px;
-}
+}*/
 
 canvas {
     background: none !important;
@@ -47,4 +47,12 @@ select {
   .full-width {
     width: 90%;
   }
+}
+
+.chart-wrap {
+  position: relative;   // Chart.js needs this
+  height: 260px !important;
+
+  @media (min-width: 1200px) { height: 360px!important; }
+  @media (min-width: 1600px) { height: 460px!important; }
 }

@@ -133,7 +133,6 @@ ngOnInit() {
   this._categoriesService.getCategories().subscribe(categories => {
     this.categories = categories;
     this.isLoading = false;
-    // Set defaults once categories arrive
     this.categorySalesForm.patchValue({
       category_name: categories[0].categoryName,
       category_year: '2024'
@@ -155,14 +154,14 @@ ngOnInit() {
 
         this.data = sales
           .map(x => Number(x.totalPurchase) * .025)
-          .slice(0, 8);
+          .slice(0, 5);
 
         this.xlabels = sales
           .map(x => x.productName.length > 3
-            ? x.productName.slice(0, 15) + '...'
+            ? x.productName
             : x.productName
           )
-          .slice(0, 8);
+          .slice(0, 5);
 
         this.maxHeight = Math.max(...this.data);
 

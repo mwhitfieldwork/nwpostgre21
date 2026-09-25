@@ -3,7 +3,7 @@
     <div class="dashboard-header">
         <div class="sales-info-panel">
             <header class="sales-info-heading">
-                <h1>Welcome, {{welcomeName}}</h1>
+                <h1>Welcomed, {{welcomeName}}</h1>
                 <p>Choose from a date from 1996 - 1998 to see the Northwind data update in the data visualizations.</p>
             </header>
             <app-sales-total-cards  
@@ -24,7 +24,6 @@
 
     </div>
     <section class="detail-information row">
-
         <div class="col">
             <mat-card class="p-3 mb-4">
                 <article class="chart">
@@ -37,33 +36,38 @@
         </div>
 
         <div class="col">
-        <app-card-basic class="overall-sales">
-            <div content-header>
-                <h3>Overall Sales</h3>
-                <p class="overall-costs">{{averageSaleCost | currency:'USD':'symbol':'1.0-0' }}</p>
+            @let overview = overview$ | async;
+
+            @if(overview){
+            <app-card-basic class="overall-sales">
+
+                <div content-header>
+                    <h3>Overall Sales</h3>
+                    @if (overview) {
+                        <p class="overall-costs">{{ overview.total | currency:'USD':'symbol':'1.0-0' }}</p>
+                    }
+                </div>
+                <div content-body>
+                    @if (overview) {
+                        <p>Cumulative costs since: {{ overview.sinceDate | date:'MMM d, y' }}</p>
+                        <h4>THIS MONTH <span>{{ overview.thisMonth | currency:'USD':'symbol':'1.0-0' }}</span></h4>
+                    }
+                </div>
+                <div content-footer>
+                    @for (cat of overview?.topCategories ?? []; track cat.name) {
+                        <div>
+                            <span>{{ cat.name }}</span>
+                            <strong>{{ cat.units | number }} units</strong>
+                            <span>{{ cat.sales | currency:'USD':'symbol':'1.0-0' }}</span>
+                        </div>
+                    }
+                </div>
+            </app-card-basic>
+            } @else {
+                <div class="loading-container">
+                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
             </div>
-            <div content-body>
-                <p>Cumulative costs since last March: {{averageSaleCost | currency:'USD':'symbol':'1.0-0' }}</p>
-                <h4>THIS MONTH <span>{{basicCost | currency:'USD':'symbol':'1.0-0' }}</span></h4>
-            </div>
-            <div content-footer>
-                <article>
-                    <h4>Water</h4>
-                    <p>185.2k Gal</p>
-                    <span>{{averageSaleCost | currency:'USD':'symbol':'1.0-0' }}</span>
-                </article>
-                <article>
-                    <h4>Coal</h4>
-                    <p>41.2k Mb</p>
-                    <span>{{averageSaleCost | currency:'USD':'symbol':'1.0-0' }}</span>
-                </article>
-                <article>
-                    <h4>Coal</h4>
-                    <p>41.2k Mb</p>
-                    <span>{{averageSaleCost | currency:'USD':'symbol':'1.0-0' }}</span>
-                </article>                
-            </div>
-        </app-card-basic>
+            }             
         </div>
     </section>
 
@@ -76,21 +80,22 @@
             </mat-card>
         </div>
         <div class="col">
+            @if(overview){
             <app-card-basic class="verified-savings">
                 <div content-header>
-                    <h3>Occupied Spaciacl Costs</h3>
-                    <p class="overall-costs">{{averageSaleCost | currency:'USD':'symbol':'1.0-0' }}</p>
+                    <h3>Occupied Specialized Costs</h3>
+                    <p class="overall-costs">{{overview.overallSales | currency:'USD':'symbol':'1.0-0' }}</p>
                 </div>
                 <div content-body>
                     <p><strong>Estimated Influenced Sales drivers</strong></p>
                     <h4>Top Sales Influences</h4>
 
-                    @for(driver of drivers; track driver.id){
-                        <article >
-                            <span class="driver-id">{{driver.id}}</span>
-                            <p><strong>{{driver.name}}</strong></p>
-                            <span class="driver-cost"><strong>{{driver.cost | currency:'USD':'symbol':'1.0-0' }}</strong></span>
-                        </article>        
+                    @for (line of overview.topUnits; track line.orderId; let i = $index) {
+                        <article>
+                            <span class="driver-id">{{ i + 1 }}</span>
+                            <p><strong>{{ line.categoryName }}</strong></p>
+                            <span class="driver-cost"><strong>{{ line.lineTotal | currency:'USD':'symbol':'1.0-0' }}</strong></span>
+                        </article>
                     }
                 </div>
                 <div content-footer>
@@ -111,6 +116,11 @@
                     </article>        
                 </div>
             </app-card-basic>
+                } @else {
+                <div class="loading-container">
+                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                </div>
+                } 
             </div>        
     </section>
 
