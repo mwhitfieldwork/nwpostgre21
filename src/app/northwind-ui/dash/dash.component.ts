@@ -78,20 +78,19 @@ export class DashComponent implements OnInit {
       this.isLoading.set(false);
     });
 
-    //this.welcomeName = this._userSessionService.currentUser!.firstname;
+    this.welcomeName = this._userSessionService.currentUser!.firstname;
   }
 
-  onDateRangeSelected(date: Date) {
-  // Beginning of day
+onDateRangeSelected(date: Date) {
   const beginningDate = new Date(date);
   beginningDate.setHours(0, 0, 0, 0);
 
-  // End of day
   const endingDate = new Date(date);
   endingDate.setHours(23, 59, 59, 999);
 
   this.beginningDate = beginningDate;
   this.endingDate = endingDate;
+
 
     this._dashService.getSalesTotals(beginningDate.toISOString(), endingDate.toISOString())
     .subscribe({
