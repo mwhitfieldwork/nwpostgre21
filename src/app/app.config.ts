@@ -8,10 +8,12 @@ import { ErrorInterceptor } from './utilities/interceptor/error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { loadingInterceptor } from './utilities/interceptor/loader.interceptor';
 import { successToastInterceptor } from './utilities/interceptor/success-toast.interceptor';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideNativeDateAdapter(),
 provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
