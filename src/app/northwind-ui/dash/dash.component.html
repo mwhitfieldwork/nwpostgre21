@@ -13,11 +13,14 @@
         </div>
 
 
-        <mat-calendar
-        (selectedChange)="onDateRangeSelected($event)"
-        [minDate]="min"
-        [maxDate]="max">
-        </mat-calendar>
+
+        @if(min && max){
+            <mat-calendar
+            (selectedChange)="onDateSelected($event)"
+            [minDate]="min"
+            [maxDate]="max">
+            </mat-calendar>
+        }
 
     </div>
     <section class="detail-information row">

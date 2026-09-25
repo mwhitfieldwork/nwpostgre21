@@ -81,7 +81,7 @@ export class DashComponent implements OnInit {
     this.welcomeName = this._userSessionService.currentUser!.firstname;
   }
 
-onDateRangeSelected(date: Date) {
+onDateSelected(date: Date) {
   const beginningDate = new Date(date);
   beginningDate.setHours(0, 0, 0, 0);
 
