@@ -109,6 +109,7 @@ donutChartData: ChartData<'doughnut'> = {
 
 donutChartOptions: ChartOptions<'doughnut'> = {
   responsive: true,
+  maintainAspectRatio: false,
   cutout: '75%',
   elements: {
     arc: {
@@ -207,14 +208,14 @@ ngOnInit() {
 
       this.data = sales
         .map(x => Number(x.totalPurchase) * .025)
-        .slice(0, 8);
+        .slice(0, 5);
 
       this.xlabels = sales
         .map(x => x.productName.length > 3
-          ? x.productName.slice(0, 15) + '...'
+          ? x.productName
           : x.productName
         )
-        .slice(0, 8);
+        .slice(0, 5);
 
       this.maxHeight = Math.max(...this.data);
       this.xFullLabels = sales.map(x => x.productName);

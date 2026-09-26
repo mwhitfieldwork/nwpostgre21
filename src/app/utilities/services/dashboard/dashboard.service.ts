@@ -57,7 +57,13 @@ export class DashboardService {
           .get<SalesLine[]>(`${this.url}/Dashboard/sales/range`, {
             params: { beginningDate, endingDate },
           })
-          .pipe(shareReplay(1))
+        .pipe(
+          tap(data => {
+            console.log('API response for range:', { beginningDate, endingDate });
+            console.log('Returned data:', data);
+          }),
+          shareReplay(1)
+        )
       );
     }
     return this.rangeCache.get(key)!;
