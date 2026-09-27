@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NavComponent } from './nav/nav.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -15,6 +15,9 @@ import { Visitor } from './utilities/models/visitor.model';
 import { DUMMY_USERS } from './utilities/models/DUMMY_USERS';
 import { LoadingSpinnerComponent } from "./shared/loader/site-wide-loader";
 import { AgentChatComponent } from './northwind-ui/agent-chat/agent-chat.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BreakpointObserver } from '@angular/cdk/layout';
+
 @Component({
     selector: 'app-root',
     standalone: true,
@@ -31,7 +34,7 @@ import { AgentChatComponent } from './northwind-ui/agent-chat/agent-chat.compone
     RouterLinkActive,
     UsersComponent,
     LoadingSpinnerComponent,
-    AgentChatComponent
+    AgentChatComponent,
 ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
@@ -46,12 +49,18 @@ export class AppComponent implements OnInit {
 
   private _router = inject(Router);
   private  _userSessionService = inject(UserSessionService);
+    private breakpointObserver = inject(BreakpointObserver);
+  private destroyRef = inject(DestroyRef);
 
   toggleSidenav() {
     this.isCollapsed = !this.isCollapsed;
   }
 
   ngOnInit(): void {
+    this.breakpointObserver.observe('(max-width: 1100px)')
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe(result => (this.isCollapsed = result.matches));
+          
     this._router.events
     .pipe(
       // Only act on NavigationEnd events

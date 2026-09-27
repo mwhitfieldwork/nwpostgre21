@@ -56,3 +56,7 @@ mat-table {
         background-color: #f3f6f7;
     }
 }
+
+table {
+  min-width: 700px; // keeps columns readable; the parent scrolls
+}

@@ -115,3 +115,16 @@
     .metric-icon { background-color:rgba(192, 171, 205, .2) }
   }
 }
+
+@media (max-width: 1100px) {
+  .top-cards {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+  }
+
+  .dashboard-cards .dashboard-card {
+    flex: 0 0 260px; // each card keeps a fixed width
+  }
+}
