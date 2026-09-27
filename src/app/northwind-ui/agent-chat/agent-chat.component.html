@@ -1,0 +1,32 @@
+<div class="agent-widget">
+  @if (isOpen) {
+    <div class="chat">
+      <div class="chat__header">
+        <span>Restock Assistant</span>
+        <button type="button" class="chat__close" (click)="toggle()">✕</button>
+      </div>
+
+      <div class="chat__messages">
+        @for (msg of messages; track $index) {
+          <div class="chat__bubble" [class.chat__bubble--user]="msg.from === 'user'">
+            {{ msg.text }}
+          </div>
+        } @empty {
+          <p class="chat__hint">Try: "Which products should I reorder?"</p>
+        }
+        @if (loading) {
+          <div class="chat__bubble">Checking inventory…</div>
+        }
+      </div>
+
+      <form class="chat__form" (ngSubmit)="send()">
+        <input name="question" [(ngModel)]="question" placeholder="Ask about your inventory…" autocomplete="off" />
+        <button type="submit" [disabled]="loading || !question.trim()">Send</button>
+      </form>
+    </div>
+  }
+
+  <button type="button" class="agent-widget__launcher" (click)="toggle()">
+    {{ isOpen ? '✕' : '💬' }}
+  </button>
+</div>

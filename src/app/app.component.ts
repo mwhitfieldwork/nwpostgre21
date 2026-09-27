@@ -14,6 +14,7 @@ import { UserSessionService } from './utilities/services/user-session/user-sessi
 import { Visitor } from './utilities/models/visitor.model';
 import { DUMMY_USERS } from './utilities/models/DUMMY_USERS';
 import { LoadingSpinnerComponent } from "./shared/loader/site-wide-loader";
+import { AgentChatComponent } from './northwind-ui/agent-chat/agent-chat.component';
 @Component({
     selector: 'app-root',
     standalone: true,
@@ -29,7 +30,8 @@ import { LoadingSpinnerComponent } from "./shared/loader/site-wide-loader";
     NgClass,
     RouterLinkActive,
     UsersComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    AgentChatComponent
 ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
