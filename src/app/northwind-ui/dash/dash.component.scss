@@ -634,7 +634,9 @@
 
     
   .basic-information
-  app-card-basic [content-body] {
+  app-card-basic [content-body],
+.basic-information
+  app-card-basic [content-header] {
         padding:unset;
     }
 

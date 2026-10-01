@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { UserSessionService } from '../utilities/services/user-session/user-session.service';
 import { Authentication } from '../utilities/models/authentication';
@@ -25,6 +25,8 @@ export class NavComponent implements AfterViewInit {
  user!:Authentication | null;
  isLoggedIn:boolean = false
  visitors = DUMMY_USERS;
+ @Input() menuOpen = false;
+ @Output() menuToggle = new EventEmitter<void>();
 
 ngAfterViewInit(): void {
   const userId = localStorage.getItem('user');

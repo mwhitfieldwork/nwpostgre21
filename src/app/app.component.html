@@ -1,12 +1,13 @@
 
 @if(isLoggedIn){ 
-<app-nav></app-nav>
+<app-nav [menuOpen]="mobileNavOpen" (menuToggle)="toggleMobileNav()"></app-nav>
 <app-loading-spinner />
 <mat-sidenav-container 
 class="layout"> 
   <mat-sidenav #sidenav 
-  mode="side" 
-  [opened]="true"
+  [mode]="isMobileScreen ? 'over' : 'side'"
+  [opened]="!isMobileScreen || mobileNavOpen"
+  (closedStart)="mobileNavOpen = false"
   [class.collapsed]="isCollapsed"
   class="sidebar"> 
       <!-- Floating collapse button -->

@@ -44,6 +44,8 @@ export class AppComponent implements OnInit {
   userId!:string | null;
   isLoggedIn = true;
   isCollapsed = false;
+  isMobileScreen = false;
+  mobileNavOpen = false;
   user!:Authentication | null;
   visitors = DUMMY_USERS;
 
@@ -56,10 +58,17 @@ export class AppComponent implements OnInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
+  toggleMobileNav() {
+    this.mobileNavOpen = !this.mobileNavOpen;
+  }
+
   ngOnInit(): void {
-    this.breakpointObserver.observe('(max-width: 1100px)')
+    this.breakpointObserver.observe('(max-width: 1024px)')
     .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe(result => (this.isCollapsed = result.matches));
+    .subscribe(result => {
+      this.isMobileScreen = result.matches;
+      this.mobileNavOpen = false;
+    });
           
     this._router.events
     .pipe(
