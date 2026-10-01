@@ -13,6 +13,9 @@
       min-width: 0;
 
       .sales-info-heading {
+        display:flex;
+        justify-content: space-between;
+        
         h1 {
           color: #313334;
           font-family: Roboto, Arial, Helvetica, sans-serif; 
@@ -651,15 +654,31 @@
   }
 
   .order-history {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     max-width: 100%;
-    margin: 0;
+    margin-bottom: 75px;
   }
 
   .order-history > .col {
     min-width: 0;
     padding: 0;
+  }
+
+  .order-history mat-card,
+  .order-history .orders {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .order-history .orders {
+    display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .order-history .orders app-order-history {
+    display: block;
+    min-width: 700px;
   }
 }
 

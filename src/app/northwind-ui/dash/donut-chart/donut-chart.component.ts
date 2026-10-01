@@ -123,18 +123,9 @@ donutChartOptions: ChartOptions<'doughnut'> = {
     }
   },
   plugins: {
-    legend: {
-      position: 'bottom',
-      labels: {
-        color: '#1a1a2e',
-        font: { size: 12 },
-        padding: 16,
-        boxWidth: 14,
-        // optional: makes legend markers look less “boxed”
-        usePointStyle: true,
-        pointStyle: 'circle'
-      }
-    },
+  legend: {
+    display: false
+  },
     tooltip: { enabled: true }
   }
 };

@@ -24,6 +24,9 @@ select {
   border: unset !important;
   width: 100%;
   min-width: 0;
+    display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .edit-categories {
@@ -35,9 +38,9 @@ select {
   }
 }
 
-.controls {
+.donut-controls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   min-width: 0;
 
@@ -47,7 +50,7 @@ select {
 
   mat-form-field,
   .custom-field {
-    width: 100%;
+    width: 50%;
     min-width: 0;
   }
 }
@@ -56,9 +59,10 @@ select {
   position: relative;      // Chart.js needs this
   container-type: size;    // lets the label size itself from this box
   width: 100%;
-  max-width: 100%;
+  max-width: 50%;
   min-width: 0;
   height: 260px !important;
+  margin:0 auto;
 
   @media (min-width: 1200px) { height: 360px !important; }
   @media (min-width: 1600px) { height: 460px !important; }

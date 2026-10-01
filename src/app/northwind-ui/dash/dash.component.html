@@ -3,27 +3,24 @@
     <div class="dashboard-header">
         <div class="sales-info-panel">
             <header class="sales-info-heading">
-                <h1>Welcomed, {{welcomeName}}</h1>
+                <div class="heading-info">
+                <h1>Hello, {{welcomeName}}</h1>
                 <p>Choose a date between 1996 and 1998 to update the Northwind data visualizations.</p>
+                </div>
+
+                @if(min && max){
+                    <div class="dashboard-calendar">
+                <app-date-picker-filter 
+                (dateRangeSelected)="onDateRangeSelected($event)">
+                </app-date-picker-filter>
+                    </div>
+                }
             </header>
             <app-sales-total-cards  
             [beginningDate]="beginningDate" 
             [endingDate]="endingDate">
             </app-sales-total-cards>
         </div>
-
-
-
-        @if(min && max){
-            <div class="dashboard-calendar">
-                <mat-calendar
-                (selectedChange)="onDateSelected($event)"
-                [minDate]="min"
-                [maxDate]="max">
-                </mat-calendar>
-            </div>
-        }
-
     </div>
     <section class="detail-information row">
         <div class="col">
@@ -34,7 +31,7 @@
                     [endingDate]="endingDate"
                     ></app-bar-chart>
                 </article>
-            </mat-card>
+            </mat-card>         
         </div>
 
         <div class="col">
