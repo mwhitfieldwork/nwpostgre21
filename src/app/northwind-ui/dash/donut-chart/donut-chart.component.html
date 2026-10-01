@@ -46,7 +46,11 @@
                   [options]="donutChartOptions"
                   type="doughnut">
                 </canvas>
-              </div>
+
+                <div class="majority-chart-label">
+                  <p>{{percentage}}%</p>
+                </div>  
+            </div>
             
               <ng-template #empty>
                 <div class="empty-state">

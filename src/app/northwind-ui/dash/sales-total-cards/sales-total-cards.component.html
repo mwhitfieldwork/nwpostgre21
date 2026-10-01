@@ -7,7 +7,10 @@
                 <article class="d-block gap-3">
                   <h3 class="text-uppercase text-secondary">{{ card.title }}</h3>
                   <h4 class="text-primary">{{ card.subtitle }}</h4>
-                  <p>
+                  <p
+                  [tickerText]="card.isCurrency 
+                  ? (card.value | currency:'USD':'symbol':'1.0-0') 
+                  : (card.value | number)">
                     @if (card.isCurrency) {
                       {{ card.value | currency:'USD':'symbol':'1.0-0' }}
                     } @else {

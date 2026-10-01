@@ -16,6 +16,7 @@ import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { SalesTotal } from '../../utilities/models/salesTotal';
 import { MatCalendar } from '@angular/material/datepicker';
 import { SalesOverview } from '../../utilities/models/sales-overview';
+import { ScrambleTextDirective } from '../../utilities/directives/label-animation/scramble-text.directive';
 
 
 @Component({
@@ -34,7 +35,8 @@ import { SalesOverview } from '../../utilities/models/sales-overview';
     MatCalendar,
     DatePipe,
     AsyncPipe,
-    DecimalPipe
+    DecimalPipe,
+    ScrambleTextDirective
 ],
     templateUrl: './dash.component.html',
     styleUrl: './dash.component.scss'
@@ -42,7 +44,7 @@ import { SalesOverview } from '../../utilities/models/sales-overview';
 export class DashComponent implements OnInit {
   beginningDate:Date= new Date();
   endingDate: Date= new Date();
-  max:Date = new Date(1998, 6, 7);
+  max:Date = new Date(1997,12, 30);
   min: Date = new Date(1996, 2, 15)
   
   totalOrders:number = 12873;
