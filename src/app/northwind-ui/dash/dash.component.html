@@ -44,7 +44,8 @@
                 <div content-header>
                     <h3>Overall Sales</h3>
                     @if (overview) {
-                        <p class="overall-costs">{{ overview.total | currency:'USD':'symbol':'1.0-0' }}</p>
+                        <p class="overall-costs" 
+                        [scrambleText]="overview.total ? (overview.total | currency:'USD':'symbol':'1.0-0') : ''">{{ overview.total | currency:'USD':'symbol':'1.0-0' }}</p>
                     }
                 </div>
                 <div content-body>

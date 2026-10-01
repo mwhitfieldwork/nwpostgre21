@@ -3,11 +3,16 @@ import { DashboardService } from '../../../utilities/services/dashboard/dashboar
 import { DashboardCard } from '../../../utilities/models/dashboard-card';
 import { AsyncPipe, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import { TickerTextDirective } from '../../../utilities/directives/label-animation/ticker-text.directive';
 
 @Component({
     selector: 'app-sales-total-cards',
     standalone: true,
-    imports: [AsyncPipe, CurrencyPipe, DecimalPipe],
+    imports: [
+      AsyncPipe, 
+      CurrencyPipe, 
+      DecimalPipe,
+      TickerTextDirective],
     templateUrl: './sales-total-cards.component.html',
     styleUrl: './sales-total-cards.component.scss'
 })
@@ -66,6 +71,6 @@ private loadCards(): Observable<DashboardCard[]> {
           return of([]);
         })
       );
-    }
+}
 
 }

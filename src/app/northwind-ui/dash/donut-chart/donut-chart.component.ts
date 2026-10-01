@@ -34,7 +34,8 @@ import { ProductsService } from '../../../utilities/services/product-table/produ
         MatFormFieldModule,
         MatSelectModule,
         BaseChartDirective,
-        AsyncPipe
+        AsyncPipe,
+
     ],
     templateUrl: './donut-chart.component.html',
     styleUrl: './donut-chart.component.scss'
@@ -73,8 +74,11 @@ salesData: CategorySale[] = [];
 ylabels:number[] =[0, 50, 100, this.max].reverse();
 isEditable:boolean = false;
 selectedProduct?:CategorySale;
-
+maxDataValue?: number;
 isLoading:boolean = true;
+percentage:number = 0;
+
+
 
 //donutChartType: ChartType = 'doughnut';
 donutChartType = 'doughnut' as const;
@@ -110,7 +114,7 @@ donutChartData: ChartData<'doughnut'> = {
 donutChartOptions: ChartOptions<'doughnut'> = {
   responsive: true,
   maintainAspectRatio: false,
-  cutout: '75%',
+  cutout: '70%',
   elements: {
     arc: {
       borderWidth: 0,
@@ -120,7 +124,7 @@ donutChartOptions: ChartOptions<'doughnut'> = {
   },
   plugins: {
     legend: {
-      position: 'right',
+      position: 'bottom',
       labels: {
         color: '#1a1a2e',
         font: { size: 12 },
@@ -218,7 +222,12 @@ ngOnInit() {
         .slice(0, 5);
 
       this.maxHeight = Math.max(...this.data);
+      //const total = this.data.reduce((sum, n) => sum + n, 0);
+      const avg = this.data.reduce((s, n) => s + n, 0) / this.data.length;
+      this.percentage = Math.round((avg / this.maxHeight) * 100);
       this.xFullLabels = sales.map(x => x.productName);
+
+      console.log(this.percentage, '% -------- percent')
 
       this.displayData();
     });
@@ -234,7 +243,7 @@ ngOnInit() {
         data: [...this.data],
         backgroundColor: [
         "#FF0000", // red
-        "#00A2FF", // cyan-blue (contrast to red)
+        "#4c1d95", // cyan-blue (contrast to red)
 
         "#dadd32", // green
         "#bfa939", // magenta-pink (contrast to green)
