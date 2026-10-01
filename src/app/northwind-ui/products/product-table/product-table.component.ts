@@ -69,16 +69,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   isChildActive: boolean = false;
 
 
-  displayedColumns: string[] = [
-      'select',
-    'displayName',
-    'quantity',
-    'price',
-    'discontinued',
-    'rating',
-    'edit',
-    'delete'
-  ];
+  displayedColumns!: string[]
 
   products$!: Observable<ProductModel[]>;
   products: ProductModel[] = [];
@@ -97,6 +88,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   updatedList:ProductModel[] = [];
   emailInvoice!: ProductInvoice;
   isEmailable:boolean = false;
+  isAdmin:boolean = false;
 
   constructor(
     private _productsService: ProductsService, 
@@ -114,6 +106,31 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
       startWith(undefined),
       switchMap(() => this.getProducts())
     );     
+    
+    this.user$.subscribe(user => {
+        const isAdmin = !!user?.admin;
+        this.isAdmin = isAdmin;
+
+        this.displayedColumns = isAdmin
+          ? [
+              'select',
+              'displayName',
+              'quantity',
+              'price',
+              'discontinued',
+              'rating',
+              'edit',
+              'delete'
+            ]
+          : [
+            'select',
+            'displayName',
+            'quantity',
+            'price',
+            'discontinued',
+            'rating'           
+            ];
+      });    
   }
 
   ngAfterViewInit(): void {

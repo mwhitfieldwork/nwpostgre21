@@ -2,6 +2,7 @@
         @if (orders$ | async) {
         <mat-table mat-table [dataSource]="dataSource" matSort class="table-mat mat-elevation-z8">
             <ng-container matColumnDef="select">
+                <!--                
                 <th mat-header-cell *matHeaderCellDef class="select-row-tr">
                     <mat-checkbox (change)="$event ? toggleAllRows() : null" 
                                 [checked]="selection.hasValue() && isAllSelected()"
@@ -13,7 +14,8 @@
                                 (change)="onCheckboxChange($event, row)"
                                 [checked]="selection.isSelected(row)">
                     </mat-checkbox>
-                </td>
+                </td> 
+                -->
             </ng-container>
             <ng-container matColumnDef="productName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Name </th>
@@ -24,11 +26,14 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Price </th>
                 <td mat-cell *matCellDef="let element"> {{element.unitPrice | customNumber:'tens'}} </td>
             </ng-container>
-
+            
             <ng-container matColumnDef="quantity">
                 <th mat-header-cell *matHeaderCellDef="let element" mat-sort-header>Quantity </th>
-                <td mat-cell *matCellDef="let element"> <input matInput [(ngModel)]="element.quantity"> </td>
+                <td mat-cell *matCellDef="let element"> 
+                    <span>{{element.quantity}}</span>
+                    <!--<input matInput [(ngModel)]="element.quantity">--> </td>
             </ng-container>
+            
             <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef="let element" mat-sort-header>Status </th>
                 <td mat-cell *matCellDef="let element" class="status">
