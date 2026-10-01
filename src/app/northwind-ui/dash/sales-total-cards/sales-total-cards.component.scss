@@ -2,25 +2,32 @@
 
 .dashboard-cards {
   margin-bottom: 1.5rem;
+  margin-left: 0;
+  margin-right: 0;
 
   .col {
     display: flex;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .top-cards {
-  display: flex;
-  gap: 1rem;
-  width: 100%;
+    display: grid;
+    align-items: baseline;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    width: 100%;
   }
 
   .dashboard-card{
-    margin:10px;
-    padding:15px;
+    box-sizing: border-box;
+    min-width: 0;
+    margin: 0;
+    padding: 1rem;
     border-radius: $card-radius;
     width: 100%;
     display: flex;
-      flex: 1;          // expands evenly
-  min-width: 0;
+    flex: 1;
     justify-content: space-between;
     box-shadow: 0 4px 10px rgba(38, 43, 69, 0.06);
     transition: transform $transition-speed ease, box-shadow $transition-speed ease;
@@ -50,10 +57,15 @@
   p {
     margin: 0 !important;
     font-family: var(--neptune-typography-family-roboto, Roboto);;
-    font-size: 2rem !important;
+    font-size: clamp(1.35rem, 2vw, 2rem) !important;
     font-weight: 600;
     line-height: 1.1;
     letter-spacing: -0.5px;
+    overflow-wrap: anywhere;
+  }
+
+  p, span {
+    color:unset !important;
   }
 
   .dashboard-card-icon {
@@ -116,15 +128,51 @@
   }
 }
 
-@media (max-width: 1100px) {
-  .top-cards {
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 8px;
+@media (max-width: 1024px) {
+  .dashboard-cards .top-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
   }
 
   .dashboard-cards .dashboard-card {
-    flex: 0 0 260px; // each card keeps a fixed width
+    min-height: 112px;
+    padding: 0.9rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .dashboard-cards .top-cards {
+    gap: 0.65rem;
+  }
+
+  .dashboard-cards .dashboard-card {
+    min-height: 104px;
+    padding: 0.8rem;
+  }
+
+  .dashboard-cards h3 {
+    font-size: 0.68rem !important;
+    letter-spacing: 0.06em;
+  }
+
+  .dashboard-cards h4 {
+    font-size: 0.95rem !important;
+  }
+
+  .dashboard-cards p {
+    font-size: clamp(1.15rem, 5.5vw, 1.55rem) !important;
+  }
+
+  .dashboard-cards .dashboard-card-icon {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    margin-left: 0.35rem;
+  }
+}
+
+@media (max-width: 359px) {
+  .dashboard-cards .top-cards {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

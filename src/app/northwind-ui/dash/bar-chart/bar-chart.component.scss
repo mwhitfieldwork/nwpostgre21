@@ -1,30 +1,56 @@
 .chart-container {
     height: 100%;
+    width: 100%;
+    min-width: 0;
 }
 
 .chart-container canvas {
     height: 80% !important;
     width: 100% !important;
+    max-width: 100%;
  }
 
  .kpi-container {
-    display: flex;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.5rem, 2vw, 1.25rem);
   }
   
   .kpi-card {
+    min-width: 0;
     background: #fff;
-    padding: 20px;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+    h2,
+    p {
+      overflow-wrap: anywhere;
+    }
   }
   
   .chart-card {
-    margin-top: 30px;
+    min-width: 0;
+    margin-top: 1.25rem;
     background: #fff;
-    padding: 20px;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
-  
+
+@media (max-width: 767px) {
+  .kpi-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chart-container canvas {
+    height: 250px !important;
+  }
+}
+
+@media (max-width: 359px) {
+  .kpi-container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
   
