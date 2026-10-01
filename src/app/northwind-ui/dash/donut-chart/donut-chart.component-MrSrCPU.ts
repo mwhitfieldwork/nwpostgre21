@@ -103,6 +103,7 @@ donutChartOptions: ChartOptions<'doughnut'> = {
     }
   },
   plugins: {
+    /*
     legend: {
       position: 'right',
       labels: {
@@ -114,7 +115,7 @@ donutChartOptions: ChartOptions<'doughnut'> = {
         usePointStyle: true,
         pointStyle: 'circle'
       }
-    },
+    },*/
     tooltip: { enabled: true }
   }
 };

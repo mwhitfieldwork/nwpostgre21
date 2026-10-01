@@ -60,7 +60,7 @@ private loadCards(): Observable<DashboardCard[]> {
           const rangeLabel = 'All time';
 
           return [
-            //{ title: 'New Orders', subtitle: latestMonth, value: new Set(monthRows.map(r => r.orderId)).size, isCurrency: false },
+            { title: 'New Orders', subtitle: latestMonth, value: new Set(monthRows.map(r => r.orderId)).size, isCurrency: false },
             { title: 'This Month', subtitle: latestMonth, value: monthRows.reduce((s, r) => s + r.lineTotal, 0), isCurrency: true },
             { title: 'Overall Sales', subtitle: rangeLabel, value: rows.reduce((s, r) => s + r.lineTotal, 0), isCurrency: true },
             { title: 'Top Country', subtitle: topCountry, value: topCountrySales, isCurrency: true },

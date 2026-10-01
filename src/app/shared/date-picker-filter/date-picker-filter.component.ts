@@ -27,7 +27,7 @@ export class DatePickerFilterComponent implements OnInit {
 
   @Output() dateRangeSelected = new EventEmitter<DateRange>();
   
-  maxDate: Date = new Date(1998, 5, 6); 
+  maxDate: Date = new Date(1997, 12, 30); 
   minDate: Date = new Date(1996, 0, 1); 
   datePickerForm!: FormGroup;
   

@@ -1,4 +1,4 @@
-import { Component, computed, effect, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { DonutChartComponent } from "./donut-chart/donut-chart.component";
 import { OrderHistoryComponent } from "../order-history/order-history.component";
@@ -14,7 +14,7 @@ import { DatePickerFilterComponent } from "../../shared/date-picker-filter/date-
 import { DashboardService } from '../../utilities/services/dashboard/dashboard.service';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { SalesTotal } from '../../utilities/models/salesTotal';
-import { MatCalendar } from '@angular/material/datepicker';
+import { MatCalendar, MatDateRangePicker } from '@angular/material/datepicker';
 import { SalesOverview } from '../../utilities/models/sales-overview';
 import { ScrambleTextDirective } from '../../utilities/directives/label-animation/scramble-text.directive';
 
@@ -42,6 +42,10 @@ import { ScrambleTextDirective } from '../../utilities/directives/label-animatio
     styleUrl: './dash.component.scss'
 })
 export class DashComponent implements OnInit {
+
+  @ViewChild(MatDateRangePicker) rangePicker!: MatDateRangePicker<Date>;
+
+
   beginningDate:Date= new Date();
   endingDate: Date= new Date();
   max:Date = new Date(1997,12, 30);
@@ -55,6 +59,7 @@ export class DashComponent implements OnInit {
   basicCost:number = 1180.09;
   salesTotals: SalesTotal[] = [];
   welcomeName!:string;
+
 
   drivers: Drivers[] = [
     {id:1, name: 'Water', cost: 185.2},
@@ -87,20 +92,18 @@ export class DashComponent implements OnInit {
     this.welcomeName = this._userSessionService.currentUser!.firstname;
   }
 
-  onDateSelected(date: Date) {
-  const beginningDate = new Date(date);
-  beginningDate.setHours(0, 0, 0, 0);
-  
-  const endingDate = new Date(date);
-  endingDate.setHours(23, 59, 59, 999);
+  onDateRangeSelected(dateRange: { beginningDate: Date; endingDate: Date }) {
+ this.beginningDate = new Date(dateRange.beginningDate);
 
-  this.overview$ = this.loadSalesOverview();
+  this.endingDate = new Date(dateRange.endingDate);
+  this.endingDate.setHours(23, 59, 59, 999); // end of day
 
-  this.beginningDate = beginningDate;
-  this.endingDate = endingDate;
+  // Convert to ISO for backend
+  const beginningIso = this.beginningDate.toISOString();
+  const endingIso = this.endingDate.toISOString();
 
-
-    this._dashService.getSalesTotals(beginningDate.toISOString(), endingDate.toISOString())
+    console.log('Selected date range:', dateRange);
+    this._dashService.getSalesTotals(dateRange.beginningDate.toISOString(), dateRange.endingDate.toISOString())
     .subscribe({
         next: (salesTotals) => {
           this.salesTotals = salesTotals;
@@ -108,7 +111,7 @@ export class DashComponent implements OnInit {
         },
         error: (err) => console.error(err)
     })
-  }
+  }   
 
   loadSalesOverview(): Observable<SalesOverview>{
     return this._dashService
