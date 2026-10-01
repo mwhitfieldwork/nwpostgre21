@@ -55,7 +55,7 @@ private rowFactory = inject(RowDisplayFactory);
 private statuses = ['Shipped', 'Pending', 'Processing'];
 
 displayedColumns: string[] = [
-   'select',
+   //'select',
   'productName',
   'unitPrice',
   'quantity',
