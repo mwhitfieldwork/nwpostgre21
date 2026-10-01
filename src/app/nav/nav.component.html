@@ -9,10 +9,20 @@
         </div>
         <ul>
             <li>
-                <span class="user">Welcome, {{user.firstname}}</span>          
+                <span class="user">Welcome, {{user.firstname}}</span>
                 <a href="#" (click)="Logout()">Logout</a>
             </li>
         </ul>
+        <button
+            type="button"
+            class="hamburger-menu"
+            aria-label="Toggle navigation menu"
+            [attr.aria-expanded]="menuOpen"
+            (click)="menuToggle.emit()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 </section>
 }

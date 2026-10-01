@@ -4,7 +4,7 @@
         <div class="sales-info-panel">
             <header class="sales-info-heading">
                 <h1>Welcomed, {{welcomeName}}</h1>
-                <p>Choose from a date from 1996 - 1998 to see the Northwind data update in the data visualizations.</p>
+                <p>Choose a date between 1996 and 1998 to update the Northwind data visualizations.</p>
             </header>
             <app-sales-total-cards  
             [beginningDate]="beginningDate" 
@@ -15,11 +15,13 @@
 
 
         @if(min && max){
-            <mat-calendar
-            (selectedChange)="onDateSelected($event)"
-            [minDate]="min"
-            [maxDate]="max">
-            </mat-calendar>
+            <div class="dashboard-calendar">
+                <mat-calendar
+                (selectedChange)="onDateSelected($event)"
+                [minDate]="min"
+                [maxDate]="max">
+                </mat-calendar>
+            </div>
         }
 
     </div>

@@ -3,12 +3,14 @@
   .dashboard-header {
     display: flex;
     justify-content: space-between;
-      align-items: flex-end; 
+    align-items: end;
+    gap: 1.5rem;
 
 
     .sales-info-panel {
       font-family: unset;
-      width: 100%;
+      flex: 1 1 auto;
+      min-width: 0;
 
       .sales-info-heading {
         h1 {
@@ -25,12 +27,24 @@
     }
 
     app-sales-total-cards {
+      display: block;
+      width: 100%;
       align-self: baseline;
+    }
+
+    .dashboard-calendar {
+      flex: 0 0 290px;
+      max-width: 100%;
     }
   }
 
 .dashboard-container {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0;
   background-color: #f0f2f8;
 
   h1 {
@@ -40,8 +54,9 @@
     color: $color-ink;
   }
 
+  .dashboard-calendar,
   mat-calendar {
-    width:25%;
+    width: 100%;
   }
 }
 
@@ -238,11 +253,16 @@
 .detail-information {
   display: flex;
   flex-wrap: wrap;
+  gap: 1rem;
+  margin-left: 0;
+  margin-right: 0;
 
   .col {
     flex: 1;
     min-width: 280px;
     display: flex;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   app-card-basic {
@@ -582,63 +602,197 @@
 }
 
 // =============================================================
-// Responsive: single column below tablet width
+// Responsive dashboard layouts
 // =============================================================
-@media (max-width: 1100px) {
-
-  // Header: title and date button stack
+@media (max-width: 1024px) {
   .dashboard-header {
     flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
+    align-items: flex-start;
+    width: 100%;
+    gap: 1.25rem;
 
     .sales-info-panel .sales-info-heading h1 {
-      font-size: 2em;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+    }
+
+    .dashboard-calendar {
+      flex: 0 1 auto;
+      width: min(100%, 360px);
     }
   }
 
   .dashboard-container {
-    h1 { font-size: 2rem; }
-    mat-calendar { width: 100%; }
+    gap: 1rem;
   }
 
-  // Top mini cards: one per row
-  .dashboard-cards .col {
-    flex-direction: column;
-  }
-
-  // Every Bootstrap column in these sections goes full width
   .basic-information .col,
   .detail-information .col {
-    flex: 0 0 100%;
-    max-width: 100%;
+    flex: 1 1 calc(50% - 0.75rem);
+    max-width: calc(50% - 0.5rem);
     min-width: 0;
-    padding-right: 0;
-    margin-bottom:25px;
   }
 
-  // Purple + "Top Sales" footers: 3 columns become a stack
-  .overall-sales [content-footer],
-  .verified-savings [content-footer] {
-    flex-direction: column;
-    width: 100%;
-
-    article {
-      border-right: none;
-      border-bottom: 1px solid rgba(#fff, 0.15);
-      padding: 10px 15px;
+    
+  .basic-information
+  app-card-basic [content-body],
+.basic-information
+  app-card-basic [content-header] {
+        padding:unset;
     }
+
+  .detail-information,
+  .basic-information {
+    gap: 1rem;
+    margin: 0;
   }
 
   .employee-information mat-card {
     width: 100%;
   }
 
-  // Table: stays wide and scrolls sideways
   .order-history {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    margin-bottom: 100px;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .order-history > .col {
+    min-width: 0;
+    padding: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .dashboard-container {
+    padding: 1rem !important;
+    gap: 0.75rem;
+  }
+
+  .dashboard-header {
+    gap: 0.75rem;
+
+    .sales-info-panel .sales-info-heading {
+      h1 {
+        font-size: clamp(1.65rem, 7vw, 2.15rem);
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+      }
+
+      p {
+        font-size: 0.95rem;
+        line-height: 1.45;
+      }
+    }
+
+    .dashboard-calendar {
+      width: 100%;
+    }
+  }
+
+  .detail-information,
+  .basic-information {
+    flex-direction: column;
+    gap: 0.75rem;
+
+    h3 {
+      height: auto;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .col {
+      flex: 1 1 100%;
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    mat-card {
+      width: 100%;
+      min-width: 0;
+      padding: 0.75rem !important;
+      margin: 0 !important;
+    }
+  }
+
+  .chart {
+    margin: 0;
+  }
+
+  .overall-sales,
+  .verified-savings {
+    min-width: 0;
+
+    [content-header],
+    [content-body],
+    [content-footer] {
+      padding: 1rem;
+    }
+
+    [content-header] .overall-costs,
+    [content-header] p {
+      font-size: clamp(1.5rem, 7vw, 2rem);
+      overflow-wrap: anywhere;
+    }
+
+    [content-footer] {
+      width: 100%;
+      flex-direction: column;
+
+      article,
+      > div {
+        min-width: 0;
+        border-right: 0;
+        border-bottom: 1px solid rgba(#fff, 0.15);
+        padding: 0.65rem 0;
+        overflow-wrap: anywhere;
+      }
+
+      article:last-child,
+      > div:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+
+  .verified-savings [content-body] article {
+    gap: 0.5rem;
+    margin: 0.35rem 0;
+    overflow-wrap: anywhere;
+
+    .driver-cost {
+      min-width: 0;
+      padding-left: 0.25rem;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .order-history mat-card {
+    min-width: 0;
+    padding: 0.75rem !important;
+  }
+
+  .order-history .orders {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 359px) {
+  .dashboard-container {
+    padding: 0.65rem !important;
+  }
+
+  .overall-sales,
+  .verified-savings {
+    [content-header],
+    [content-body],
+    [content-footer] {
+      padding: 0.75rem;
+    }
   }
 }
 
