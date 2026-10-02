@@ -1,3 +1,5 @@
+@use '../../../shared/mixins/color-palette.scss' as *;
+
 .bar-chart, .chart-lines {
   width: 100%;
   height: 300px;
@@ -92,6 +94,57 @@ select {
     color: #4c1d95;
     margin: 0;
   }
+}
+
+[content-footer] {
+    padding: 1.5rem 1.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(204, 204, 204, 0.32);
+    border-radius: 8px;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;    
+
+  h4 {
+    margin: 0 0 0.65rem 0 !important;
+    font-family:var(--neptune-typography-family-roboto, Roboto);;
+    font-size: $font-size-card-title !important;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }   
+
+    article {
+        border-right: 1px solid rgba(91, 90, 90, 0.15);
+        display: flex;
+        flex-direction: column;
+        padding-left: 15px;
+        flex: 1;    
+        font-size: 0.85rem;
+        color: #262b45;
+
+        h4,
+        span,
+        p 
+        {
+            margin:unset !important;
+        }
+
+        p {
+            margin: 0;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        h4 {
+            font: 400 Roboto, sans-serif;
+            font-size: 0.85rem;
+            color: #262b45;
+        }
+    }  
 }
 
 @media (max-width: 767px) {

@@ -1,4 +1,4 @@
-import { Component, computed, effect, EventEmitter, inject, OnInit, Output, signal, ViewChild } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, Input, OnInit, Output, signal, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { DonutChartComponent } from "./donut-chart/donut-chart.component";
 import { OrderHistoryComponent } from "../order-history/order-history.component";
@@ -44,7 +44,8 @@ import { ScrambleTextDirective } from '../../utilities/directives/label-animatio
 export class DashComponent implements OnInit {
 
   @ViewChild(MatDateRangePicker) rangePicker!: MatDateRangePicker<Date>;
-
+  @Input() beginningValue:Date= new Date();
+  @Input() endingValue:Date= new Date();
 
   beginningDate:Date= new Date();
   endingDate: Date= new Date();
@@ -92,30 +93,24 @@ export class DashComponent implements OnInit {
     this.welcomeName = this._userSessionService.currentUser!.firstname;
   }
 
+
   onDateRangeSelected(dateRange: { beginningDate: Date; endingDate: Date }) {
- this.beginningDate = new Date(dateRange.beginningDate);
+    this.beginningDate = new Date(dateRange.beginningDate);
 
-  this.endingDate = new Date(dateRange.endingDate);
-  this.endingDate.setHours(23, 59, 59, 999); // end of day
+      this.endingDate = new Date(dateRange.endingDate);
+      this.endingDate.setHours(23, 59, 59, 999); // end of day
 
-  // Convert to ISO for backend
-  const beginningIso = this.beginningDate.toISOString();
-  const endingIso = this.endingDate.toISOString();
+      // Convert to ISO for backend
+      const beginningIso = this.beginningDate.toISOString();
+      const endingIso = this.endingDate.toISOString();
 
-    console.log('Selected date range:', dateRange);
-    this._dashService.getSalesTotals(dateRange.beginningDate.toISOString(), dateRange.endingDate.toISOString())
-    .subscribe({
-        next: (salesTotals) => {
-          this.salesTotals = salesTotals;
-          console.log('parent got:', salesTotals)
-        },
-        error: (err) => console.error(err)
-    })
+      //reassigns the the collection  when the dates are chosen
+     this.overview$ = this.loadSalesOverview();
   }   
 
   loadSalesOverview(): Observable<SalesOverview>{
     return this._dashService
-      .getSalesByDateRange(this.beginningDate.toISOString(), this.endingDate.toISOString())
+      .getSalesByDateRangeNoCache(this.beginningDate.toISOString(), this.endingDate.toISOString())
       .pipe(
         switchMap(rows => rows.length ? of(rows) : this._dashService.getAllSales()),
         map(rows => {
@@ -148,6 +143,16 @@ export class DashComponent implements OnInit {
           .sort(() => Math.random() - 0.5)
           .slice(0, 3)
 
+          console.log('returnobject ------', {
+            total: rows.reduce((s, r) => s + r.lineTotal, 0),
+            sinceDate,
+            thisMonth: rows
+              .filter(r => r.orderDate.startsWith(latestMonth))
+              .reduce((s, r) => s + r.lineTotal, 0),
+            topCategories,
+            overallSales,
+            topUnits
+          });
 
           return {
             total: rows.reduce((s, r) => s + r.lineTotal, 0),

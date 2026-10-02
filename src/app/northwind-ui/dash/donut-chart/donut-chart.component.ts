@@ -8,7 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BaseChartDirective } from 'ng2-charts';
-import { AsyncPipe, NgFor } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, NgFor } from '@angular/common';
 import { ChartData, ChartOptions, ChartType,
   Chart,
   DoughnutController,
@@ -35,6 +35,7 @@ import { ProductsService } from '../../../utilities/services/product-table/produ
         MatSelectModule,
         BaseChartDirective,
         AsyncPipe,
+        CurrencyPipe
 
     ],
     templateUrl: './donut-chart.component.html',
@@ -77,7 +78,7 @@ selectedProduct?:CategorySale;
 maxDataValue?: number;
 isLoading:boolean = true;
 percentage:number = 0;
-
+averageSaleCost:number = 23468.09;
 
 
 //donutChartType: ChartType = 'doughnut';
