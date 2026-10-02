@@ -47,6 +47,7 @@ export class DashboardService {
     return this.allSales$;
   }
 
+  //tracks how many time this method is called, only fires once
   getSalesByDateRange(beginningDate: string, endingDate: string): Observable<SalesLine[]> {
     const key = `${beginningDate}|${endingDate}`;
 
@@ -68,6 +69,20 @@ export class DashboardService {
     }
     return this.rangeCache.get(key)!;
   }  
+
+  getSalesByDateRangeNoCache(beginningDate: string, endingDate: string): Observable<SalesLine[]> {
+    return this._http
+      .get<SalesLine[]>(`${this.url}/Dashboard/sales/range`, {
+        params: { beginningDate, endingDate },
+      })
+      .pipe(
+        tap(data => {
+          console.log('NON‑CACHED API response:', { beginningDate, endingDate });
+          console.log('Returned data:', data);
+        })
+      );
+  }
+
 
   private handleError(error: Response) {
     console.error(error);

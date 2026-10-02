@@ -758,20 +758,32 @@
 
     [content-footer] {
       width: 100%;
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 0;
 
       article,
       > div {
+        flex: 1 1 0;
         min-width: 0;
-        border-right: 0;
-        border-bottom: 1px solid rgba(#fff, 0.15);
-        padding: 0.65rem 0;
-        overflow-wrap: anywhere;
+        border-right: 1px solid rgba(#fff, 0.15);
+        border-bottom: 0;
+        padding: 0.5rem;
+        overflow-wrap: break-word;
       }
 
       article:last-child,
       > div:last-child {
+        border-right: 0;
         border-bottom: 0;
+      }
+
+      h4,
+      p,
+      span,
+      strong {
+        font-size: clamp(0.65rem, 2.5vw, 0.85rem);
+        overflow-wrap: anywhere;
       }
     }
   }
@@ -798,6 +810,7 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+  
 }
 
 @media (max-width: 359px) {
