@@ -17,6 +17,7 @@ import { SalesTotal } from '../../utilities/models/salesTotal';
 import { MatCalendar, MatDateRangePicker } from '@angular/material/datepicker';
 import { SalesOverview } from '../../utilities/models/sales-overview';
 import { ScrambleTextDirective } from '../../utilities/directives/label-animation/scramble-text.directive';
+import { LineChartComponent } from './line-chart/line-chart.component';
 
 
 @Component({
@@ -30,6 +31,7 @@ import { ScrambleTextDirective } from '../../utilities/directives/label-animatio
     CardBasicComponent,
     CurrencyPipe,
     BarChartComponent,
+    LineChartComponent,
     SalesTotalCardsComponent,
     DatePickerFilterComponent,
     MatCalendar,

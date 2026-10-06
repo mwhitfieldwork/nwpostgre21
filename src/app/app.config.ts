@@ -9,10 +9,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { loadingInterceptor } from './utilities/interceptor/loader.interceptor';
 import { successToastInterceptor } from './utilities/interceptor/success-toast.interceptor';
 import { provideNativeDateAdapter } from '@angular/material/core';
-
+import { provideHighcharts } from 'highcharts-angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHighcharts(),
     provideNativeDateAdapter(),
 provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
