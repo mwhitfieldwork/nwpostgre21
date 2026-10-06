@@ -47,7 +47,7 @@ getUser(){
   if(this.userId) {
     this._userSessionService.getUser(this.userId).subscribe((response) => {
       this.user = response;
-      console.log(this.user);
+     // console.log(this.user);
     });
   }
 }

@@ -49,8 +49,8 @@ export class DashComponent implements OnInit {
   @Input() beginningValue:Date= new Date();
   @Input() endingValue:Date= new Date();
 
-  beginningDate:Date= new Date();
-  endingDate: Date= new Date();
+  beginningDate: Date = new Date(1996, 9, 10);
+  endingDate: Date = new Date(1996, 9, 31, 23, 59, 59, 999);
   max:Date = new Date(1997,12, 30);
   min: Date = new Date(1996, 2, 15)
   
