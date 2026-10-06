@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges, inject } from '@angular/core';
 import { HighchartsChartComponent } from 'highcharts-angular';
-import type { Options } from 'highcharts';
+import {DashboardService} from '../../../utilities/services/dashboard/dashboard.service';
+import type { Options, SeriesSplineOptions, XAxisOptions } from 'highcharts';
 
 @Component({
   selector: 'app-line-chart',
@@ -9,15 +10,29 @@ import type { Options } from 'highcharts';
   styleUrl: './line-chart.component.scss',
 })
 export class LineChartComponent {
-@Input() beginningDate: Date = new Date();
-@Input() endingDate: Date = new Date();
+@Input() beginningDate!: Date;
+@Input() endingDate!: Date;
 
 private readonly days = 60;
+private _dashboardService = inject(DashboardService);
+private plotLines: number[] = [];
+private max: number = 0;
 
-// Fake sine wave: swings between ~55 and ~105
 private readonly trend = Array.from({ length: this.days }, (_, i) =>
   Math.round(80 + 25 * Math.sin(i / 4))
 );
+
+private buildDateLabels(count: number): string[] {
+  const today = new Date();
+
+  return Array.from({ length: count }, (_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);   // today, tomorrow, etc.
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${mm}/${dd}`;
+  });
+}
 
 private statusColor(value: number): string {
   if (value >= 100) return 'orange';   // critical
@@ -33,6 +48,40 @@ private readonly events = [6, 19, 31, 44, 57].map(i => ({
   name: this.trend[i] >= 100 ? 'Critical spike' : 'Low point'
 }));
 
+ngOnChanges(changes: SimpleChanges): void {
+  if ((changes['beginningDate'] || changes['endingDate']) && this.beginningDate && this.endingDate) {
+    this.getSplineData();
+  }
+} 
+
+getSplineData(){
+  console.log('Sending dates:', this.beginningDate.toISOString(), this.endingDate.toISOString());
+  this._dashboardService.getSalesByDateRange(this.beginningDate.toISOString(), this.endingDate.toISOString())
+    .subscribe(rows => {
+      this.plotLines = [...rows]
+                      .sort(() => Math.random() - 0.5)  
+                      .map(row => row.unitPrice) 
+                      .filter(price => price <= 80)                     
+                      .slice(0, 22) 
+
+      this.plotLines = this.plotLines.length > 0
+              ? this.plotLines
+              : [0, 0, 63, 8, 55, 29, 71, 34, 12, 66, 47,
+                23, 79, 38, 5, 58, 31, 74, 19, 50, 27, 80];
+
+      this.trendOptions = {
+        ...this.trendOptions,
+        xAxis: {
+          ...(this.trendOptions.xAxis as XAxisOptions),
+          categories: this.buildDateLabels(this.plotLines.length)
+        },        
+        series: [{ ...(this.trendOptions.series![0] as SeriesSplineOptions), data: this.plotLines }]
+      };                
+      console.log('Updated plotLines  ---------:', this.plotLines);
+  });
+}
+
+
 public trendOptions: Options = {
   chart: {
     type: 'spline',
@@ -44,7 +93,7 @@ public trendOptions: Options = {
   credits: { enabled: false },
   legend: { enabled: false },
   xAxis: {
-    categories: Array.from({ length: this.days }, (_, i) => `Day ${i + 1}`), //replace with acutal dates if needed
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     crosshair: { 
       color: '#66a8ff',
       dashStyle: 'Dash',
@@ -52,7 +101,7 @@ public trendOptions: Options = {
     },
     labels: { 
         style: { 
-          color: '#66a8ff',
+          color: '#03101f',
           fontSize: '12px',
           fontWeight: 'bold',
           fontFamily: 'Arial, sans-serif'
@@ -73,8 +122,8 @@ public trendOptions: Options = {
         fontFamily: 'Arial, sans-serif'
       }
     },
-    min:60,
-    max:110,
+    //min:0,
+    max: 80,
     tickInterval: 5,
     labels: { 
       format: '{value}',
@@ -87,13 +136,13 @@ public trendOptions: Options = {
     },
     gridLineWidth: 0,
     plotLines: [
-      { value: 100, color: '#ff5722',  width: 1.5, dashStyle: 'Dash', zIndex: 5 },
-      { value: 85,  color: '#f5a623', width: 1.5, dashStyle: 'Dash',  zIndex: 5 }
+      { value: 50, color: '#ff5722',  width: 1.5, dashStyle: 'Dash', zIndex: 5 },
+      { value: 0,  color: '#f5a623', width: 1.5, dashStyle: 'Dash',  zIndex: 5 }
     ],
     plotBands: [                                                 // 2. threshold zones
-      { from: 60,   to: 85,  color: 'rgba(194, 178, 128, 0.18)' },
-      { from: 85,  to: 100, color: 'rgba(102, 187, 106, 0.18)' },
-      { from: 100, to: 130, color: 'rgba(239, 184, 175, 0.8)' }
+      { from: 0,   to: 25,  color: 'rgba(194, 178, 128, 0.18)' },
+      { from: 25,  to: 50, color: 'rgba(102, 187, 106, 0.18)' },
+      { from: 50, to: 80, color: 'rgba(239, 184, 175, 0.8)' }
     ]
   },
   tooltip: { shared: true },
@@ -107,32 +156,11 @@ public trendOptions: Options = {
     {
       type: 'spline',                                            // 1. primary trend line
       name: 'Trend',
-      data: this.trend,
+      data: this.plotLines,
       color: '#0057b8',
       lineWidth: 3,
       marker: { lineColor: '#2ecc71'},
-      /*zones: [                                                   // 5. status coloring
-        { value: 85,  color: '#2e9e44' },
-        { value: 100, color: '#f5a623' },
-        { color: 'orange' }
-      ]*/
-    },
-    {
-      type: 'scatter', 
-      color: '#60d394',                                          // 3. event markers
-      data: this.events,
-      marker: { radius: 4 },
-      tooltip: { pointFormat: '<b>{point.name}</b><br/>Value: {point.y}' },
-      zIndex: 5
-    },
-    {
-      type: 'scatter', 
-      color: '#e69f00',                                          // 3. event markers
-      data: [this.events],
-      marker: { radius: 4 },
-      tooltip: { pointFormat: '<b>{point.name}</b><br/>Value: {point.y}' },
-      zIndex: 5
-    }    
+    },  
   ]
 };
 }
