@@ -18,17 +18,18 @@
   </div>
   
   <div class="chart-card">
-    @if(weeklyData.datasets.length){
-    <canvas baseChart height="250"
-      [data]="weeklyData"
-      [options]="weeklyChartOptions"
-      chartType="line">
-    </canvas>
-  } @else {
-    <p class="text-secondary text-center my-5">
-      No sales found for this date range.
-    </p>
-  }
+    @if (weeklyChartData$ | async; as weeklyData) {
+      @if(weeklyData.datasets.length){
+        <canvas baseChart type="line" 
+        [data]="weeklyData " 
+        [options]="weeklyLineOptions">
+        </canvas>    
+      } @else {
+        <p class="text-secondary text-center my-5">
+          No sales found for this date range.
+        </p>
+      }
+    }
   </div> 
   } @else {
     <div class="loading-container">
