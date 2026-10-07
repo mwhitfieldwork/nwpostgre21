@@ -8,10 +8,10 @@
 
 @if(!isChildActive){
   <div id="main-wrapper">
-    <header>
+    <!--<header>
       <h1>Restock Product Details</h1>
       <p>Selecting products from the table automatically prepares a detailed invoice tailored to your chosen items.</p>
-    </header>
+    </header> -->
     <article class="product-classification">Product Table</article>
     <div class="product-info-container">
       <mat-table mat-table [dataSource]="dataSource" matSort class="table-mat mat-elevation-z8">
@@ -103,8 +103,10 @@
       <mat-paginator [pageSizeOptions]="[5, 10, 20]"  showFirstLastButtons></mat-paginator>
 
       <div class="product-navigation">
+        @if(isAdmin){
         <button class="btn btn-success" 
         (click)="onSelectNewProductDetails()">Add New Product</button>
+        }
           <button class="btn btn-warning" 
           [disabled]="!isEmailable"
         (click)="getEmailInvoice()">Get Invoice Email</button>
