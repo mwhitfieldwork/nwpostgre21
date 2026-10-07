@@ -89,7 +89,7 @@ public trendOptions: Options = {
        minWidth: 1300, 
        scrollPositionX: 0 } 
   },
-  title: { text: 'Daily Trend' },
+  title: { text: undefined },
   credits: { enabled: false },
   legend: { enabled: false },
   xAxis: {
