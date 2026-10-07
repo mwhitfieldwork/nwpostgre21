@@ -30,12 +30,6 @@
                     [beginningDate]="beginningDate"
                     [endingDate]="endingDate"
                     ></app-line-chart>
-                    <!--                    <app-bar-chart 
-                    [beginningDate]="beginningDate" 
-                    [endingDate]="endingDate"
-                    ></app-bar-chart>
-                    -->
-
                 </article>
             </mat-card>         
         </div>
@@ -81,7 +75,10 @@
         <div class="col">
             <mat-card class="p-3 mb-4">
                 <article class="chart">
-                    <app-donut-chart></app-donut-chart>
+                   <app-bar-chart 
+                    [beginningDate]="beginningDate" 
+                    [endingDate]="endingDate"
+                    ></app-bar-chart>
                 </article>
             </mat-card>
         </div>
