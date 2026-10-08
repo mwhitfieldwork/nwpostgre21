@@ -54,7 +54,7 @@
                     }
                 </div>
                 <div content-footer>
-                    @for (cat of overview?.topCategories ?? []; track cat.name) {
+                    @for (cat of overview?.topCategories ?? []; track $index) {
                         <div>
                             <span>{{ cat.name }}</span>
                             <strong>{{ cat.units | number }} units</strong>

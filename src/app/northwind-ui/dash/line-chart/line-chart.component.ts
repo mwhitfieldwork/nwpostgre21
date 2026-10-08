@@ -137,7 +137,7 @@ public trendOptions: Options = {
     gridLineWidth: 0,
     plotLines: [
       { value: 50, color: '#ff5722',  width: 1.5, dashStyle: 'Dash', zIndex: 5 },
-      { value: 0,  color: '#f5a623', width: 1.5, dashStyle: 'Dash',  zIndex: 5 }
+      { value: 25,  color: '#f5a623', width: 1.5, dashStyle: 'Dash',  zIndex: 5 }
     ],
     plotBands: [                                                 // 2. threshold zones
       { from: 0,   to: 25,  color: 'rgba(194, 178, 128, 0.18)' },

@@ -2,20 +2,23 @@
   <h3>Weekly Product Totals</h3>
   @if (weeklyChartData$ | async; as weeklyData) {
   <div class="kpi-container">
-    <div class="kpi-card">
-      <h2>5,689</h2>
-      <p>New Orders</p>
-    </div>
-  
-    <div class="kpi-card">
-      <h2>32,568</h2>
-      <p>This Month</p>
-    </div>
-  
-    <div class="kpi-card">
-      <h2>$23,464</h2>
-      <p>Expected Profit</p>
-    </div>
+    <div class="stat-viewport">
+      <div class="stat-track" [class.sliding]="sliding" (transitionend)="onSlideDone($event)">
+        @for (stat of stats; track stat.label; let i = $index) {
+          <div class="stat-slot">
+            <div class="stat-card">
+              <h3>{{ stat.value }}</h3>
+              <p>{{ stat.label }}</p>
+              <div class="stat-metric">
+                <div class="metric-container">
+                  <div class="metric-bar" [style.width.%]="stat.percent" [style.backgroundColor]="colors[i % colors.length]" ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+</div>
   </div>
   
   <div class="chart-card">

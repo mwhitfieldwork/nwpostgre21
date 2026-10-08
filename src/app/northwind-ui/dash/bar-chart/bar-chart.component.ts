@@ -21,11 +21,53 @@ export class BarChartComponent {
   @Input() endingDate:Date= new Date();
 
   private _dashboardService = inject(DashboardService);
-  private colors = ['#FF0000', '#00A2FF', '#dadd32', '#bfa939', '#673AB7', '#2ecc71', '#ff8c00', '#8e8e8e'];
+  public colors = [
+  '#FF0000', // warmest red
+  '#ff8c00', // warm orange
+  '#bfa939', // mustard yellow
+  '#dadd32', // yellow-green
+  '#2ecc71', // cool green
+  '#673AB7', // cool purple
+  '#8e8e8e', // neutral gray
+  '#00A2FF'  // coolest blue
+  ];
+
+  public stats = [
+    { value: '5,689', label: 'New Orders', percent:69 },
+    { value: '32,568', label: 'This Month', percent:24  },
+    { value: '$23,464', label: 'Expected Profit', percent:33  },
+    { value: '1,204', label: 'Overseas', percent:90  },
+    { value: '87%', label: 'Local Revenue', percent:19  },
+    { value: '$9,310', label: 'Top Performance', percent:22  },
+  ];
+
+  public sliding = false;
+  private timerId?: ReturnType<typeof setInterval>;
+  protected readonly Math = Math;
 
   public weeklyChartData$: Observable<ChartData<'bar'>> = this.loadWeeklyChart();
 
-  // Runs whenever the parent passes in new dates
+  ngOnInit() {
+    this.startRotation(); // temporary — Step 3 replaces this
+  }
+
+  startRotation() {
+    this.timerId = setInterval(() => (this.sliding = true), 4000);
+  }
+
+  onSlideDone(event: TransitionEvent) {
+    // only react to the track's own slide, not animations on the cards inside it
+    if (event.target !== event.currentTarget) return;
+
+    this.sliding = false;
+    this.stats.push(this.stats.shift()!); // move first card to the end
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.timerId); // stops the timer when you leave the page
+  }
+
+
   ngOnChanges() {
     this.weeklyChartData$ = this.loadWeeklyChart();
   }
@@ -69,7 +111,6 @@ export class BarChartComponent {
       );
   }
 
-    
   public weeklyChartOptions: ChartOptions = {
     responsive: true,
     scales: {
@@ -87,8 +128,6 @@ export class BarChartComponent {
     }
   };
 
-
-  
   public monthlyAreaData = {
     labels: Array.from({ length: 10 }, (_, i) => `Jul ${i + 1}`),
     datasets: [

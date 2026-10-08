@@ -19,23 +19,52 @@
  }
 
  .kpi-container {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(0.5rem, 2vw, 1.25rem);
-  }
-  
-  .kpi-card {
-    min-width: 0;
-    background: #fff;
-    padding: clamp(0.75rem, 2vw, 1.25rem);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    //display: grid;
+    //grid-template-columns: repeat(3, minmax(0, 1fr));
+    //gap: clamp(0.5rem, 2vw, 1.25rem);
 
-    h2,
-    p {
-      overflow-wrap: anywhere;
+    .stat-viewport {
+        overflow: hidden;
+        width: 100%;
+        min-width: 0;  
+    }
+
+    .stat-track {
+      display: flex;
+    }
+
+    .stat-slot {
+      flex: 0 0 33.333%;
+      padding: 0 8px;
+      box-sizing: border-box;
+    }
+
+    .stat-card {
+      padding: 8px;
+      border: 1px solid rgb(233, 232, 232);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .stat-track.sliding {
+      transform: translateX(-33.333%);
+      transition: transform 0.6s ease;
+    }   
+    
+
+    .metric-container {
+      background:#ccc;
+      border-radius: 999px;
+      height: 5px;
+      max-width: 75%
+    }
+
+    .metric-bar {
+        border-radius: 999px;
+        height:100%;
     }
   }
+
   
   .chart-card {
     min-width: 0;
