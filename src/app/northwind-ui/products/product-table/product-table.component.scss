@@ -21,31 +21,11 @@ header {
   }
 }
 
-/* Wrapper */
 #main-wrapper {
-  background-color:#fff;
   width:95%;
   margin-top:50px;
   margin-left:25px;
   margin-bottom: 100px;
-
-  mat-table {
-    tr {
-      display: flex;
-    }
-
-    td, th {  
-      flex: 1 1 0;
-    }
-
-    td:nth-of-type(2), th:nth-of-type(2) {
-      flex: 2 1 0;
-    }
-
-    .cdk-column-rating {
-      flex: 1.5 1 0;
-    }    
-  }
 
   .product-classification {
     font-size: 16px;
@@ -56,14 +36,45 @@ header {
   }
 }
 
+.table-mat {
+  .mat-mdc-cell,
+  .mat-mdc-header-cell {
+    padding: 12px 16px;
+  }
+
+  .mat-column-displayName {
+    min-width: 240px;
+  }
+
+  .mat-column-rating {
+    min-width: 120px;
+  }
+
+  .mat-column-edit,
+  .mat-column-delete {
+    width: 60px;
+    text-align: right;
+  }
+}
+
 /* Remove old flex table rules */
 .table-mat {
   width:100%;
   padding:1%;
+
+  .price-highlight {
+    width:50%;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    padding:5px;
+  }
 }
 
-.table-mat tr:nth-child(even){
-  background-color: #f3f6f7;
+.table-mat tr {
+  &:hover {
+    background-color: rgba(247, 247, 248, 0.5);
+  }
 }
 
 /* Mobile hiding rules stay fine */

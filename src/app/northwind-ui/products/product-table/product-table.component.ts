@@ -61,9 +61,20 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   //paginator!: MatPaginator;
   
   @ContentChild('h1') title!: ElementRef<HTMLElement>;
+  protected readonly Math = Math;
   private rowFactory = inject(RowDisplayFactory);
   private _userSessionService = inject(UserSessionService);
   private statuses = ['In Stock', 'Low Stock', 'Backordered'];
+  public colors = [
+  '#FF0000', // warmest red
+  '#ff8c00', // warm orange
+  '#bfa939', // mustard yellow
+  '#dadd32', // yellow-green
+  '#2ecc71', // cool green
+  '#673AB7', // cool purple
+  '#8e8e8e', // neutral gray
+  '#00A2FF'  // coolest blue
+  ];
 
   isLoading: boolean = false;
   isChildActive: boolean = false;
