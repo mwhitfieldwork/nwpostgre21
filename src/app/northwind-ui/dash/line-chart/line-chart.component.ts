@@ -89,6 +89,9 @@ public trendOptions: Options = {
        minWidth: 1300, 
        scrollPositionX: 0 } 
   },
+    palette: {
+    colorScheme: 'light'
+  },
   title: { text: undefined },
   credits: { enabled: false },
   legend: { enabled: false },
