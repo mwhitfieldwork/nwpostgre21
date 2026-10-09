@@ -1,11 +1,19 @@
 @use '../app/shared/mixins/color-palette.scss' as *;
 
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
 mat-sidenav-container {
-  height: 100vh; /* Fill the viewport vertically */
-  width: 100%; /* Use the full width of the screen */
-  overflow: hidden; /* Prevent any overflow */
-  box-sizing: border-box; /* Ensure padding is included in the width/height */
-  position:relative;
+  flex: 1;
+  min-height: 0;
+  /* remove height: 100vh */
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
 }
 
 
