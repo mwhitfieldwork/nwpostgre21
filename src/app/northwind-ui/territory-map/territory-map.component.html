@@ -34,11 +34,11 @@
   <table class="employee-table">
     <thead>
       <tr>
+        <th></th>
         <th class="col-photo"></th>
         <th>Employee</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
+        <th class="col-desktop">&nbsp;</th>
+        <th class="col-desktop">&nbsp;</th>
       </tr>
     </thead>
     <tbody>
@@ -50,9 +50,13 @@
           <td>
             <img [src]="emp.photoPath" class="employee-photo" />
           </td>
-          <td>{{ emp.firstName }}</td>
-          <td>{{ emp.lastName }}</td>
-          <td>{{ emp.title }}</td>
+          <td>
+            {{ emp.firstName }}
+            <span class="mobile-only">{{ emp.lastName }}</span>
+            <small class="mobile-only mobile-title">{{ emp.title }}</small>
+          </td>
+          <td class="col-desktop">{{ emp.lastName }}</td>
+          <td class="col-desktop">{{ emp.title }}</td>
         </tr>
         @if (emp.expanded) {
           <tr class="detail-row">

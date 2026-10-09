@@ -147,3 +147,23 @@ google-map {
   display: block;
   width: 100%;
 }
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .employee-table .col-desktop {
+    display: none;
+  }
+
+  .employee-table .mobile-only {
+    display: inline;
+  }
+
+  .employee-table .mobile-title {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+  }
+}
