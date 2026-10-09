@@ -67,3 +67,36 @@ mat-card {
         }
     }    
 }
+
+@media (max-width: 600px) {
+  .logo-nw {
+    margin-top: 40px;
+  }
+
+  mat-card {
+    width: 90%;
+
+    article {
+      flex-direction: column;
+    }
+
+    .google-login {
+      border-right: none;
+      border-bottom: 1px solid #ccc;
+      padding: 0 0 16px;
+      margin-bottom: 16px;
+
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+      }
+
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}
