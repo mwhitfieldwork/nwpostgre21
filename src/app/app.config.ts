@@ -10,6 +10,7 @@ import { loadingInterceptor } from './utilities/interceptor/loader.interceptor';
 import { successToastInterceptor } from './utilities/interceptor/success-toast.interceptor';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideHighcharts } from 'highcharts-angular';
+import { authInterceptor } from './utilities/interceptor/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +21,7 @@ provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(
       withInterceptors([
         loadingInterceptor,
+        authInterceptor,
         successToastInterceptor,
         (req, next) => {
           const interceptor = new ErrorInterceptor();

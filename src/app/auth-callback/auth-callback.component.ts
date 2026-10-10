@@ -28,6 +28,7 @@ export class AuthCallbackComponent {
     this.loginService.exchangeGoogleCode(code).subscribe({
       next: (response) => {
         if (response?.message === 'Authentication successful.') {
+          this.loginService.saveToken(response.token);
           this.userSessionService.setUser(response.user.pkid);
           this.router.navigate(['/dashboard']).then(() => {
             window.location.reload();
