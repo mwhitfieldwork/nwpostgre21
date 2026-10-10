@@ -21,7 +21,8 @@ export class LoginService {
   url:string = environment.apiUrl;
   errorMessage:any;
   private _http = inject(HttpClient);
-  private _oauthService = inject(OAuthService)
+  private _oauthService = inject(OAuthService);
+  private readonly tokenKey = 'nw_token';
 
 
   userProfile$ = this._oauthService.events.pipe(
@@ -35,6 +36,7 @@ export class LoginService {
   }
 
   logout(){
+    this.clearToken();
     this._oauthService.logOut();
   }
 
@@ -61,6 +63,17 @@ export class LoginService {
     })
   }
   
+  saveToken(token: string) {
+    localStorage.setItem(this.tokenKey, token);
+  }
+
+  get token(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  clearToken() {
+    localStorage.removeItem(this.tokenKey);
+  }  
   createUser(authentication: Authentication): Observable<any> {
     let url = `${this.url}/api/Login/AddUser`;
     let newLogin = JSON.stringify(authentication)

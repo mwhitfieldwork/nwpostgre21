@@ -53,6 +53,7 @@ userProfile:any;
   verifyUser($event:Authentication){
     this._loginService.AuthenticateUser($event).subscribe((response) => {
       if(response?.value?.message === "Authentication successful.") {
+        this._loginService.saveToken(response.value.token);
         this._userSessionService.setUser(response.value.user.pkid);
         this.router.navigate(['/dashboard']).then(() => {
           window.location.reload();
