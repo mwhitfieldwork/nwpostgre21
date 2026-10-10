@@ -188,25 +188,12 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getEmailInvoice() {
-    const userId = this._userSessionService.userId;
-    if (!userId) {
-      console.error("User ID missing");
-      return;
-    }
+    const productIds = this.productInvoiceList.map(p => p.productId);
+    if (!productIds.length) return;
 
-    this._userSessionService.getUser(userId).subscribe(user => {
-      this.emailInvoice = {
-        userEmail: user.username,
-        products: this.productInvoiceList
-      };
-
-      console.log(this.emailInvoice, "------invoiceeee");
-
-      // Optional: send invoice
-       this._productsService.createProductInvoice(this.emailInvoice).subscribe(invoice =>
-        console.log(invoice)
-        
-       )
+    this._productsService.createProductInvoice(productIds).subscribe({
+      next: res => console.log(res.message),
+      error: err => console.error('Invoice failed', err)
     });
   }
 

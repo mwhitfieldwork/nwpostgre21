@@ -74,13 +74,10 @@ refresh$ = this.refreshSource.asObservable();
     return response;
   }
 
-  createProductInvoice(invoice: ProductInvoice): Observable<ProductInvoice> {
-    let url = `${this.noapiurl}/Invoice`;
-    let newInvoice = JSON.stringify(invoice)
-    var response = this._http.post<ProductInvoice>(url, newInvoice, httpOptions);
-    console.log(url);
-    return response;
-  }  
+  createProductInvoice(productIds: number[]): Observable<{ message: string }> {
+    const url = `${this.noapiurl}/Invoice`;
+    return this._http.post<{ message: string }>(url, { productIds });
+  } 
 
   updateProduct(product: ProductModel, productId:string): Observable<ProductModel> {
     let url = `${this.url}/Product/${productId}`;
