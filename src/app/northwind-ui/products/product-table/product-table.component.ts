@@ -126,7 +126,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
           ? [
               'select',
               'displayName',
-              'quantity',
+              'stock',
               'price',
               'discontinued',
               'rating',
@@ -136,7 +136,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
           : [
             'select',
             'displayName',
-            'quantity',
+            'stock',
             'price',
             'discontinued',
             'rating'           
