@@ -1,10 +1,12 @@
 export interface OrderDetails {
-    orderId: number,
-    pkID:number,
-    productId: number,
-    unitPrice: number,
-    quantity: number,
-    discount: number,
-    order: null,
-    product: null
+discount: number;
+extendedPrice: number;
+orderId: number;
+pkID: number;
+productId: number;
+productName: string;
+quantity: number;
+rating: number;
+status: string;
+unitPrice: number;
 }

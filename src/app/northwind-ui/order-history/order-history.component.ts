@@ -12,6 +12,8 @@ import { CustomNumberPipe } from '../../utilities/pipes/custom-number/custom-num
 import { CommonModule, DecimalPipe, NgClass } from '@angular/common';
 import { RatingComponent } from '../../shared/rating/rating.component';
 import { RowDisplayFactory } from '../../utilities/factories/row-display.factory';
+import {AgGridAngular} from 'ag-grid-angular';
+import type { ColDef } from 'ag-grid-community';
 
 @Component({
     selector: 'app-order-history',
@@ -26,7 +28,8 @@ import { RowDisplayFactory } from '../../utilities/factories/row-display.factory
         DecimalPipe,
         RatingComponent,
         NgClass,
-        CommonModule
+        CommonModule,
+        AgGridAngular,
     ],
     templateUrl: './order-history.component.html',
     styleUrl: './order-history.component.scss'
@@ -38,92 +41,30 @@ orderList!:Subscription;
 dataSource: MatTableDataSource<OrderDetails> = new MatTableDataSource();
 selection = new SelectionModel<OrderDetails>(true, []);
 orderHistory: OrderDetails[] = [];
-
-//@ViewChild(MatPaginator, {static: true})
-//paginator!: MatPaginator;
-//@ViewChild(MatSort, {static: true}) sort!: MatSort;
-
-@ViewChild(MatPaginator) set paginator(mp: MatPaginator) {
-  if (mp) this.dataSource.paginator = mp;
-}
-
-@ViewChild(MatSort) set sort(ms: MatSort) {
-  if (ms) this.dataSource.sort = ms;
-}
+defaultColDef: ColDef = { flex: 1 };
 
 private rowFactory = inject(RowDisplayFactory);
 private statuses = ['Shipped', 'Pending', 'Processing'];
 
-displayedColumns: string[] = [
-   //'select',
-  'productName',
-  'unitPrice',
-  'quantity',
-  'rating',
-  'status'
+colDefs: ColDef[] = [
+  {field:'productName'},
+  {field:'unitPrice'},
+  {field:'quantity'},
+  {field:'orderId'},
+  {field:'status',
+  cellClass: params => ['status-cell', 'status-' + params.value?.toLowerCase()] 
+  }
 ];
 
- /*ngAfterViewInit(): void {
-    no subscribe in ngOnInit, no unsubscribe in ngOnDestroy, 
-    no subscription variable — the async pipe subscribes when 
-    he template renders and unsubscribes automatically when the 
-    component is destroyed. 
-    
-    this.orderList = this._orderHistoryService.get()
-    .pipe(
-      map(orders => this.rowFactory.createMany(orders, this.statuses))
-    )
-    .subscribe((data) => {
-      this.dataSource.data = data;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      console.log(data);
-    });
+  ngOnInit(){
+    this.getOrderHisroty();
   }
 
-  ngonDestroy(): void {
-    if(this.orderList) this.orderList.unsubscribe();
-  }
-*/
-
-  orders$ = this._orderHistoryService.get().pipe(
-    map(orders => this.rowFactory.createMany(orders, this.statuses)),
-    tap(rows => this.dataSource.data = rows)
-  );
-  
-  addToEmailList(order:OrderDetails){
-    this.orderHistory.push(order);
-    //console.log(this.orderHistory, "Order added to email");
-  }
-
-  removeFromEmailList(row:OrderDetails){
-    const index = this.orderHistory.findIndex(item => item.pkID === row.pkID);
-    if (index !== -1) {
-        this.orderHistory.splice(index, 1);
-    }
-    //console.log(this.orderHistory, "Order removed to email");
-  }
-
-  onCheckboxChange(event: MatCheckboxChange, row: any): void {
-    if (event.checked) {
-        this.addToEmailList(row);
-    } else {
-        this.removeFromEmailList(row);
-    }
-  }
-
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-    } else {
-      this.dataSource.data.forEach(row => this.selection.select(row));
-    }
-  }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  getOrderHisroty(){
+     this._orderHistoryService.get().subscribe(rows => {
+      this.orderHistory = this.rowFactory.createMany(rows, this.statuses);
+      //console.log(this.orderHistory, '----------------history');
+     })
   }
 
 }
