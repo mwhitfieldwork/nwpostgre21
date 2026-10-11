@@ -1,11 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AgentService } from '../../utilities/services/agents/agents.service';
-
-interface ChatMessage {
-  from: 'user' | 'agent';
-  text: string;
-}
+import { ChatMessage } from '../../utilities/models/messages';
 
 @Component({
   selector: 'app-agent-chat',
@@ -24,6 +20,7 @@ export class AgentChatComponent {
   toggle(): void {
     this.isOpen = !this.isOpen;
   }
+  
   send(): void {
     const text = this.question.trim();
     if (!text || this.loading) return;
@@ -32,9 +29,10 @@ export class AgentChatComponent {
     this.question = '';
     this.loading = true;
 
-    this.agentService.ask(text).subscribe({
+    this.agentService.ask(this.messages).subscribe({
       next: answer => {
         this.messages.push({ from: 'agent', text: answer });
+
         this.loading = false;
       },
       error: () => {
