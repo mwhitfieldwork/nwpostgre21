@@ -211,3 +211,46 @@ mat-datepicker-content .mat-datepicker-actions {
 .status-pending::before { background-color: red; }
 .status-processing::before { background-color: orange; }
 .status-shipped::before { background-color: green; }
+.ag-root-wrapper span {
+  color: inherit;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.status-pill.status-on-time    { background: #dcfce7; color: #16a34a; border-color: #bbf7d0; }
+.status-pill.status-processing { background: #fef9c3; color: #ca8a04; border-color: #fde68a; }
+.status-pill.status-behind     { background: #fee2e2; color: #dc2626; border-color: #fecaca; }
+
+.grid-search {
+  width: 280px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+
+  &:focus {
+    outline: none;
+    border-color: #5b2a9e;
+  }
+}
+
+.export-btn {
+  padding: 8px 14px;
+  margin: 0 0 12px 8px;
+  background: #5b2a9e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display:block;
+
+  &:hover { background: #4a2283; }
+}

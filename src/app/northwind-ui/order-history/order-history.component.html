@@ -1,8 +1,32 @@
 
+    <button class="export-btn" (click)="exportCsv(grid)">Export CSV</button>
+    
+    <input
+    class="grid-search"
+    type="text"
+    placeholder="Search orders..."
+    [(ngModel)]="searchText" />
+
     <ag-grid-angular
+    #grid
     class="ag-theme-quartz"
     style="height:500px"
     [rowData]="orderHistory"
+    [theme]="gridTheme"
     [columnDefs]="colDefs"
     [defaultColDef]="defaultColDef"
+    [quickFilterText]="searchText"
+    [rowSelection]="rowSelection"
+    (selectionChanged)="onSelectionChanged($event)"
+    [tooltipShowDelay]="300"
+    tooltipShowMode="whenTruncated"
+    [pagination]="true"
+    [paginationPageSize]="10"
+    [paginationPageSizeSelector]="[10, 25, 50]"
     />        
+
+    @if (selectedCount > 0) {
+    <p class="selection-summary">
+        {{ selectedCount }} selected · {{ selectedTotal | currency }}
+    </p>
+    }
