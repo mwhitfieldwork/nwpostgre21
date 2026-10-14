@@ -15,7 +15,6 @@ export class UserSessionService {
   public user$: Observable<Authentication | null> = this.userSubject.asObservable();
 
   url:string = environment.apiUrl;
-  errorMessage:any;
   userId?:string;
 
 constructor() {

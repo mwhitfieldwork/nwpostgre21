@@ -18,7 +18,7 @@ export class EmployeeService {
   private _http = inject(HttpClient)
   
   url:string = 'https://localhost:5001';
-  errorMessage:any;
+  errorMessage: string ='';
 
   constructor() { }
 

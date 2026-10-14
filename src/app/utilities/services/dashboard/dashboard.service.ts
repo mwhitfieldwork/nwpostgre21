@@ -14,7 +14,6 @@ export class DashboardService {
   private allSales$?: Observable<SalesLine[]>;
   private rangeCache = new Map<string, Observable<SalesLine[]>>();  
   url:string =  environment.apiUrl;
-  errorMessage:any;
   
   constructor() { }
 

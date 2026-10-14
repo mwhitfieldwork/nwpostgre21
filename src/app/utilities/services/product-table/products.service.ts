@@ -26,7 +26,7 @@ refresh$ = this.refreshSource.asObservable();
 
   url:string = environment.apiUrl + '/api';
   noapiurl:string = environment.apiUrl;
-  errorMessage:any;
+  errorMessage:string = '';
 
   getProducts(): Observable<ProductModel[]> {
     var response = this._http.get<ProductModel[]>(`${this.url}/Product`)
