@@ -22,7 +22,6 @@ private _oauthService = inject(OAuthService)
 private _userSessionService = inject(UserSessionService)
 private router = inject(Router)
 signInErrorMessage = '';
-userProfile:any;
 
   constructor() {
     console.log('UserSessionService instance created');

@@ -87,11 +87,9 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   productInvoiceList: ProductModel[] = [];
   dataSource: MatTableDataSource<ProductModel> = new MatTableDataSource();
   selection = new SelectionModel<ProductModel>(true, []);
-  errorMessage:any;
   productID!:number;
   stars:string[] = [];
   index!:number
-  starList:any[]  = [];
   productsList!:Subscription;
   isEdit: boolean = false;
   isOpenDialog:boolean = false;
@@ -178,8 +176,8 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   addRating(products:ProductModel[]):void {
   }
 
-  deleteProduct($event:any){
-    console.log($event, 'TESTTTTTT');
+  deleteProduct(product:ProductModel){
+    console.log(product, 'product model');
   }
 
   addToEmailList(selectedProduct: ProductModel) {
@@ -199,13 +197,15 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   removeFromEmailList(row:ProductModel){
-    const index = this.products.findIndex(item => item.productId === row.productId);
-    if (index !== -1) {
-        this.products.splice(index, 1);
-    }
+    this.productInvoiceList = this.productInvoiceList.filter(
+      item => item.productId !== row.productId
+    );
+
+    // Nothing left to email → the invoice button shouldn't be active.
+    this.isEmailable = this.productInvoiceList.length > 0;
   }
 
-  onCheckboxChange(event: MatCheckboxChange, row: any): void {
+  onCheckboxChange(event: MatCheckboxChange, row: ProductModel): void {
     if (event.checked) {
         this.addToEmailList(row);
     } else {

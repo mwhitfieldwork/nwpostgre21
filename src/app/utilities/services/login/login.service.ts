@@ -19,7 +19,6 @@ const httpOptions = {
 })
 export class LoginService {
   url:string = environment.apiUrl;
-  errorMessage:any;
   private _http = inject(HttpClient);
   private _oauthService = inject(OAuthService);
   private readonly tokenKey = 'nw_token';

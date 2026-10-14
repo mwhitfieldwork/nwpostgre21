@@ -18,6 +18,8 @@ import { MatCalendar, MatDateRangePicker } from '@angular/material/datepicker';
 import { SalesOverview } from '../../utilities/models/sales-overview';
 import { ScrambleTextDirective } from '../../utilities/directives/label-animation/scramble-text.directive';
 import { LineChartComponent } from './line-chart/line-chart.component';
+import { OrderDetails } from '../../utilities/models/order-detail';
+import { DashboardData } from '../../utilities/resolvers/dashboard-resolver.resolver';
 
 
 @Component({
@@ -76,8 +78,10 @@ export class DashComponent implements OnInit {
   //specified union types
   currentStatus!: 'online' | 'offline'| 'unknown' 
   
-  data: any;
-  //isLoading = true;
+  // The order history rows loaded by DashboardResolver before the page opens.
+  // Starts as an empty list so the template can loop over it safely
+  // before the data arrives.
+  data: OrderDetails[] = [];
 
   isLoading = signal(true);
   overview$: Observable<SalesOverview> = this.loadSalesOverview();
@@ -87,8 +91,32 @@ export class DashComponent implements OnInit {
   ngOnInit() {
     this.isLoading.set(true);
 
+    /**
+   * HOW THE DASHBOARD GETS ITS DATA (route → resolver → component)
+   *
+   * 1. ROUTE CONFIG names the label.
+   *    In the routes file: resolve: { data: DashboardResolver }
+   *    → "Put whatever DashboardResolver returns under the label 'data'."
+   *
+   * 2. THE RESOLVER fills the label and describes its shape.
+   *    DashboardResolver loads the order history BEFORE this page opens.
+   *    Its DashboardData interface describes the shape of what it returns.
+   *
+   * 3. THIS COMPONENT opens the delivery.
+   *    'resolved' is just our name for the box the router hands us.
+   *    (Not the same thing as the resolver: resolver = who fills the box,
+   *    resolved = the box we receive.)
+   *
+   * WHY 'as DashboardData'?
+   *    The router passes data between files as 'any', so the shape from
+   *    the resolver gets lost in transit. 'as DashboardData' puts it back,
+   *    so TypeScript checks everything we do with it after this line.
+   *    Note: 'as' is a promise WE make. TypeScript trusts it and doesn't
+   *    double-check, so it must match what the resolver really returns.
+   */  
     this.route.data.subscribe(resolved => {
-      this.data = resolved['data'].dataFromService1;
+      const dashboardData = resolved['data'] as DashboardData;
+      this.data = dashboardData.dataFromService1;
       this.isLoading.set(false);
     });
 

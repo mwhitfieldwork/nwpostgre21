@@ -10,7 +10,6 @@ import { environment } from '../../../../environments/environment';
 export class OrderHistoryService {
   private _http = inject(HttpClient)
   url:string = environment.apiUrl;
-  errorMessage:any;
   
   constructor() { }
 

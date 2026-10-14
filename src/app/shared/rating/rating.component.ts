@@ -12,7 +12,6 @@ export class RatingComponent implements OnInit {
 @Input() color?: string = '#03dffc';
 index: number = 0;
 stars: string[] = [];
-starList: any[] = [];
 
 ngOnInit(): void {
   this.getStars(this.score);
@@ -54,7 +53,7 @@ ngOnInit(): void {
       this.stars.push('0%')
       }
     }
-    this.starList.push(this.stars);
+
     return this.stars;
     }
     
