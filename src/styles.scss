@@ -1,19 +1,70 @@
-/**/  
 @use "@material/tooltip/styles";
 
+/**
+ * GLOBAL STYLES (styles.scss)
+ *
+ * WHAT: Styles shared by the whole Northwind app.
+ * WHY:  One place for fonts, layout basics, Material overrides and
+ *       small shared helpers (loader, status pills, buttons).
+ * HOW:  Angular loads this file once for every page. Component .scss
+ *       files can still add their own styles on top.
+ */
 
-/* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
+/* =========================================================
+   1. FONTS
+   Two fonts only:
+   - Roboto: all normal text, labels, buttons, small headings
+   - Bitter: big headings (h1, h2)
+   Only the weights we actually use are loaded, so the
+   download stays small.
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+/* One place for the font names, so changing a font is a one-line edit. */
+:root {
+  --font-text: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-heading: 'Bitter', Georgia, serif;
+}
+
+
+/* =========================================================
+   2. PAGE BASICS
+   ========================================================= */
 html, body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  font-family: (--neptune-typography-family-roboto, Roboto);
 }
 
+body {
+  font-family: var(--font-text);
+  background-color: #4c4c5c;
+}
+
+/*
+ * Force Roboto everywhere, so Angular Material and third-party
+ * components match the rest of the app.
+ *
+ * IMPORTANT: icon fonts must be left alone. Icons are drawn with
+ * their own font; if we force Roboto on them they turn into empty
+ * boxes. So we skip:
+ *   - Material icons (mat-icon, .material-icons, .material-symbols-outlined)
+ *   - Font Awesome icons (.fa, .fas, .far, .fab) used in the sidebar
+ */
+body *:not(mat-icon):not(.material-icons):not(.material-symbols-outlined):not(.fa):not(.fas):not(.far):not(.fab) {
+  font-family: var(--font-text) !important;
+}
+
+/* Big headings use Bitter; smaller headings stay Roboto. */
+body :is(h1, h2) {
+  font-family: var(--font-heading) !important;
+}
+
+
+/* =========================================================
+   3. LAYOUT
+   ========================================================= */
 .main-layout {
   height: 100vh;
   display: flex;
@@ -28,13 +79,25 @@ html, body {
   overflow-y: auto; /* only one scrollbar */
 }
 
+.detail-information .basic-card,
+.basic-information .basic-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================================================
+   4. ANGULAR MATERIAL OVERRIDES
+   Makes Material form fields look like simple bordered inputs.
+   ========================================================= */
 .mdc-text-field--filled:not(.mdc-text-field--disabled), .mat-mdc-form-field-focus-overlay {
   background-color: unset !important;
 }
 
 .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input {
   border: solid 1px #ccc;
-  padding:5px;
+  padding: 5px;
 }
 
 .mdc-line-ripple {
@@ -43,13 +106,13 @@ html, body {
 
 .mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label {
   margin-top: 12px;
-  margin-left:10px;
-  background-color:#fff;
+  margin-left: 10px;
+  background-color: #fff;
 }
 
 mat-select {
-  border:solid 1px #ccc;
-  padding:5px;
+  border: solid 1px #ccc;
+  padding: 5px;
 
   & .mat-mdc-select-arrow {
     display: flex;
@@ -57,118 +120,16 @@ mat-select {
   }
 }
 
-mat-nav-list {
-  span {
-    font-family:Inter, Verdana, Geneva, Tahoma, sans-serif;
-  }
-}
-
-body {
-  font-family: 'Roboto', sans-serif !important;
-  background-color: #4c4c5c;
-}
-
-.loading-container {
-    display:block;
-    width:80px;
-    margin:50px auto;
-}
-
-
-.lds-ellipsis,
-.lds-ellipsis div {
-  box-sizing: border-box;
-}
-.lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.loading-container .lds-ellipsis div {
-  position: absolute;
-  top: 33.33333px;
-  width: 13.33333px;
-  height: 13.33333px;
-  border-radius: 50%;
-  background: currentColor;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-  left: 8px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-  left: 8px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-  left: 32px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-  left: 56px;
-  animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(24px, 0);
-  }
-}
-
-.detail-information .basic-card,
-.basic-information .basic-card {
-  flex: 1;
+mat-datepicker-content .mat-datepicker-actions {
   display: flex;
-  flex-direction: column;
-}
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+  justify-content: space-between;
+  font-size: 1rem;
+  /* font comes from the global Roboto rule above */
 
-.bootstrap-primary-btn {
-  background-color: #4c1d95;
-  color: #fff;
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.375rem;
-  border: 1px solid transparent;
-  font-weight: 500;
-  line-height: 1.5;
-  text-transform: none; // remove Material uppercase
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
-  &:hover {
-    background-color: #0b5ed7;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-  }
-
-  &:active {
-    background-color: #0a58ca;
-  }
-
-  &:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-    opacity: 0.65;
+  button {
+    background: none;
+    color: rgb(19, 70, 179);
+    padding: 5px;
   }
 }
 
@@ -182,19 +143,122 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   color: white !important;
 }
 
-mat-datepicker-content .mat-datepicker-actions {
-    display:flex;
-    justify-content: space-between;
-    font-size:1rem;
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
-    button {    
-      background:none;
-      color: rgb(19, 70, 179);
-      padding:5px;
-    }
+/* =========================================================
+   5. PAGE LOADER (three bouncing dots)
+   ========================================================= */
+.loading-container {
+  display: block;
+  width: 80px;
+  margin: 50px auto;
 }
 
+.lds-ellipsis,
+.lds-ellipsis div {
+  box-sizing: border-box;
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.loading-container .lds-ellipsis div {
+  position: absolute;
+  top: 33.33333px;
+  width: 13.33333px;
+  height: 13.33333px;
+  border-radius: 50%;
+  background: currentColor;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+@keyframes lds-ellipsis3 {
+  0% { transform: scale(1); }
+  100% { transform: scale(0); }
+}
+
+@keyframes lds-ellipsis2 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(24px, 0); }
+}
+
+
+/* =========================================================
+   6. BUTTONS
+   ========================================================= */
+.bootstrap-primary-btn {
+  background-color: #4c1d95;
+  color: #fff;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid transparent;
+  font-weight: 500;
+  line-height: 1.5;
+  text-transform: none; // remove Material uppercase
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:hover {
+    background-color: #0b5ed7;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    background-color: #0a58ca;
+  }
+
+  &:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+}
+
+.export-btn {
+  padding: 8px 14px;
+  margin: 0 0 12px 8px;
+  background: #5b2a9e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
+
+  &:hover { background: #4a2283; }
+}
+
+
+/* =========================================================
+   7. STATUS DOTS AND PILLS (order tables, AG Grid)
+   ========================================================= */
 .status-cell {
   display: flex;
   align-items: center;
@@ -211,9 +275,6 @@ mat-datepicker-content .mat-datepicker-actions {
 .status-pending::before { background-color: red; }
 .status-processing::before { background-color: orange; }
 .status-shipped::before { background-color: green; }
-.ag-root-wrapper span {
-  color: inherit;
-}
 
 .status-pill {
   display: inline-block;
@@ -229,6 +290,14 @@ mat-datepicker-content .mat-datepicker-actions {
 .status-pill.status-processing { background: #fef9c3; color: #ca8a04; border-color: #fde68a; }
 .status-pill.status-behind     { background: #fee2e2; color: #dc2626; border-color: #fecaca; }
 
+
+/* =========================================================
+   8. AG GRID HELPERS
+   ========================================================= */
+.ag-root-wrapper span {
+  color: inherit;
+}
+
 .grid-search {
   width: 280px;
   padding: 8px 12px;
@@ -240,17 +309,4 @@ mat-datepicker-content .mat-datepicker-actions {
     outline: none;
     border-color: #5b2a9e;
   }
-}
-
-.export-btn {
-  padding: 8px 14px;
-  margin: 0 0 12px 8px;
-  background: #5b2a9e;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  display:block;
-
-  &:hover { background: #4a2283; }
 }
