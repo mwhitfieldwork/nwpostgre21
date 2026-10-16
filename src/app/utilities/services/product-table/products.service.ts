@@ -45,7 +45,7 @@ refresh$ = this.refreshSource.asObservable();
       .pipe(
         tap(items => {
           //this.nwDataChanged.next(items);
-          console.log(this.url)
+          // console.log(this.url)
         }),
         catchError(this.handleError),
       )
@@ -70,7 +70,7 @@ refresh$ = this.refreshSource.asObservable();
     let url = `${this.url}/Product/AddProduct`;
     let newProduct = JSON.stringify(product)
     var response = this._http.post<ProductModel>(url, newProduct, httpOptions);
-    console.log(url);
+    // console.log(url);
     return response;
   }
 
@@ -82,7 +82,7 @@ refresh$ = this.refreshSource.asObservable();
   updateProduct(product: ProductModel, productId:string): Observable<ProductModel> {
     let url = `${this.url}/Product/${productId}`;
     let newProduct = JSON.stringify(product)
-    console.log(url);
+    // console.log(url);
     var response = this._http.put<ProductModel>(url, newProduct, httpOptions);
     return response;
   }
@@ -92,7 +92,7 @@ refresh$ = this.refreshSource.asObservable();
   updateSalesDashboardProduct(product: ProductModel, productId:string): Observable<ProductModel> {
     let url = `${this.url}/Product/${productId}`;
     let newProduct = JSON.stringify(product)
-    console.log(url);
+    // console.log(url);
     var response = this._http.put<ProductModel>(url, newProduct, httpOptions);
     return response;
   }
@@ -102,7 +102,7 @@ refresh$ = this.refreshSource.asObservable();
     var response = this._http.delete(url)
     .subscribe({
       next: data => {
-          console.log( 'Delete successful');
+          // console.log( 'Delete successful');
       },
       error: error => {
           this.errorMessage = error.message;

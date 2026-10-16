@@ -77,7 +77,7 @@ export class LoginService {
     let url = `${this.url}/api/Login/AddUser`;
     let newLogin = JSON.stringify(authentication)
     var response = this._http.post<Authentication>(url, newLogin, httpOptions);
-    console.log(url,1);
+    // console.log(url,1);
     return response;
   }
 
@@ -85,7 +85,7 @@ export class LoginService {
     let url = `${this.url}/api/Login`;
     let newLogin = JSON.stringify(authentication)
     var response = this._http.post<Authentication>(url, newLogin, httpOptions);
-    console.log(url, 2);
+    // console.log(url, 2);
     return response;
   }
 }

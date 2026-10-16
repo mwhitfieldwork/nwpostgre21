@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
     .subscribe((event: NavigationEnd) => {
       // Use router.url to get the current address, e.g., '/dashboard'
       const currentUrl = event.urlAfterRedirects;
-      console.log('Current URL:', currentUrl);
+      // console.log('Current URL:', currentUrl);
 
       // Update isLoggedIn based on your criteria
       // This example assumes a non-empty path means logged in.
@@ -96,7 +96,7 @@ export class AppComponent implements OnInit {
       this._userSessionService.getUser(this.userId).subscribe((response) => {
         this.user = response;
         this.getVisitor();
-        console.log(this.getVisitor());
+        // console.log(this.getVisitor());
       });
     }
   }

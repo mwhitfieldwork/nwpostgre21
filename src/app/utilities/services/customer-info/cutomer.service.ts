@@ -28,7 +28,7 @@ export class CutomerService {
   }
 
   getProductsByCustomer(id:string): Observable<CustomerProducts[]> {
-    console.log(id, 'ID')
+    // console.log(id, 'ID')
     var response = this._http.get<CustomerProducts[]>(`${this.url}/Category/${id}`)
       .pipe(
         tap(items => {

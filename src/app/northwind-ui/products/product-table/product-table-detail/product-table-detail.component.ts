@@ -100,7 +100,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       "unitPrice": productForm.value.unitPrice,
       "CategoryId": Number(productForm.value.category)}
 
-    console.log(productUpdate, '--- Produ Update');
+    // console.log(productUpdate, '--- Produ Update');
 
     this._productsService.updateProduct(productUpdate, this.productId).subscribe(product => {
       this._productsService.notifyProductsChanged();
@@ -109,7 +109,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
   }
 
   create(payload:FormGroup){
-    console.log(payload.value);
+    // console.log(payload.value);
 
     let newProduct = {
       categoryId: Number(payload.value.category),
@@ -122,7 +122,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       unitsInStock: 0,
       unitsOnOrder: 0
     }
-    console.log(newProduct, '---- new PRODuct');
+    // console.log(newProduct, '---- new PRODuct');
     this._productsService.createProduct(newProduct).subscribe(product => {
       this._productsService.notifyProductsChanged();
       this.router.navigate(['/products']);

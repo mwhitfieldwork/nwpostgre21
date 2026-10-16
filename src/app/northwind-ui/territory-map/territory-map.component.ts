@@ -155,7 +155,7 @@ private buildMarkers(groups: EmployeeTerritoryMap[]): TerritoryMarker[] {
       territories:group.territories
     }));
 
-    console.log(this.employees, '---employeez')
+    // console.log(this.employees, '---employeez')
     
   }
 

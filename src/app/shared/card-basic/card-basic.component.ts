@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 export class CardBasicComponent implements OnInit{
 
   ngOnInit(): void {
-    console.log('cards work');
+    // console.log('cards work');
   }
 
 }

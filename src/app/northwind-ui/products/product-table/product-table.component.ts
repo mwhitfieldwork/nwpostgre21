@@ -177,7 +177,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deleteProduct(product:ProductModel){
-    console.log(product, 'product model');
+    // console.log(product, 'product model');
   }
 
   addToEmailList(selectedProduct: ProductModel) {
@@ -190,7 +190,8 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!productIds.length) return;
 
     this._productsService.createProductInvoice(productIds).subscribe({
-      next: res => console.log(res.message),
+      next: res => { // console.log(res.message);
+      },
       error: err => console.error('Invoice failed', err)
     });
   }

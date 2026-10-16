@@ -4,7 +4,7 @@ import { Directive, ElementRef, inject } from '@angular/core';
   selector: '[appLog]',
   standalone: true,
   host: {
-    '(click)': 'onLog($event)'
+    '(click)': 'onLog()'
   }
 
 })
