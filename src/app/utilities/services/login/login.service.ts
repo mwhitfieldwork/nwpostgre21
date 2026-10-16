@@ -6,6 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import {authConfig} from '../.././../auth.config'
+import { LoginResponse } from '../../../utilities/models/login-response'
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -48,10 +49,12 @@ export class LoginService {
     return this._oauthService.getAccessToken();
   }
 
-  exchangeGoogleCode(code: string): Observable<any> {
-    const url = `${this.url}/api/Login/GoogleCallback`;
-    return this._http.post(url, { code }, httpOptions);
-  }
+// Sends Google's one-time code to our API.
+// The API answers with a message, the user and our own JWT token.
+exchangeGoogleCode(code: string): Observable<LoginResponse> {
+  const url = `${this.url}/api/Login/GoogleCallback`;
+  return this._http.post<LoginResponse>(url, { code }, httpOptions);
+}
 
   get userProfile() {
     const url = "https://www.googleapis.com/oauth2/v2/userinfo";
