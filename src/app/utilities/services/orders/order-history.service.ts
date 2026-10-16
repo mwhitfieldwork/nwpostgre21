@@ -17,7 +17,7 @@ export class OrderHistoryService {
     return this._http.get<OrderDetails[]>(`${this.url}/api/OrderHistory/`)
     .pipe( 
       tap(items => {
-        console.log(this.url)
+        // console.log(this.url)
       }),
       catchError(this.handleError),
     )

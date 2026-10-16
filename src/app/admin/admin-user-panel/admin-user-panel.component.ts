@@ -40,7 +40,7 @@ export class AdminUserPanelComponent implements OnInit {
     this.userSessionService.getAdminUsers().subscribe({
       next: users => {
         this.users = users; 
-        console.log(users, '---- users')
+        // console.log(users, '---- users')
         this.isLoading = false;
       },
       error: () => {

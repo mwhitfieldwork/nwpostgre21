@@ -21,7 +21,7 @@ export class DashboardService {
     return this._http.get<BarOrderDetail[]>(`${this.url}/Dashboard/totals`)
     .pipe( 
       tap(items => {
-        console.log(this.url,)
+        // console.log(this.url,)
       }),
       catchError(this.handleError),
     )
@@ -31,7 +31,7 @@ export class DashboardService {
     return this._http.get<SalesTotal[]>(`${this.url}/Dashboard/salestotals?beginningDate=${beginningDate}&endingDate=${endingDate}`)
     .pipe( 
       tap(items => {
-        console.log(this.url, '--sales totals');
+        // console.log(this.url, '--sales totals');
       }),
       catchError(this.handleError),
     )
@@ -59,8 +59,8 @@ export class DashboardService {
           })
         .pipe(
           tap(data => {
-            console.log('API response for range:', { beginningDate, endingDate });
-            console.log('Returned data:', data);
+            // console.log('API response for range:', { beginningDate, endingDate });
+            // console.log('Returned data:', data);
           }),
           shareReplay(1)
         )
@@ -76,8 +76,8 @@ export class DashboardService {
       })
       .pipe(
         tap(data => {
-          console.log('NON‑CACHED API response:', { beginningDate, endingDate });
-          console.log('Returned data:', data);
+          // console.log('NON‑CACHED API response:', { beginningDate, endingDate });
+          // console.log('Returned data:', data);
         })
       );
   }

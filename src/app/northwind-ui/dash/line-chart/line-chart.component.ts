@@ -55,7 +55,7 @@ ngOnChanges(changes: SimpleChanges): void {
 } 
 
 getSplineData(){
-  console.log('Sending dates:', this.beginningDate.toISOString(), this.endingDate.toISOString());
+  // console.log('Sending dates:', this.beginningDate.toISOString(), this.endingDate.toISOString());
   this._dashboardService.getSalesByDateRange(this.beginningDate.toISOString(), this.endingDate.toISOString())
     .subscribe(rows => {
       this.plotLines = [...rows]
@@ -77,7 +77,7 @@ getSplineData(){
         },        
         series: [{ ...(this.trendOptions.series![0] as SeriesSplineOptions), data: this.plotLines }]
       };                
-      console.log('Updated plotLines  ---------:', this.plotLines);
+      // console.log('Updated plotLines  ---------:', this.plotLines);
   });
 }
 

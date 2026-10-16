@@ -26,7 +26,7 @@ export class EmployeeService {
     return this._http.get<Employee[]>(`${this.url}/Employee/`)
     .pipe( 
       tap(items => {
-        console.log(this.url)
+        // console.log(this.url)
       }),
       catchError(this.handleError),
     )
@@ -49,7 +49,7 @@ export class EmployeeService {
     var response = this._http.delete(url)
     .subscribe({
       next: data => {
-          console.log( 'Delete successful');
+          // console.log( 'Delete successful');
       },
       error: error => {
           this.errorMessage = error.message;

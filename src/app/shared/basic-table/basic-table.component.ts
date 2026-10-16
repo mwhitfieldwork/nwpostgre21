@@ -40,7 +40,7 @@ export class BasicTableComponent  implements OnChanges, AfterViewInit {
       this.dataSource.sort = this.sort;
     }
 
-    console.log('DataSource data: 1', this.dataSource)
+    // console.log('DataSource data: 1', this.dataSource)
   }
 
   ngAfterViewInit(): void {
@@ -48,10 +48,10 @@ export class BasicTableComponent  implements OnChanges, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
-    console.log('DataSource data:2', this.dataSource)
+    // console.log('DataSource data:2', this.dataSource)
   }
   onRowClick($event:Event){
-    console.log($event, 'Row clicked');
+    // console.log($event, 'Row clicked');
   }
 
 }

@@ -173,7 +173,7 @@ export class DashComponent implements OnInit {
           .sort(() => Math.random() - 0.5)
           .slice(0, 3)
 
-          console.log('returnobject ------', {
+          /* console.log('returnobject ------', {
             total: rows.reduce((s, r) => s + r.lineTotal, 0),
             sinceDate,
             thisMonth: rows
@@ -182,7 +182,7 @@ export class DashComponent implements OnInit {
             topCategories,
             overallSales,
             topUnits
-          });
+          }); */
 
           return {
             total: rows.reduce((s, r) => s + r.lineTotal, 0),

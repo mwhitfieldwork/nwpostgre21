@@ -17,7 +17,7 @@ export class EmployeeTerritoryMapService {
     return this._http.get<EmployeeTerritoryMap[]>(`${this.url}/api/EmployeeTerritoryMap`)
       .pipe(
         tap(items => {
-          console.log(this.url, '--employee territory map');
+          // console.log(this.url, '--employee territory map');
         }),
         catchError(this.handleError),
       );

@@ -24,7 +24,7 @@ private router = inject(Router)
 signInErrorMessage = '';
 
   constructor() {
-    console.log('UserSessionService instance created');
+    // console.log('UserSessionService instance created');
   }
 
   ngOnInit() {
@@ -45,7 +45,7 @@ signInErrorMessage = '';
 
   createUser($event:Authentication){
     this._loginService.createUser($event).subscribe((response) => {
-      console.log(response);
+      // console.log(response);
     });
   }
 

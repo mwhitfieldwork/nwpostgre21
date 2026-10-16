@@ -219,7 +219,7 @@ ngOnInit() {
       this.percentage = Math.round((avg / this.maxHeight) * 100);
       this.xFullLabels = sales.map(x => x.productName);
 
-      console.log(this.percentage, '% -------- percent')
+      // console.log(this.percentage, '% -------- percent')
 
       this.displayData();
     });
@@ -269,10 +269,10 @@ ngOnInit() {
           ...fullProduct,
           productName: categorySalesEditForm.value.productName
         };
-        console.log(productId, '--- Sales Update Update');
+        // console.log(productId, '--- Sales Update Update');
 
         this._productsService.updateSalesDashboardProduct(updatedProduct, productId.toString()).subscribe(product => {
-          console.log(product);
+          // console.log(product);
           this.editCategoriesGraphViewToggle();
           this.loadSalesData(this.categorySalesForm.value.category_name, this.categorySalesForm.value.category_year);
         });   
