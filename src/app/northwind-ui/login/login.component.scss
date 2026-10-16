@@ -5,6 +5,8 @@ body {
 .login {
     display: flex;
     width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -14,12 +16,11 @@ body {
     display: block;
     width: 150px;
     margin: 0 auto 20px;
-    margin-top:75px;
 }
 
 mat-card {
     width:40%;
-    margin:auto 0;
+  margin: 0;
 
     article {
     display: flex;
@@ -40,7 +41,7 @@ mat-card {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 100%;
+        width: 50%;
         min-height: 100%;
         padding: 2%;
         border-right: 1px solid #ccc;
@@ -65,14 +66,17 @@ mat-card {
                 margin-right: 10px;
             }
         }
-    }    
+    }   
+    
+    .login-intro{
+      padding:8px;
+      display: flex;
+      justify-content:center;
+      align-items: center;
+    }
 }
 
 @media (max-width: 600px) {
-  .logo-nw {
-    margin-top: 40px;
-  }
-
   mat-card {
     width: 90%;
 

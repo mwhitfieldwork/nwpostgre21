@@ -12,16 +12,21 @@
                     <span (click)="login()"><img src="assets/google-logo.png" alt="Google Icon"/> Login with Google</span>
                 }
             </div>
+            <div class="login-intro">
+                <p>Please use your Google login to enter</p>
+            </div>
+            <!--
             <app-auth-form (submitted)="verifyUser($event)" [signInErrorMessage]="signInErrorMessage">
-                <!-- ngProjectAs: can be used anywhere  but limits use to inside the projected component-->
+                
                 <h3>Log In</h3>
-                <!-- If I were to use the appButton template variablehere I would get the ButtonComponent not the HTMLButtonElement -->  
+
                 <button 
                 type="submit"
                 class="btn btn-warning" 
                 appButton #appButton>Log In
                 <span ngProjectAs="icon"> ></span></button>  
             </app-auth-form>
+            -->
         </article>
     </mat-card>
 </section>
