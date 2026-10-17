@@ -6,7 +6,8 @@ import { environment } from '../../../../environments/environment';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import {authConfig} from '../.././../auth.config'
-import { LoginResponse } from '../../../utilities/models/login-response'
+import { LoginResponse, WrappedLoginResponse } from '../../../utilities/models/login-response'
+import { ApiUser } from '../../models/api-user';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -76,18 +77,19 @@ exchangeGoogleCode(code: string): Observable<LoginResponse> {
   clearToken() {
     localStorage.removeItem(this.tokenKey);
   }  
-  createUser(authentication: Authentication): Observable<any> {
+  
+  createUser(authentication: Authentication): Observable<ApiUser> {
     let url = `${this.url}/api/Login/AddUser`;
     let newLogin = JSON.stringify(authentication)
-    var response = this._http.post<Authentication>(url, newLogin, httpOptions);
+    var response = this._http.post<ApiUser>(url, newLogin, httpOptions);
     // console.log(url,1);
     return response;
   }
 
-  AuthenticateUser(authentication: Authentication): Observable<any> {
+  AuthenticateUser(authentication: Authentication): Observable<WrappedLoginResponse> {
     let url = `${this.url}/api/Login`;
     let newLogin = JSON.stringify(authentication)
-    var response = this._http.post<Authentication>(url, newLogin, httpOptions);
+    var response = this._http.post<WrappedLoginResponse>(url, newLogin, httpOptions);
     // console.log(url, 2);
     return response;
   }
