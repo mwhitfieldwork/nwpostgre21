@@ -22,3 +22,13 @@ export interface LoginResponse {
   user: LoginUser;
   token: string;
 }
+// WHAT: The email/password sign-in reply (POST api/Login).
+// WHY:  The API wraps its answer in a second Ok(), so the real
+//       data sits inside "value". On a bad password, "value" is
+//       just an error message (text) instead of the login data.
+// HOW:  "A | B" means "either A or B". The code that reads it
+//       has to check which one it got before using it.
+export interface WrappedLoginResponse {
+  value: LoginResponse | string;
+  statusCode: number; // 200 = success, 400/401 = problem
+}

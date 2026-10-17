@@ -49,16 +49,28 @@ signInErrorMessage = '';
     });
   }
 
-  verifyUser($event:Authentication){
+  // Signs in with email/password.
+  // The API replies with { value, statusCode }.
+  // "value" is either the login data (success) or an error message (text).
+  verifyUser($event: Authentication) {
     this._loginService.AuthenticateUser($event).subscribe((response) => {
-      if(response?.value?.message === "Authentication successful.") {
-        this._loginService.saveToken(response.value.token);
-        this._userSessionService.setUser(response.value.user.pkid);
+      const result = response.value;
+
+      // If "value" is text, the API is telling us what went wrong.
+      // After this check, TypeScript knows "result" is a string here...
+      if (typeof result === 'string') {
+        this.signInErrorMessage = result;
+        return;
+      }
+
+      // ...and down here it knows "result" is a LoginResponse,
+      // so .message, .token and .user are all checked for typos.
+      if (result.message === 'Authentication successful.') {
+        this._loginService.saveToken(result.token);
+        this._userSessionService.setUser(result.user.pkid.toString());
         this.router.navigate(['/dashboard']).then(() => {
           window.location.reload();
-      });
-      } else{
-        this.signInErrorMessage = response.value
+        });
       }
     });
   }
