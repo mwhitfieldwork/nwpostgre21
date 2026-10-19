@@ -42,8 +42,18 @@ mat-sidenav-container {
     };
   }
 
+  // When collapsed, show only the icons
   mat-sidenav.collapsed {
     width: 60px;
+
+    .label,
+    .collapse-text {
+      display: none; // no room for words at 60px
+    }
+
+    .fa {
+      margin-right: 0; // center the icon in the thin bar
+    }
   }
   
   router-outlet {
@@ -85,7 +95,34 @@ a.active span, a.active i {
   color: #fff;
 }
 
+// The open/close button at the top of the sidebar
+.collapse-btn-container {
+  display: flex;
+  justify-content: flex-end; // sits on the right when open
+  padding: 8px;
+}
 
+mat-sidenav.collapsed .collapse-btn-container {
+  justify-content: center;   // centered in the thin bar
+}
+
+.collapse-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 999px;      // pill shape, same as the login button
+  background: #fff;
+  color: #5e5d5d;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #f3f0f7;
+  }
+}
 
 @media screen and (max-width: 1024px) {
     mat-sidenav {

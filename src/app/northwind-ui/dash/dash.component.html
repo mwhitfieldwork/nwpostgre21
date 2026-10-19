@@ -93,7 +93,7 @@
                     <p><strong>Estimated Influenced Sales drivers</strong></p>
                     <h4>Top Sales Influences</h4>
 
-                    @for (line of overview.topUnits; track line.orderId; let i = $index) {
+                    @for (line of overview.topUnits; track $index; let i = $index) {
                         <article>
                             <span class="driver-id">{{ i + 1 }}</span>
                             <p><strong>{{ line.categoryName }}</strong></p>
