@@ -19,6 +19,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ProductInvoice } from '../../../utilities/models/productInvoice';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 
@@ -61,9 +62,12 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   //paginator!: MatPaginator;
   
   @ContentChild('h1') title!: ElementRef<HTMLElement>;
-  protected readonly Math = Math;
-  private rowFactory = inject(RowDisplayFactory);
+
+    private rowFactory = inject(RowDisplayFactory);
   private _userSessionService = inject(UserSessionService);
+  private snackbar = inject(MatSnackBar);
+  
+  protected readonly Math = Math;
   private statuses = ['In Stock', 'Low Stock', 'Backordered'];
   public colors = [
   '#FF0000', // warmest red
@@ -175,10 +179,33 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addRating(products:ProductModel[]):void {
   }
-
-  deleteProduct(product:ProductModel){
-    // console.log(product, 'product model');
-  }
+/**
+ * Runs after the user confirms a delete (through the confirmDelete directive).
+ *
+ * 1. Asks the API to delete the product (async, so the answer comes later).
+ * 2. On success: the service already told the table to reload (refresh$),
+ *    so here we just show a message and remove it from the invoice list.
+ * 3. On failure: show an error message. Nothing is removed.
+ */
+deleteProduct(product: ProductModel) {
+  this._productsService.deleteProduct(product.productId).subscribe({
+    next: () => {
+      // If it was ticked for the invoice, take it off that list too.
+      this.removeFromEmailList(product);
+      this.snackbar.open(`${product.productName} was deleted.`, 'OK', {
+        duration: 3000,
+        panelClass: 'grit-snackbar-success'
+      });
+    },
+    error: err => {
+      console.error('Delete failed', err);
+      this.snackbar.open(`Couldn't delete ${product.productName}. Please try again.`, 'OK', {
+        duration: 4000,
+        panelClass: 'grit-snackbar-warning'
+      });
+    }
+  });
+}
 
   addToEmailList(selectedProduct: ProductModel) {
     this.productInvoiceList = [...this.productInvoiceList, selectedProduct];

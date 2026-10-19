@@ -51,8 +51,8 @@ mat-sidenav-container {
       display: none; // no room for words at 60px
     }
 
-    .fa {
-      margin-right: 0; // center the icon in the thin bar
+    .nav-icon {
+      margin-right: 0;
     }
   }
   
@@ -72,8 +72,18 @@ mat-toolbar {
     height:100px;
 }
 
-.fa {
-  margin-right: 10px;
+// Sidebar icons (Material Symbols). The icon name inside the span picks the picture.
+.nav-icon {
+  font-size: 22px;
+  margin-right: 12px;
+  vertical-align: middle;
+  font-variation-settings: 'FILL' 0; // outline style by default
+  transition: font-variation-settings 0.2s;
+}
+
+// The page you're on gets a filled icon
+a.active .nav-icon {
+  font-variation-settings: 'FILL' 1;
 }
 
 a {

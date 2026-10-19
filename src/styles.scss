@@ -49,10 +49,10 @@ body {
  * IMPORTANT: icon fonts must be left alone. Icons are drawn with
  * their own font; if we force Roboto on them they turn into empty
  * boxes. So we skip:
- *   - Material icons (mat-icon, .material-icons, .material-symbols-outlined)
+  *   - Material icons (mat-icon, .material-icons, .material-symbols-outlined, .material-symbols-rounded)
  *   - Font Awesome icons (.fa, .fas, .far, .fab) used in the sidebar
  */
-body *:not(mat-icon):not(.material-icons):not(.material-symbols-outlined):not(.fa):not(.fas):not(.far):not(.fab) {
+body *:not(mat-icon):not(.material-icons):not(.material-symbols-outlined):not(.material-symbols-rounded):not(.fa):not(.fas):not(.far):not(.fab) {
   font-family: var(--font-text) !important;
 }
 

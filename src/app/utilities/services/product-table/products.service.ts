@@ -21,8 +21,18 @@ const httpOptions = {
 })
 export class ProductsService {
 private _http = inject(HttpClient);
-private refreshSource = new Subject<void>();
-refresh$ = this.refreshSource.asObservable();
+/**
+ * HOW THE PRODUCTS TABLE KNOWS TO RELOAD
+ *
+ * Think of a radio station:
+ * - refreshSource is the MICROPHONE (a Subject). Only this service can talk into it.
+ * - refresh$ is the RADIO (an Observable). Anyone can listen; nobody can talk into it.
+ *
+ * The products table listens to refresh$. Every time something is said
+ * into the microphone, the table fetches the product list again.
+ */
+private refreshSource = new Subject<void>();      // the microphone (send signals)
+refresh$ = this.refreshSource.asObservable();     // the radio (listen only)
 
   url:string = environment.apiUrl + '/api';
   noapiurl:string = environment.apiUrl;
@@ -97,21 +107,29 @@ refresh$ = this.refreshSource.asObservable();
     return response;
   }
 
-  deleteProduct(id:number): void {
-    let url = `${this.url}/Product/${id}`;
-    var response = this._http.delete(url)
-    .subscribe({
-      next: data => {
-          // console.log( 'Delete successful');
-      },
-      error: error => {
-          this.errorMessage = error.message;
-          console.error('There was an error!', error);
-      }
-    });
+  /**
+   * Deletes one product on the API.
+   *
+   * ASYNC: the API answers later, so this returns an Observable
+   * (a callback promise) instead of a result.
+   * Nothing happens until the component SUBSCRIBES to it.
+   *
+   * tap() lets us do something extra when the answer arrives,
+   * without changing the answer itself.
+   * Here: once the delete succeeds, tell the table to reload.
+   */
+  deleteProduct(id: number): Observable<void> {
+    const url = `${this.url}/Product/${id}`;
+    return this._http.delete<void>(url).pipe(
+      tap(() => this.notifyProductsChanged())   // delete worked, so reload the table
+    );
+  } 
 
-  }
-
+  /**
+   * Says "products changed!" into the microphone.
+   * It sends no data, just the signal (that's what <void> means).
+   * The table hears it and reloads its own list.
+   */
   notifyProductsChanged() {
     this.refreshSource.next();
   }
