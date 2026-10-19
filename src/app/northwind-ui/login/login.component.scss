@@ -1,119 +1,178 @@
+// Load the font. This line must stay at the very top of the file.
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+// WHAT: Styles for the login page (logo, intro text, Google sign-in card).
+// WHY:  First thing a visitor (or a hiring manager) sees, so it should look clean
+//       and work on any screen size.
+// HOW:  One centered column with a max width. On small screens the card
+//       stacks its two halves on top of each other.
+
+// Colors and font in one place, so they're easy to change later
+$font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+$bg: #343b4a;
+$text-light: #eef1f6;
+$text-muted: #b8bfcc;
+$accent: #f2c94c;       // warm yellow, matches the site loader
+$border: #e3e6eb;
+
 body {
-    background-color: #343b4a !important; 
+  background-color: $bg !important;
 }
 
 .login {
-    display: flex;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;               // even space between logo, text and card
+  width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  padding: 48px 16px;      // 16px keeps text off the screen edges on phones
+  font-family: $font;
+  // A soft glow at the top so the page isn't one flat color
+  background: radial-gradient(ellipse at top, #444d61 0%, $bg 65%);
 }
 
 .logo-nw {
-    display: block;
-    width: 150px;
-    margin: 0 auto 20px;
+  display: block;
+  width: 160px;
+  margin: 0;
 }
 
 .login-summmary {
-  width:40%;
-  margin: 0;
+  width: 100%;
+  max-width: 560px;        // stops lines getting too long to read on big screens
 
   p {
-    color:#fff;
+    margin: 0 0 12px;
+    color: $text-muted;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  // The first sentence is the headline, so make it stand out a little
+  p:first-child {
+    color: $text-light;
+    font-size: 1.125rem;
+    font-weight: 500;
   }
 }
 
 mat-card {
-    width:40%;
+  width: 100%;
+  max-width: 560px;
   margin: 0;
+  box-sizing: border-box;
+  padding: 24px !important; // !important beats Bootstrap's p-3 class on the card
+  border-radius: 16px;
+  border-top: 4px solid $accent;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  font-family: $font;
 
-    article {
+  article {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .google-login {
+    flex: 1;                // both halves share the width equally
+    display: flex;
     justify-content: center;
-    }
+    padding: 0 24px 0 0;
+    border-right: 1px solid $border;
 
-    button{
-        width:100px;
-    }
-
-    p {
-        display: flex;
-        align-self: center;
-    }
-
-    .google-login {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 50%;
-        min-height: 100%;
-        padding: 2%;
-        border-right: 1px solid #ccc;
-
-        span {
-            display: block;
-            margin: auto;
-            border: 1px dotted #ccc;
-            background:#fff;
-            color:#232222;
-            width:100%;
-            padding:15px;
-            font-size: 1rem;
-
-            &:hover {
-                cursor: pointer;
-            }
-
-            img{
-                width: 40px;
-                height: 40px;
-                margin-right: 10px;
-            }
-        }
-    }   
-    
-    .login-intro{
-      padding:8px;
+    // The login span and the logout button share one pill-button look
+    span,
+    button {
       display: flex;
-      justify-content:center;
       align-items: center;
-    }
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 20px;
+      border: 1px solid #dadce0;
+      border-radius: 999px; // a huge radius makes a pill shape
+      background: #fff;
+      color: #1f2430;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
 
-    p{
-      color:#333;
-    }
-}
+      &:hover {
+        border-color: #c4c7cc;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px); // tiny lift on hover
+      }
 
-@media (max-width: 600px) {
-  mat-card {
-    width: 90%;
-
-    article {
-      flex-direction: column;
-    }
-
-    .google-login {
-      border-right: none;
-      border-bottom: 1px solid #ccc;
-      padding: 0 0 16px;
-      margin-bottom: 16px;
-
-      span {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
+      &:active {
+        transform: translateY(0);
+        box-shadow: none;
       }
 
       img {
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
+        margin: 0;
       }
+    }
+  }
+
+  .login-intro {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    p {
+      margin: 0;
+      color: #5b6372;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+// Phones and small tablets
+@media (max-width: 600px) {
+  .login {
+    justify-content: flex-start; // start at the top instead of the middle
+    gap: 20px;
+    padding: 32px 16px;
+  }
+
+  .logo-nw {
+    width: 130px;
+  }
+
+  .login-summmary p {
+    font-size: 0.9rem;
+  }
+
+  mat-card {
+    padding: 20px !important;
+
+    article {
+      flex-direction: column; // stack button above the text
+      gap: 16px;
+    }
+
+    .google-login {
+      width: 100%;
+      padding: 0 0 16px;
+      border-right: none;
+      border-bottom: 1px solid $border;
+    }
+
+    .login-intro {
+      justify-content: center;
+      text-align: center;
     }
   }
 }

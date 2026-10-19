@@ -3,34 +3,33 @@
 <app-nav [menuOpen]="mobileNavOpen" (menuToggle)="toggleMobileNav()"></app-nav>
 <app-loading-spinner />
 <mat-sidenav-container 
-class="layout"> 
+class="layout"
+autosize> 
   <mat-sidenav #sidenav 
   [mode]="isMobileScreen ? 'over' : 'side'"
   [opened]="!isMobileScreen || mobileNavOpen"
   (closedStart)="mobileNavOpen = false"
   [class.collapsed]="isCollapsed"
   class="sidebar"> 
-      <!-- Floating collapse button -->
-      <div class="collapse-btn-container" >
-        <button mat-icon-button class="collapse-btn" (click)="toggleSidenav()">
+      <!-- Open/close button for the desktop sidebar -->
+      <div class="collapse-btn-container">
+        <button type="button" class="collapse-btn" (click)="toggleSidenav()"
+          [attr.aria-label]="isCollapsed ? 'Open menu' : 'Close menu'">
           @if (isCollapsed) {
-          <span>close</span>            
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <span class="collapse-text">open</span>
+            <!-- Arrow pointing right: "expand" -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 6 15 12 9 18"></polyline>
-          </svg>
+            </svg>
           } @else {
-          <span>open</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <span class="collapse-text">close</span>
+            <!-- Arrow pointing left: "shrink" -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="15 6 9 12 15 18"></polyline>
-          </svg>
-            }
+            </svg>
+          }
         </button>
       </div>
-      <!--
-      <div class="user-icon">
-        <app-users [user]="getVisitor()" [signInUser]="user"/>
-      </div>
-      -->
       <mat-nav-list>
   
         <a mat-list-item routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">

@@ -17,6 +17,7 @@ import { LoadingSpinnerComponent } from "./shared/loader/site-wide-loader";
 import { AgentChatComponent } from './northwind-ui/agent-chat/agent-chat.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { LoginService } from './utilities/services/login/login.service';
 
 @Component({
     selector: 'app-root',
@@ -50,6 +51,8 @@ export class AppComponent implements OnInit {
   visitors = DUMMY_USERS;
 
   private _router = inject(Router);
+  private _loginService = inject(LoginService);
+
   private  _userSessionService = inject(UserSessionService);
     private breakpointObserver = inject(BreakpointObserver);
   private destroyRef = inject(DestroyRef);
@@ -63,6 +66,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Set the token-expiry alarm on every app start (a page reload clears timers).
+    // If the saved token is already expired, this sends the user to login right away.
+    this._loginService.startExpiryTimer();
+
     this.breakpointObserver.observe('(max-width: 1024px)')
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(result => {
