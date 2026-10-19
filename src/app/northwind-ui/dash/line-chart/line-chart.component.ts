@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges, inject } from '@angular/core';
 import { HighchartsChartComponent } from 'highcharts-angular';
 import {DashboardService} from '../../../utilities/services/dashboard/dashboard.service';
-import type { Options, SeriesSplineOptions, XAxisOptions } from 'highcharts';
+import type { Options, SeriesSplineOptions, XAxisOptions, YAxisOptions } from 'highcharts';
 
 @Component({
   selector: 'app-line-chart',
@@ -69,13 +69,24 @@ getSplineData(){
               : [0, 0, 63, 8, 55, 29, 71, 34, 12, 66, 47,
                 23, 79, 38, 5, 58, 31, 74, 19, 50, 27, 80];
 
+      // Find the highest value in the data, then round UP to the next
+      // multiple of 5 so it lines up with tickInterval: 5.
+      // "|| 5" keeps the chart from collapsing if every value is 0.
+      const highest = Math.max(...this.plotLines);
+      this.max = Math.ceil(highest / 5) * 5 || 5;
+
       this.trendOptions = {
         ...this.trendOptions,
         xAxis: {
           ...(this.trendOptions.xAxis as XAxisOptions),
           categories: this.buildDateLabels(this.plotLines.length)
-        },        
-        series: [{ ...(this.trendOptions.series![0] as SeriesSplineOptions), data: this.plotLines }]
+        },  
+        // Copy the existing y-axis settings, but replace max with the new value
+        yAxis: {
+          ...(this.trendOptions.yAxis as YAxisOptions),
+          max: this.max
+        },              
+        series: [{ ...(this.trendOptions.series![0] as SeriesSplineOptions), data: this.plotLines }],
       };                
       // console.log('Updated plotLines  ---------:', this.plotLines);
   });
