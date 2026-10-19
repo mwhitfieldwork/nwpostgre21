@@ -8,7 +8,6 @@ import { ProductTableDetailComponent } from './northwind-ui/products/product-tab
 import { Error404Component } from './shared/error/error404/error404.component';
 import { Error500Component } from './shared/error/error500/error500.component';
 import { TerritoryMapComponent } from './northwind-ui/territory-map/territory-map.component';
-import { DashboardResolver } from './utilities/resolvers/dashboard-resolver.resolver';
 import { ProductSummaryComponent } from './northwind-ui/products/product-summary/product-summary.component';
 import { AdminUserPanelComponent } from './admin/admin-user-panel/admin-user-panel.component';
 
@@ -20,8 +19,7 @@ export const routes: Routes = [
   // Dashboard (resolver made safe in code)
   { 
     path: 'dashboard', 
-    component: DashComponent,
-    resolve: { data: DashboardResolver }
+    component: DashComponent
   },
   { 
     path: 'territories', 
