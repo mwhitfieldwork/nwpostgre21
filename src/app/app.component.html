@@ -33,31 +33,34 @@ autosize>
       <mat-nav-list>
   
         <a mat-list-item routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <span class="fa fa-dashboard"></span>
-          <span class="label">Dashboard</span>
-        </a>
-  
-        <a mat-list-item routerLink="/products" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fa fa-archive"></i>
-          <span class="label">Product</span>
+          <!--<span class="material-symbols-rounded nav-icon">space_dashboard</span>-->
+          <i class="fa-solid fa-house"></i>
+          <span class="label"> Dashboard</span>
         </a>
 
-         <a mat-list-item routerLink="/territories" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fa fa-archive"></i>
-          <span class="label">Territories</span>
-        </a> 
-        <a mat-list-item routerLink="/admin" routerLinkActive="active" *appDisplayLink>
-            <i class="fa fa-shopping-cart"></i>
-            <span class="label">Admin Users</span>
-        </a>   
-        <a mat-list-item href="https://mwhitfieldwork.github.io/portfolio/#home" routerLinkActive="active" *appDisplayLink>
-            <i class="fa fa-briefcase"></i>
-            <span class="label">Portfolio</span>
+        <a mat-list-item routerLink="/products" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <!--<span class="material-symbols-rounded nav-icon">inventory_2</span>-->
+          <i class="fa-solid fa-table" style="color: rgb(30, 48, 80);"></i>
+          <span class="label"> Product</span>
         </a>
-        <a mat-list-item href="https://grithoodies.com" routerLinkActive="active" *appDisplayLink>
-            <i class="fa fa-shopping-cart"></i>
-            <span class="label">Shop</span>
-        </a>          
+
+        <a mat-list-item routerLink="/territories" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <!--<span class="material-symbols-rounded nav-icon">map</span>-->
+          <i class="fa-solid fa-earth-oceania" style="color: rgb(30, 48, 80);"></i>
+          <span class="label"> Territories</span>
+        </a>
+        <a mat-list-item routerLink="/admin" routerLinkActive="active" *appDisplayLink>
+          <!--<span class="material-symbols-rounded nav-icon">admin_panel_settings</span>-->
+          <span class="label">Admin Users</span>
+        </a>
+        <a mat-list-item href="https://mwhitfieldwork.github.io/portfolio/#home" *appDisplayLink>
+          <!--<span class="material-symbols-rounded nav-icon">work</span>-->
+          <span class="label">Portfolio</span>
+        </a>
+        <a mat-list-item href="https://grithoodies.com" *appDisplayLink>
+          <!--<span class="material-symbols-rounded nav-icon">storefront</span>-->
+          <span class="label">Shop</span>
+        </a>         
       </mat-nav-list>
   </mat-sidenav>
 
