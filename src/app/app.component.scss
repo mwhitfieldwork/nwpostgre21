@@ -96,13 +96,19 @@ a {
 }
 
 a.active {
-  background: $color-violet-deep;  
+  background: $color-violet-deep;
   border-radius: unset;
   color: #fff;
-}
+  --mat-list-list-item-label-text-color: #fff;
+  --mat-list-list-item-hover-label-text-color: #fff;
+  --mat-list-list-item-focus-label-text-color: #fff;
 
-a.active span, a.active i {
-  color: #fff;
+  span,
+  i,
+  svg {
+    color: #fff;
+    fill: currentColor;
+  }
 }
 
 // The open/close button at the top of the sidebar
