@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { UserSessionService } from '../../utilities/services/user-session/user-session.service';
 import { BasicButtonComponent } from '../../shared/basic-button/basic-button.component';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { isLoginResponse } from '../../utilities/models/login-response';
 
 @Component({
     selector: 'app-login',
@@ -56,22 +57,21 @@ signInErrorMessage = '';
     this._loginService.AuthenticateUser($event).subscribe((response) => {
       const result = response.value;
 
-      // If "value" is text, the API is telling us what went wrong.
-      // After this check, TypeScript knows "result" is a string here...
-      if (typeof result === 'string') {
-        this.signInErrorMessage = result;
-        return;
-      }
+          // isLoginResponse is our type guard (in login-response.ts).
+          // If it says no, "result" is the error text from the API.
+          if (!isLoginResponse(result)) {
+            this.signInErrorMessage = result;   // TypeScript knows this is a string
+            return;
+          }
 
-      // ...and down here it knows "result" is a LoginResponse,
-      // so .message, .token and .user are all checked for typos.
-      if (result.message === 'Authentication successful.') {
+
+        // From here on, TypeScript knows "result" is a LoginResponse,
+        // so .token and .user are checked for typos.
         this._loginService.saveToken(result.token);
         this._userSessionService.setUser(result.user.pkid.toString());
         this.router.navigate(['/dashboard']).then(() => {
           window.location.reload();
         });
-      }
     });
   }
 

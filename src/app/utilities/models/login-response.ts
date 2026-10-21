@@ -32,3 +32,15 @@ export interface WrappedLoginResponse {
   value: LoginResponse | string;
   statusCode: number; // 200 = success, 400/401 = problem
 }
+
+/**
+ * WHAT: Checks whether the email/password reply's "value" is the
+ *       real login data, or just an error message (text).
+ * WHY:  "value" can be either one (LoginResponse | string). This gives
+ *       the check a name, so any component can reuse it.
+ * HOW:  The special return type "value is LoginResponse" tells TypeScript:
+ *       if this returns true, treat value as a LoginResponse from here on.
+ */
+export function isLoginResponse(value: LoginResponse | string): value is LoginResponse {
+  return typeof value !== 'string' && !!value.token;
+}

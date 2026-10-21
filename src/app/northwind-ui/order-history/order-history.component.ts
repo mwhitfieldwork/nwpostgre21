@@ -14,7 +14,7 @@ import { RatingComponent } from '../../shared/rating/rating.component';
 import { RowDisplayFactory } from '../../utilities/factories/row-display.factory';
 import type { RowSelectionOptions, SelectionChangedEvent } from 'ag-grid-community';
 import {AgGridAngular} from 'ag-grid-angular';
-import type { ColDef } from 'ag-grid-community';
+import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { themeQuartz } from 'ag-grid-community';
 
 export type DeliveryStatus = 'on-time' | 'behind' | 'processing';
@@ -88,7 +88,7 @@ colDefs: ColDef[] = [
       default: return 'processing';
     }
   },
-  cellRenderer: (params: any) =>
+ cellRenderer: (params: ICellRendererParams<unknown, string>) =>
     `<span class="status-pill status-${params.value}">${params.value}</span>`
   }, 
   {field:'quantity'},
