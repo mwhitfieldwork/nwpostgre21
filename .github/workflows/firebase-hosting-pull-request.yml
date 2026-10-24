@@ -29,6 +29,9 @@ jobs:
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          # Pinned: firebase-tools 15.34.1 added a service check that fails with 403.
+          # 15.34.0 was the last version that deployed. Remove once Firebase fixes it.
+          firebaseToolsVersion: '15.34.0'
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NWPOSTGRE21 }}
           projectId: northwind-fe-postgre

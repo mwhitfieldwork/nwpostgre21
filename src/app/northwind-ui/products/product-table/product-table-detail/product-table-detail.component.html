@@ -4,81 +4,94 @@
     <div class="product-info-container">
       <form [formGroup]="productForm" cdkFocusInitial>
         <div class="form-group">
+        <mat-form-field  class="custom-field">
+        <mat-label>Product Name</mat-label>
+        <input matInput placeholder="" class="form-control" id="name" formControlName="productname"
+        [ngClass]="{'is-invalid':!productForm.get('productname')?.valid &&
+        productForm.get('productname')?.touched}">
+        </mat-form-field>
+
+        <span class="invalid-feedback">
+        @if (productForm.get('productname')?.hasError('required')) {
+        <span>
+        Please enter a product name.
+        </span>
+        }
+        </span>
+
+        </div>
+        <div class="form-group">
+        <mat-form-field  class="custom-field">
+        <mat-label>Quantity</mat-label>
+        <input matInput placeholder="" class="form-control" id="name" formControlName="quantity"
+        [ngClass]="{'is-invalid':!productForm.get('quantity')?.valid &&
+        productForm.get('quantity')?.touched}">
+        </mat-form-field>
+
+        <!-- <label for="name">Quantity</label>
+        <input type="text" class="form-control" id="name" formControlName="quantity"
+        [ngClass]="{'is-invalid':!productForm.get('quantity')?.valid &&
+        productForm.get('quantity')?.touched}"> -->
+
+        <span class="invalid-feedback">
+        @if (productForm.get('quantity')?.hasError('required')) {
+        <span>
+          Please enter a quantity.
+        </span>
+        }
+        </span>
+
+        </div>
+        <div class="form-group">
           <mat-form-field  class="custom-field">
-            <mat-label>Product Name</mat-label>
-            <input matInput placeholder="" class="form-control" id="name" formControlName="productname"
-              [ngClass]="{'is-invalid':!productForm.get('productname')?.valid &&
-              productForm.get('productname')?.touched}">
-            </mat-form-field>
+          <mat-label>Unit Price</mat-label>
+          <input matInput placeholder="" class="form-control" id="name" formControlName="unitPrice"
+          [ngClass]="{'is-invalid':!productForm.get('unitPrice')?.valid &&
+          productForm.get('unitPrice')?.touched}">
+          </mat-form-field>
 
-            <span class="invalid-feedback">
-              @if (productForm.get('productname')?.hasError('required')) {
-                <span>
-                  Please enter a product name.
-                </span>
-              }
+          <span class="invalid-feedback">
+          @if (productForm.get('unitPrice')?.hasError('required')) {
+            <span>
+              Please enter a unit price.
             </span>
+          }
+          </span>
+        </div>
+        <div class="form-group">
 
-          </div>
-          <div class="form-group">
-            <mat-form-field  class="custom-field">
-              <mat-label>Quantity</mat-label>
-              <input matInput placeholder="" class="form-control" id="name" formControlName="quantity"
-            [ngClass]="{'is-invalid':!productForm.get('quantity')?.valid &&
-            productForm.get('quantity')?.touched}">
-              </mat-form-field>
+        <mat-form-field appearance="fill" class="custom-field">
+          <mat-label>Select Product</mat-label>
+          <mat-select formControlName="category">
+            <mat-option [value]="">Select Product</mat-option>
+            @for(category of categories$ | async; track i; let i = $index) {
+              <mat-option [value]="category.categoryId">
+                {{ category.categoryName}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-              <!-- <label for="name">Quantity</label>
-              <input type="text" class="form-control" id="name" formControlName="quantity"
-            [ngClass]="{'is-invalid':!productForm.get('quantity')?.valid &&
-            productForm.get('quantity')?.touched}"> -->
-
-                <span class="invalid-feedback">
-                  @if (productForm.get('quantity')?.hasError('required')) {
-                    <span>
-                      Please enter a quantity.
-                    </span>
-                  }
-                </span>
-
-              </div>
-              <div class="form-group">
-                <mat-form-field  class="custom-field">
-                  <mat-label>Unit Price</mat-label>
-                  <input matInput placeholder="" class="form-control" id="name" formControlName="unitPrice"
-            [ngClass]="{'is-invalid':!productForm.get('unitPrice')?.valid &&
-            productForm.get('unitPrice')?.touched}">
-                  </mat-form-field>
-
-                  <span class="invalid-feedback">
-                    @if (productForm.get('unitPrice')?.hasError('required')) {
-                      <span>
-                        Please enter a unit price.
-                      </span>
-                    }
-                  </span>
-                </div>
-                <div class="form-group">
-
-                  <mat-form-field appearance="fill" class="custom-field">
-                    <mat-label>Select Product</mat-label>
-                    <mat-select formControlName="category">
-                      <mat-option [value]="">Select Product</mat-option>
-                      @for(category of categories$ | async; track i; let i = $index) {
-                        <mat-option [value]="category.categoryId">
-                          {{ category.categoryName}}
-                        </mat-option>
-                      }
-                    </mat-select>
-                  </mat-form-field>
-
-                  <!-- <select formControlName="category">
-                  <option value="">Select Product</option>
-                  <option *ngFor="let category of categories$ | async"
-                    [ngValue]="category.categoryId"
-                  >{{category.categoryName}}</option>
-                </select> -->
-              </div>
+        <!-- <select formControlName="category">
+        <option value="">Select Product</option>
+        <option *ngFor="let category of categories$ | async"
+        [ngValue]="category.categoryId"
+        >{{category.categoryName}}</option>
+        </select> -->
+        </div>
+        <div class="form-group">        
+          <!-- Stock on the shelf. Required and can't be negative (see the form in the .ts). -->
+          <mat-form-field appearance="fill" class="custom-field">
+            <mat-label>Units in Stock</mat-label>
+            <input matInput type="number" min="0" formControlName="unitsInStock">
+            @if (productForm.get('unitsInStock')?.hasError('required')) {
+            <mat-error>Stock is required</mat-error>
+            }
+            @if (productForm.get('unitsInStock')?.hasError('min')) {
+            <mat-error>Stock can't be negative</mat-error>
+            }
+          </mat-form-field>     
+        </div>   
 
               <section class="nav-actions">
                 <div class="crud-btns">
