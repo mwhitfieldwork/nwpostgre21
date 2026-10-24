@@ -89,12 +89,15 @@ refresh$ = this.refreshSource.asObservable();     // the radio (listen only)
     return this._http.post<{ message: string }>(url, { productIds });
   } 
 
-  updateProduct(product: ProductModel, productId:string): Observable<ProductModel> {
-    let url = `${this.url}/Product/${productId}`;
-    let newProduct = JSON.stringify(product)
-    // console.log(url);
-    var response = this._http.put<ProductModel>(url, newProduct, httpOptions);
-    return response;
+  /**
+   * WHAT: Saves an edited product.
+   * WHY:  The API's PUT needs the WHOLE product, ID included (it checks the
+   *       URL ID matches the body ID). It replies with NoContent, so nothing comes back.
+   * HOW:  Send the full ProductModel; use its own productId for the URL.
+   */
+  updateProduct(product: ProductModel): Observable<void> {
+    const url = `${this.url}/Product/${product.productId}`;
+    return this._http.put<void>(url, product, httpOptions);
   }
 
 

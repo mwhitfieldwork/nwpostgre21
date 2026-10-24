@@ -63,6 +63,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       unitPrice:['', Validators.required],
       quantity:['', Validators.required],
       category:['', Validators.required],
+      unitsInStock:['', [Validators.required, Validators.min(0)]],
       store: new FormGroup({
         branch: new FormControl(''),
         code: new FormControl('')
@@ -98,11 +99,12 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       "productName": productForm.value.productname,
       "quantityPerUnit": productForm.value.quantity,
       "unitPrice": productForm.value.unitPrice,
-      "CategoryId": Number(productForm.value.category)}
+      "unitsInStock": Number(productForm.value.unitsInStock),
+      "categoryId": Number(productForm.value.category)}
 
     // console.log(productUpdate, '--- Produ Update');
 
-    this._productsService.updateProduct(productUpdate, this.productId).subscribe(product => {
+    this._productsService.updateProduct(productUpdate).subscribe(product => {
       this._productsService.notifyProductsChanged();
       this.router.navigate(['/products']);
     })
@@ -119,7 +121,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       reorderLevel: 0,
       supplierId: 1,
       unitPrice: payload.value.unitPrice,
-      unitsInStock: 0,
+      unitsInStock: Number(payload.value.unitsInStock),
       unitsOnOrder: 0
     }
     // console.log(newProduct, '---- new PRODuct');
@@ -137,6 +139,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       this.ratedProduct = product;
       this.productForm.get('productname')?.setValue(this.ratedProduct.productName)
       this.productForm.get('quantity')?.setValue(this.ratedProduct.quantityPerUnit);
+      this.productForm.get('unitsInStock')?.setValue(this.ratedProduct.unitsInStock);
       this.productForm.get('unitPrice')?.setValue(this.ratedProduct.unitPrice);
     },
     error => this.errorMessage = error?.message ?? 'Failed to load product')
