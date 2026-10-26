@@ -1,30 +1,22 @@
-import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiService } from '../api/api.service';
 import { EmployeeTerritoryMap } from '../../models/employee-territory-map';
 
+/**
+ * WHAT: Loads the employee/territory map for the map page.
+ * WHY:  It used to repeat the URL, http.get and error handling itself.
+ * HOW:  extends ApiService<EmployeeTerritoryMap> gives us getAll() for free.
+ *       We only say where the data lives (path).
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeTerritoryMapService {
-  private _http = inject(HttpClient);
-  url: string = environment.apiUrl;
+export class EmployeeTerritoryMapService extends ApiService<EmployeeTerritoryMap> {
+  protected path = '/api/EmployeeTerritoryMap';
 
-  constructor() { }
-
+  /** Same name as before, so the component doesn't change. */
   getEmployeeTerritoryMap(): Observable<EmployeeTerritoryMap[]> {
-    return this._http.get<EmployeeTerritoryMap[]>(`${this.url}/api/EmployeeTerritoryMap`)
-      .pipe(
-        tap(items => {
-          // console.log(this.url, '--employee territory map');
-        }),
-        catchError(this.handleError),
-      );
-  }
-
-  private handleError(error: Response) {
-    console.error(error);
-    return throwError(() => error || 'Server error');
+    return this.getAll();
   }
 }

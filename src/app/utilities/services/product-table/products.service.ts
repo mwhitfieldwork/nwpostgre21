@@ -8,6 +8,7 @@ import { Category } from '../../../utilities/models/category';
 import { ProductCreateModel } from '../../models/productNew';
 import { CategorySale } from '../../models/categorySale';
 import { ProductInvoice } from '../../models/productInvoice';
+import { ApiService } from '../api/api.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,8 +20,9 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService {
+export class ProductsService extends ApiService<ProductModel> {
 private _http = inject(HttpClient);
+protected path = '/api/Product';
 /**
  * HOW THE PRODUCTS TABLE KNOWS TO RELOAD
  *
@@ -39,15 +41,9 @@ refresh$ = this.refreshSource.asObservable();     // the radio (listen only)
   errorMessage:string = '';
 
   getProducts(): Observable<ProductModel[]> {
-    var response = this._http.get<ProductModel[]>(`${this.url}/Product`)
-      .pipe(
-        map(products =>  products.sort((a, b) => b.productId - a.productId)), 
-        tap(items => {
-        }),
-        catchError(this.handleError),
-      )
-
-    return response
+    return this.getAll().pipe(
+      map(products => products.sort((a, b) => b.productId - a.productId))
+    );
   }
 
   getCategories(): Observable<Category[]> {
@@ -64,15 +60,7 @@ refresh$ = this.refreshSource.asObservable();     // the radio (listen only)
   }
 
   getProduct(productId: string): Observable<ProductModel> {
-    let url = `${this.url}/Product/${productId}`;
-    var response = this._http.get<ProductModel>(url)
-      .pipe(
-        tap(item => {
-        }),
-        catchError(this.handleError),
-      )
-
-    return response
+    return this.getById(productId)
   }
 
 
@@ -135,10 +123,5 @@ refresh$ = this.refreshSource.asObservable();     // the radio (listen only)
    */
   notifyProductsChanged() {
     this.refreshSource.next();
-  }
-
-  private handleError(error: Response) {
-    console.error(error);
-    return throwError(() => error || 'Server error');
   }
 }
