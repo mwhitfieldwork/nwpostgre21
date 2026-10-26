@@ -20,9 +20,9 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
     '(click)': 'onRowClick($event)'
   }
 })
-export class BasicTableComponent  implements OnChanges, AfterViewInit {
+export class BasicTableComponent<T> implements OnChanges, AfterViewInit {
   
-  @Input() dataSource!: MatTableDataSource<any>;
+   @Input() dataSource!: MatTableDataSource<T>;
   @Input() displayedColumns: { columnDef: string; header: string }[] = [];
 
   columnKeys: string[] = [];
