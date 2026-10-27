@@ -4,6 +4,7 @@ import { LoginComponent } from './northwind-ui/login/login.component';
 import { DashComponent } from './northwind-ui/dash/dash.component';
 import { ProductTableComponent } from './northwind-ui/products/product-table/product-table.component';
 import { ProductTableDetailComponent } from './northwind-ui/products/product-table/product-table-detail/product-table-detail.component';
+import { authGuard } from './utilities/guards/auth.guard';
 
 import { Error404Component } from './shared/error/error404/error404.component';
 import { Error500Component } from './shared/error/error500/error500.component';
@@ -19,20 +20,24 @@ export const routes: Routes = [
   // Dashboard (resolver made safe in code)
   { 
     path: 'dashboard', 
-    component: DashComponent
+    component: DashComponent,
+    canActivate: [authGuard]
   },
   { 
     path: 'territories', 
-    component: TerritoryMapComponent
+    component: TerritoryMapComponent,
+    canActivate: [authGuard]
   },
   { 
     path: 'admin', 
-    component: AdminUserPanelComponent
+    component: AdminUserPanelComponent,
+    canActivate: [authGuard]
   },
   // Products + children
   { 
     path: 'products', 
     component: ProductTableComponent,
+    canActivate: [authGuard],
     children: [
       { path: 'details/new', component: ProductTableDetailComponent },
       { path: 'details/:id', component: ProductTableDetailComponent },
