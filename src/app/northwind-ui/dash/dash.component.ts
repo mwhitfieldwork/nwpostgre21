@@ -13,11 +13,12 @@ import { DatePickerFilterComponent } from "../../shared/date-picker-filter/date-
 import { DashboardService } from '../../utilities/services/dashboard/dashboard.service';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { SalesTotal } from '../../utilities/models/salesTotal';
-import { MatCalendar, MatDateRangePicker } from '@angular/material/datepicker';
+import {MatCalendar, MatDateRangePicker } from '@angular/material/datepicker';
 import { SalesOverview } from '../../utilities/models/sales-overview';
 import { ScrambleTextDirective } from '../../utilities/directives/label-animation/scramble-text.directive';
 import { LineChartComponent } from './line-chart/line-chart.component';
-
+import { CandlestickChartComponent } from './candlestick-chart/candlestick-chart.component';
+import { DateRange } from '../../shared/date-picker-filter/date-picker-filter.component';
 
 @Component({
     selector: 'app-dash',
@@ -37,7 +38,8 @@ import { LineChartComponent } from './line-chart/line-chart.component';
     DatePipe,
     AsyncPipe,
     DecimalPipe,
-    ScrambleTextDirective
+    ScrambleTextDirective,
+    CandlestickChartComponent,
 ],
     templateUrl: './dash.component.html',
     styleUrl: './dash.component.scss'
@@ -61,7 +63,8 @@ export class DashComponent implements OnInit {
   basicCost:number = 1180.09;
   salesTotals: SalesTotal[] = [];
   welcomeName!:string;
-
+  // The date range the candlestick chart uses (null = chart's default weeks)
+  candleDateRange: DateRange | null = null;
 
   drivers: Drivers[] = [
     {id:1, name: 'Water', cost: 185.2},
@@ -97,6 +100,8 @@ export class DashComponent implements OnInit {
 
       //reassigns the the collection  when the dates are chosen
      this.overview$ = this.loadSalesOverview();
+
+    this.candleDateRange = dateRange; // also send it to the candlestick chart
   }   
 
   loadSalesOverview(): Observable<SalesOverview>{

@@ -43,6 +43,7 @@
     "@angular/build": "^21.2.22",
     "@angular/cli": "^21.2.22",
     "@angular/compiler-cli": "^21.2.22",
+    "@types/d3": "^7.4.3",
     "@types/google.maps": "^3.66.2",
     "@types/jasmine": "~5.1.0",
     "angular-cli-ghpages": "^3.1.0",

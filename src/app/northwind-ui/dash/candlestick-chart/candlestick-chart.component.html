@@ -1,0 +1,10 @@
+@if (loading) {
+  <p class="chart-message">Loading…</p>
+}
+
+@if (hasLoaded && !loading && candles.length === 0) {
+  <p class="chart-message">No sales in this date range.</p>
+}
+
+<!-- D3 draws the chart in here -->
+<div #chartContainer class="chart-container"></div>
