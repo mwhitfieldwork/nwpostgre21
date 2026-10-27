@@ -22,6 +22,19 @@
             </app-sales-total-cards>
         </div>
     </div>
+    <section class="d3-container">
+        <app-card-basic >
+            <div content-header>
+                <h3>Overall Weekly Sales</h3>
+            </div>   
+            <div content-body> 
+            <app-candlestick-chart [dateRange]="candleDateRange"></app-candlestick-chart>
+            </div>
+            <div content-footer>
+                
+            </div>
+        </app-card-basic>
+    </section>
     <section class="detail-information row">
         <div class="col">
             <mat-card class="p-3 mb-4">

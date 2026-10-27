@@ -143,6 +143,16 @@ mat-datepicker-content .mat-datepicker-actions {
   color: white !important;
 }
 
+.d3-container .basic-card{
+  h3 {
+      margin: 0 0 0.5rem 0;
+      font-family: "Bitter", serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: rgba(22, 3, 3, 0.9);
+  }
+}
+
 
 /* =========================================================
    5. PAGE LOADER (three bouncing dots)
