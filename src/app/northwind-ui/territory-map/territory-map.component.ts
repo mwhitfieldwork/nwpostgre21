@@ -1,4 +1,5 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { GoogleMapsService } from '../../utilities/services/google-maps/google-maps.service';
 import { Observable, map, tap } from 'rxjs';
 import { GoogleMap, MapMarker, MapInfoWindow } from '@angular/google-maps';
 import { EmployeeTerritoryMap, TerritoryMap } from '../../utilities/models/employee-territory-map';
@@ -30,17 +31,33 @@ const UNASSIGNED_COLOR = '#868E96';
   templateUrl: './territory-map.component.html',
   styleUrl: './territory-map.component.scss',
 })
-export class TerritoryMapComponent {
+export class TerritoryMapComponent implements OnInit{
  private _service = inject(EmployeeTerritoryMapService);
+ private _mapsLoader = inject(GoogleMapsService);
+
+  @ViewChild(GoogleMap) map!: GoogleMap;
+
+  selectedEmployeeId: number | null = null;
+  markers: TerritoryMarker[] = [];
+    /** false until Google's Maps script is ready. The template waits on this. */
+  mapsLoaded = false;
+  mapsError = '';
 
   center: google.maps.LatLngLiteral = { lat: 39.5, lng: -98.35 };
   zoom = 4;
 
   selectedMarker: TerritoryMarker | null = null;
   employees: EmployeeTerritoryMap[] = [];
-  @ViewChild(GoogleMap) map!: GoogleMap;
-  selectedEmployeeId: number | null = null;
-  markers: TerritoryMarker[] = [];
+  /**
+   * Start loading Google Maps when this page opens (not when the app starts).
+   * Once ready, the template shows <google-map>, which subscribes to markers$.
+   * So buildMarkers() (which uses google.maps.SymbolPath) only runs after Maps exists.
+   */
+  ngOnInit(): void {
+    this._mapsLoader.load()
+      .then(() => this.mapsLoaded = true)
+      .catch(() => this.mapsError = 'The map could not be loaded. Please refresh to try again.');
+  }
 
   mapOptions: google.maps.MapOptions = {
     styles: [

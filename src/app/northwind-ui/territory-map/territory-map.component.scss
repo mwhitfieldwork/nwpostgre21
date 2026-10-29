@@ -152,6 +152,14 @@ google-map {
   display: none;
 }
 
+.map-message {
+  height: 400px;            // same height as the map, so nothing jumps
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
 @media (max-width: 767px) {
   .employee-table .col-desktop {
     display: none;

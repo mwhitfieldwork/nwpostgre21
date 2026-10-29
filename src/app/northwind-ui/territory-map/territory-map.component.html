@@ -1,34 +1,47 @@
-  <!-- <h1>Employee Territories </h1> -->
+<!-- <h1>Employee Territories </h1> -->
 <section class="territory-map">
   <!--<header>
     <h1>Sales Rep Territories</h1>
-    <p>Selecting a sales rep’s row enables you to choose specific locations for inspection, ensuring precise and targeted evaluations..</p>
+    <p>Selecting a sales rep's row enables you to choose specific locations for inspection, ensuring precise and targeted evaluations..</p>
   </header>-->
   <article class="geolocation-header">Geolocation Table</article>
-  <google-map [center]="center" [zoom]="zoom" [options]="mapOptions" height="400px" width="100%">
-    @for (marker of (markers$ | async) ?? []; track marker.territoryId) {
-      <map-marker
-        #markerRef="mapMarker"
-        [position]="marker.position"
-        [options]="marker.options"
-        (mapClick)="onMarkerClick(marker, markerRef, info)">
-      </map-marker>
-    }
-    <map-info-window #info="mapInfoWindow">
-      @if (selectedMarker) {
-        <div class="info-window">
-          <strong>{{ selectedMarker.city }}</strong><br />
-          Region: {{ selectedMarker.regionDescription }}<br />
-          @if (selectedMarker.employeeName) {
-            {{ selectedMarker.employeeName }}<br />
-            <span>{{ selectedMarker.employeeTitle }}</span>
-          } @else {
-            <em>Unassigned</em>
-          }
-        </div>
+
+  <!--
+    WAIT FOR GOOGLE MAPS
+    The map (and its markers) only render once Google's script is ready.
+    markers$ | async lives INSIDE google-map, so buildMarkers() only runs after
+    Maps exists, which avoids "google is not defined".
+  -->
+  @if (mapsLoaded) {
+    <google-map [center]="center" [zoom]="zoom" [options]="mapOptions" height="400px" width="100%">
+      @for (marker of (markers$ | async) ?? []; track marker.territoryId) {
+        <map-marker
+          #markerRef="mapMarker"
+          [position]="marker.position"
+          [options]="marker.options"
+          (mapClick)="onMarkerClick(marker, markerRef, info)">
+        </map-marker>
       }
-    </map-info-window>
-  </google-map>
+      <map-info-window #info="mapInfoWindow">
+        @if (selectedMarker) {
+          <div class="info-window">
+            <strong>{{ selectedMarker.city }}</strong><br />
+            Region: {{ selectedMarker.regionDescription }}<br />
+            @if (selectedMarker.employeeName) {
+              {{ selectedMarker.employeeName }}<br />
+              <span>{{ selectedMarker.employeeTitle }}</span>
+            } @else {
+              <em>Unassigned</em>
+            }
+          </div>
+        }
+      </map-info-window>
+    </google-map>
+  } @else if (mapsError) {
+    <p class="map-message">{{ mapsError }}</p>
+  } @else {
+    <p class="map-message">Loading map…</p>
+  }
 
   <div class="employee-table-container">
   <table class="employee-table">
