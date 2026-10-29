@@ -2,15 +2,10 @@ import { Routes } from '@angular/router';
 
 import { LoginComponent } from './northwind-ui/login/login.component';
 import { DashComponent } from './northwind-ui/dash/dash.component';
-import { ProductTableComponent } from './northwind-ui/products/product-table/product-table.component';
-import { ProductTableDetailComponent } from './northwind-ui/products/product-table/product-table-detail/product-table-detail.component';
 import { authGuard } from './utilities/guards/auth.guard';
 
 import { Error404Component } from './shared/error/error404/error404.component';
 import { Error500Component } from './shared/error/error500/error500.component';
-import { TerritoryMapComponent } from './northwind-ui/territory-map/territory-map.component';
-import { ProductSummaryComponent } from './northwind-ui/products/product-summary/product-summary.component';
-import { AdminUserPanelComponent } from './admin/admin-user-panel/admin-user-panel.component';
 
 export const routes: Routes = [
 
@@ -24,24 +19,27 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
-    path: 'territories', 
-    component: TerritoryMapComponent,
+    path: 'territories',
+    loadComponent: () => import('./northwind-ui/territory-map/territory-map.component')
+      .then(m => m.TerritoryMapComponent),
     canActivate: [authGuard]
   },
   { 
-    path: 'admin', 
-    component: AdminUserPanelComponent,
+    path: 'admin',
+    loadComponent: () => import('./admin/admin-user-panel/admin-user-panel.component')
+      .then(m => m.AdminUserPanelComponent),
     canActivate: [authGuard]
   },
   // Products + children
   { 
-    path: 'products', 
-    component: ProductTableComponent,
+    path: 'products',
+    loadComponent: () => import('./northwind-ui/products/product-table/product-table.component')
+      .then(m => m.ProductTableComponent),
     canActivate: [authGuard],
     children: [
-      { path: 'details/new', component: ProductTableDetailComponent },
-      { path: 'details/:id', component: ProductTableDetailComponent },
-      { path: 'summary', component: ProductSummaryComponent }
+      { path: 'details/new', loadComponent: () => import('./northwind-ui/products/product-table/product-table-detail/product-table-detail.component').then(m => m.ProductTableDetailComponent) },
+      { path: 'details/:id', loadComponent: () => import('./northwind-ui/products/product-table/product-table-detail/product-table-detail.component').then(m => m.ProductTableDetailComponent) },
+      { path: 'summary',     loadComponent: () => import('./northwind-ui/products/product-summary/product-summary.component').then(m => m.ProductSummaryComponent) }
     ]
   },
 

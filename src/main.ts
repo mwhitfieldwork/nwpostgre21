@@ -1,10 +1,31 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
-import { environment } from './environments/environment';
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import {
+  ClientSideRowModelModule,
+  QuickFilterModule,
+  TextFilterModule,
+  NumberFilterModule,
+  DateFilterModule,
+  PaginationModule,
+  RowSelectionModule,
+  TooltipModule,
+  CellStyleModule,
+  CsvExportModule,  
+  ModuleRegistry } from 'ag-grid-community';
 
-ModuleRegistry.registerModules([AllCommunityModule]);
+ModuleRegistry.registerModules([
+    ClientSideRowModelModule,
+  QuickFilterModule,
+  TextFilterModule,
+  NumberFilterModule,
+  DateFilterModule,
+  PaginationModule,
+  RowSelectionModule,
+  TooltipModule,
+  CellStyleModule,
+  CsvExportModule
+]);
 
 function loadGoogleMaps(apiKey: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -17,7 +38,5 @@ function loadGoogleMaps(apiKey: string): Promise<void> {
   });
 }
 
-loadGoogleMaps(environment.googleMapsApiKey).then(() => {
-  bootstrapApplication(AppComponent, appConfig)
-    .catch(err => console.error(err));
-});
+bootstrapApplication(AppComponent, appConfig)
+  .catch(err => console.error(err));
