@@ -133,7 +133,7 @@ exchangeGoogleCode(code: string): Observable<LoginResponse> {
   }
 
   // What happens when the alarm goes off
-  private expireSession(): void {
+  expireSession(): void {
     this.clearToken();
     this._router.navigate(['']); // '' is your login route
   }
