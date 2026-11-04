@@ -28,6 +28,9 @@
                 <h3>Overall Weekly Sales</h3>
             </div>   
             <div content-body> 
+            @if (candleRangeWidened) {
+              <p class="candle-note">Showing the last 12 months for weekly trends.</p>
+            }
             <app-candlestick-chart [dateRange]="candleDateRange"></app-candlestick-chart>
             </div>
             <div content-footer>

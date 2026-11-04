@@ -65,6 +65,8 @@ export class DashComponent implements OnInit {
   welcomeName!:string;
   // The date range the candlestick chart uses (null = chart's default weeks)
   candleDateRange: DateRange | null = null;
+    /** true when the candle chart is showing a wider range than the user picked */
+  candleRangeWidened = false;
 
   drivers: Drivers[] = [
     {id:1, name: 'Water', cost: 185.2},
@@ -87,6 +89,27 @@ export class DashComponent implements OnInit {
      this.welcomeName = this._userSessionService.currentUser!.firstname;
    }
 
+  /**
+   * WHAT: Makes sure the candle chart always gets at least 12 months.
+   * WHY:  Weekly candles look empty on short ranges (only a few bars).
+   *       The other charts are fine with short ranges, so only candles get this.
+   * HOW:  Keep the user's END date. If the start is less than a year before it,
+   *       move the start back to exactly one year before the end.
+   */
+  private atLeastOneYear(range: { beginningDate: Date; endingDate: Date }) {
+    const end = new Date(range.endingDate);
+    const oneYearBefore = new Date(end);
+    oneYearBefore.setFullYear(end.getFullYear() - 1);
+
+    const start = new Date(range.beginningDate);
+    this.candleRangeWidened = start > oneYearBefore;
+
+    return {
+      beginningDate: this.candleRangeWidened ? oneYearBefore : start,
+      endingDate: end
+    };
+  }
+
 
   onDateRangeSelected(dateRange: { beginningDate: Date; endingDate: Date }) {
     this.beginningDate = new Date(dateRange.beginningDate);
@@ -101,7 +124,9 @@ export class DashComponent implements OnInit {
       //reassigns the the collection  when the dates are chosen
      this.overview$ = this.loadSalesOverview();
 
-    this.candleDateRange = dateRange; // also send it to the candlestick chart
+    //this.candleDateRange = dateRange; // also send it to the candlestick chart
+    // Candles need at least a year to look right; other charts use the exact range.
+    this.candleDateRange = this.atLeastOneYear(dateRange);    
   }   
 
   loadSalesOverview(): Observable<SalesOverview>{
