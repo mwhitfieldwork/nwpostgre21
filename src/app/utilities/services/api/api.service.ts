@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+import { API_URL } from '../../tokens/api-url.token';
 
 /**
  * WHAT: A blueprint for services that GET data from our API.
@@ -17,7 +17,8 @@ import { environment } from '../../../../environments/environment';
  */
 export abstract class ApiService<T> {
   protected http = inject(HttpClient);
-  protected baseUrl = environment.apiUrl;
+  // Ask Angular for the API URL instead of importing environment.
+  protected baseUrl = inject(API_URL);
 
   /** Each child service MUST set this, e.g. '/Product'. */
   protected abstract path: string;

@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { DistinctCustomer } from '../../models/distinctCustomers.model';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { CustomerProducts } from '../../models/customerProducts.model';
-import { environment } from '../../../../environments/environment';
+import { API_URL } from '../../tokens/api-url.token';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ import { environment } from '../../../../environments/environment';
 export class CutomerService {
   private _http = inject(HttpClient)
   
-  url:string = environment.apiUrl;
+url: string = inject(API_URL);
 
   constructor() { }
 

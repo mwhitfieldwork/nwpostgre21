@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment'; // keep your existing path
+import { API_URL } from '../../tokens/api-url.token';
 import { ProductSalesCandle } from '../../../utilities/models/product-sales-candle.model'; // keep your existing path
 
 /**
@@ -15,7 +15,7 @@ import { ProductSalesCandle } from '../../../utilities/models/product-sales-cand
 @Injectable({ providedIn: 'root' })
 export class CandleService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.apiUrl}/Dashboard/candles/weekly`; // keep your env property name
+  private baseUrl = `${inject(API_URL)}/Dashboard/candles/weekly`;
 
   getWeeklyCandles(
     weeks: number,

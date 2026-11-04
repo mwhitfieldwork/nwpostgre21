@@ -4,7 +4,7 @@ import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user.model'
 import { AdminUser } from '../../models/admin-user.model';
-import { environment } from '../../../../environments/environment';
+import { API_URL } from '../../tokens/api-url.token';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class UserSessionService {
   private userSubject = new BehaviorSubject<Authentication | null>(null);
   public user$: Observable<Authentication | null> = this.userSubject.asObservable();
 
-  url:string = environment.apiUrl;
+  url: string = inject(API_URL);
   userId?:string;
 
 constructor() {
