@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { filter, Observable, switchMap } from 'rxjs';
 import { Authentication } from '../../models/authentication';
-import { environment } from '../../../../environments/environment';
+import { API_URL } from '../../tokens/api-url.token';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import {authConfig} from '../.././../auth.config'
@@ -22,7 +22,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class LoginService {
-  url:string = environment.apiUrl;
+  url: string = inject(API_URL);
   private _http = inject(HttpClient);
   private _oauthService = inject(OAuthService);
   private readonly tokenKey = 'nw_token';

@@ -36,8 +36,8 @@ protected path = '/api/Product';
 private refreshSource = new Subject<void>();      // the microphone (send signals)
 refresh$ = this.refreshSource.asObservable();     // the radio (listen only)
 
-  url:string = environment.apiUrl + '/api';
-  noapiurl:string = environment.apiUrl;
+  url:string = this.baseUrl + '/api';
+  noapiurl:string = this.baseUrl;
   errorMessage:string = '';
 
   getProducts(): Observable<ProductModel[]> {

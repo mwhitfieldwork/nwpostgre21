@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError,shareReplay  } from 'rxjs';
 import { BarOrderDetail } from '../../models/bar-order-detail';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { API_URL } from '../../tokens/api-url.token';
 import { SalesTotal } from '../../models/salesTotal';
 import { SalesLine } from '../../models/sales-line.model';
 
@@ -13,7 +13,7 @@ export class DashboardService {
   private _http = inject(HttpClient)
   private allSales$?: Observable<SalesLine[]>;
   private rangeCache = new Map<string, Observable<SalesLine[]>>();  
-  url:string =  environment.apiUrl;
+  url: string = inject(API_URL);
   
   constructor() { }
 

@@ -11,12 +11,16 @@ import { successToastInterceptor } from './utilities/interceptor/success-toast.i
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideHighcharts } from 'highcharts-angular';
 import { authInterceptor } from './utilities/interceptor/auth.interceptor';
+import { API_URL } from './utilities/tokens/api-url.token';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHighcharts(),
     provideNativeDateAdapter(),
-provideZoneChangeDetection({ eventCoalescing: true }),
+    // The ONE place the API URL is chosen. Services ask for API_URL instead.
+    { provide: API_URL, useValue: environment.apiUrl },
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
@@ -26,6 +30,7 @@ provideZoneChangeDetection({ eventCoalescing: true }),
         errorInterceptor,
       ])
     ),
+    
     importProvidersFrom(
       OAuthModule.forRoot({
         resourceServer: {
