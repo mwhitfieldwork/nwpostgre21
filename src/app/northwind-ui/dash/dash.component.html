@@ -8,13 +8,13 @@
                 <p>Choose a date between 1996 and 1998 to update the Northwind data visualizations.</p>
                 </div>
 
-                @if(min && max){
+                <!--@if(min && max){
                     <div class="dashboard-calendar">
                 <app-date-picker-filter 
                 (dateRangeSelected)="onDateRangeSelected($event)">
                 </app-date-picker-filter>
                     </div>
-                }
+                }-->
             </header>
             <app-sales-total-cards  
             [beginningDate]="beginningDate" 

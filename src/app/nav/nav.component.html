@@ -6,6 +6,13 @@
         </a>
     </div>
     <nav class="navbar">
+        @if (isDashboard) {
+        <div class="nav-calendar">
+            <app-date-picker-filter
+            (dateRangeSelected)="onDateRangeSelected($event)">
+            </app-date-picker-filter>
+        </div>
+        }
         <div class="user-icon">
             <app-users [user]="getVisitor()" [signInUser]="user" />
         </div>

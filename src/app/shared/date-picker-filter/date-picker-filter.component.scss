@@ -14,3 +14,19 @@
 .date-picker-form{
     position: relative;
 }
+
+button {
+  animation: blackToYellow 3s ease-in-out infinite alternate;
+  margin-right: 10px;
+}
+
+@keyframes blackToYellow {
+  from {
+    background-color: #4c1d95;
+    color: #fff;          // white text on black
+  }
+  to {
+    background-color: #c374ed;
+    color: #fff;          // black text on yellow, so it stays readable
+  }
+}
