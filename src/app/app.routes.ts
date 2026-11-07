@@ -42,7 +42,13 @@ export const routes: Routes = [
       { path: 'summary',     loadComponent: () => import('./northwind-ui/products/product-summary/product-summary.component').then(m => m.ProductSummaryComponent) }
     ]
   },
-
+   // Contact page (Session 10: template-driven form). Lazy, like products/territories.
+   {
+     path: 'contact',
+     loadComponent: () => import('./northwind-ui/contact/contact.component')
+       .then(m => m.ContactComponent),
+     canActivate: [authGuard]
+   },
   // Error pages (NO GUARDS)
   { path: '404', component: Error404Component },
   { path: '500', component: Error500Component },

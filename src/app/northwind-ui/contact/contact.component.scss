@@ -1,0 +1,8 @@
+.contact-page {
+  max-width: 560px;
+  padding: 24px;
+
+  form { display: flex; flex-direction: column; gap: 8px; }
+  button { align-self: flex-start; }
+}
+.sent-message { color: #16a34a; font-weight: 600; }
