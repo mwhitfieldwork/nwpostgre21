@@ -9,7 +9,7 @@ import { AsyncPipe, CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common'
 import { Drivers } from '../../utilities/models/drivers';
 import { BarChartComponent } from "./bar-chart/bar-chart.component";
 import { SalesTotalCardsComponent } from "./sales-total-cards/sales-total-cards.component";
-import { DatePickerFilterComponent } from "../../shared/date-picker-filter/date-picker-filter.component";
+//import { DatePickerFilterComponent } from "../../shared/date-picker-filter/date-picker-filter.component";
 import { DashboardService } from '../../utilities/services/dashboard/dashboard.service';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { SalesTotal } from '../../utilities/models/salesTotal';
@@ -19,6 +19,9 @@ import { ScrambleTextDirective } from '../../utilities/directives/label-animatio
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { CandlestickChartComponent } from './candlestick-chart/candlestick-chart.component';
 import { DateRange } from '../../shared/date-picker-filter/date-picker-filter.component';
+import { DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DateRangeService } from '../../utilities/services/date-range/date-range.service';
 
 @Component({
     selector: 'app-dash',
@@ -33,7 +36,7 @@ import { DateRange } from '../../shared/date-picker-filter/date-picker-filter.co
     BarChartComponent,
     LineChartComponent,
     SalesTotalCardsComponent,
-    DatePickerFilterComponent,
+    //DatePickerFilterComponent,
     MatCalendar,
     DatePipe,
     AsyncPipe,
@@ -45,6 +48,8 @@ import { DateRange } from '../../shared/date-picker-filter/date-picker-filter.co
     styleUrl: './dash.component.scss'
 })
 export class DashComponent implements OnInit {
+  private _dateRangeService = inject(DateRangeService);
+  private _destroyRef = inject(DestroyRef);
 
   @ViewChild(MatDateRangePicker) rangePicker!: MatDateRangePicker<Date>;
   @Input() beginningValue:Date= new Date();
@@ -79,7 +84,7 @@ export class DashComponent implements OnInit {
   //the type for this property can only be one of the three 
   //specified union types
   currentStatus!: 'online' | 'offline'| 'unknown' 
-  overview$: Observable<SalesOverview> = this.loadSalesOverview();
+  overview$!: Observable<SalesOverview>;
 
   constructor() {}
 
@@ -87,6 +92,16 @@ export class DashComponent implements OnInit {
      // The dashboard has no resolver: each card loads its own data,
      // so the page opens right away. Only the greeting is set here.
      this.welcomeName = this._userSessionService.currentUser!.firstname;
+
+     // Listen for date ranges from the nav bar picker.
+    // Fires right away with the current range, then again on every new pick.
+    this._dateRangeService.range$
+    .pipe(takeUntilDestroyed(this._destroyRef))   // stop listening when we leave the dashboard
+    .subscribe(range => {
+      this.beginningDate = range.beginningDate;   // new Date objects → child charts' ngOnChanges fire
+      this.endingDate = range.endingDate;
+      this.overview$ = this.loadSalesOverview();  // refresh the cards
+    });
    }
 
   /**

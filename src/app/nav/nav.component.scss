@@ -131,6 +131,35 @@
     }
 }
 
+@media (max-width: 768px) {
+  #navigation {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto auto;
+    grid-template-areas:
+      "logo     .  icon  links  menu"
+      "calendar .  .     .      .";
+    align-items: center;
+    height: auto;
+    row-gap: 6px;
+    padding-bottom: 8px;
+  }
+
+  // Let the navbar's children join the grid directly
+  .navbar {
+    display: contents;
+  }
+
+  #navigation > div:first-child { grid-area: logo; }
+  .user-icon                     { grid-area: icon; }
+  .navbar ul                     { grid-area: links; }
+  .hamburger-menu                { grid-area: menu; }
+
+  .nav-calendar {
+    grid-area: calendar;
+    justify-self: start;   // line up with the left edge of the logo
+  }
+}
+
 @media (max-width: 359px) {
     #navigation {
         .logo {
