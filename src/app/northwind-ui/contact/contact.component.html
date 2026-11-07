@@ -1,0 +1,59 @@
+<!--
+  TEMPLATE-DRIVEN FORM
+  #contactForm="ngForm"  → a handle to the WHOLE form (valid? touched?)
+  #name="ngModel"        → a handle to ONE field, so we can read its errors
+  name="..."             → required with ngModel inside a <form>; it's the field's ID in the form
+  required / minlength / email → Angular's built-in validators, written as plain HTML attributes
+-->
+<section class="contact-page">
+  <h1>Contact us</h1>
+
+  @if (sent) {
+    <p class="sent-message">Thanks, we got your message.</p>
+  }
+
+  <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
+
+    <!-- NAME: required, at least 2 letters -->
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput name="name" [(ngModel)]="contact.name" #name="ngModel"
+             required minlength="2" />
+      @if (name.hasError('required')) {
+        <mat-error>Name is required</mat-error>
+      } @else if (name.hasError('minlength')) {
+        <mat-error>Name must be at least 2 letters</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- EMAIL: required, must look like an email -->
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" name="email" [(ngModel)]="contact.email" #email="ngModel"
+             required email />
+      @if (email.hasError('required')) {
+        <mat-error>Email is required</mat-error>
+      } @else if (email.hasError('email')) {
+        <mat-error>Enter a valid email, like you&#64;example.com</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- MESSAGE: required, at least 10 characters -->
+    <mat-form-field appearance="outline">
+      <mat-label>Message</mat-label>
+      <textarea matInput rows="5" name="message" [(ngModel)]="contact.message" #message="ngModel"
+                required minlength="10"></textarea>
+      <mat-hint align="end">{{ contact.message.length }} characters</mat-hint>
+      @if (message.hasError('required')) {
+        <mat-error>Message is required</mat-error>
+      } @else if (message.hasError('minlength')) {
+        <mat-error>Message must be at least 10 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Disabled until every field is valid -->
+    <button mat-flat-button color="primary" type="submit" [disabled]="contactForm.invalid">
+      Send
+    </button>
+  </form>
+</section>
