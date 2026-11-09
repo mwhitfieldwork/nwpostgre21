@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^21.2.22",
     "@angular/router": "^21.2.22",
     "@fontsource/roboto": "^5.2.5",
+    "@intl-tel-input/angular": "^29.5.11",
     "@material/tooltip": "^14.0.0",
     "ag-grid-angular": "^36.2.0",
     "angular-oauth2-oidc": "^21.0.3",

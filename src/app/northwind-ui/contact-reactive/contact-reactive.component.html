@@ -1,0 +1,65 @@
+<!--
+  REACTIVE FORM
+  [formGroup]="form"      → connects this <form> to the FormGroup in the .ts
+  formControlName="name"  → connects an input to one field in that group
+  No required/minlength here: the rules live in the .ts.
+-->
+<section class="contact-page">
+  <h1>Contact us <small>(reactive)</small></h1>
+  <a routerLink="/contact">← See the template-driven version</a>
+
+  @if (sent) {
+    <p class="sent-message">Thanks, we got your message.</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>Name is required</mat-error>
+      } @else if (form.controls.name.hasError('minlength')) {
+        <mat-error>Name must be at least 2 letters</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+      @if (form.controls.email.hasError('required')) {
+        <mat-error>Email is required</mat-error>
+      } @else if (form.controls.email.hasError('email')) {
+        <mat-error>Enter a valid email, like you&#64;example.com</mat-error>
+      }
+    </mat-form-field>
+    <!-- PHONE (optional): validity is checked per country by Google's libphonenumber -->
+    <div class="phone-field">
+      <label for="phone">Phone (optional)</label>
+            <intl-tel-input
+        formControlName="phone"
+        initialCountry="us"
+        [countryOrder]="['us', 'ca', 'gb']"
+        [separateDialCode]="true"
+        [loadUtils]="loadUtils" />
+      @if (form.controls.phone.touched && form.controls.phone.hasError('invalidPhone')) {
+        <small class="phone-error">Enter a valid number for the selected country</small>
+      }
+      @if (form.controls.phone.touched && form.controls.phone.invalid) {
+        <small class="phone-error">Enter a valid number for the selected country</small>
+      }
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Message</mat-label>
+      <textarea matInput rows="5" formControlName="message"></textarea>
+      <mat-hint align="end">{{ form.controls.message.value.length }} characters</mat-hint>
+      @if (form.controls.message.hasError('required')) {
+        <mat-error>Message is required</mat-error>
+      } @else if (form.controls.message.hasError('minlength')) {
+        <mat-error>Message must be at least 10 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">Send</button>
+  </form>
+</section>

@@ -49,6 +49,13 @@ export const routes: Routes = [
        .then(m => m.ContactComponent),
      canActivate: [authGuard]
    },
+      // Same Contact form, built REACTIVE (Session 11), to compare with /contact.
+   {
+     path: 'contact/reactive',
+     loadComponent: () => import('./northwind-ui/contact-reactive/contact-reactive.component')
+       .then(m => m.ContactReactiveComponent),
+     canActivate: [authGuard]
+   },
   // Error pages (NO GUARDS)
   { path: '404', component: Error404Component },
   { path: '500', component: Error500Component },

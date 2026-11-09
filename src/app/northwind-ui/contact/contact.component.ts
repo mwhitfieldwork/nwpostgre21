@@ -3,6 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 /**
  * WHAT: A Contact / feedback page built as a TEMPLATE-DRIVEN form.
@@ -16,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
  */
 @Component({
   selector: 'app-contact',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
