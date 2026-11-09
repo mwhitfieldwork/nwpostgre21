@@ -1,0 +1,44 @@
+/* Same layout as the template-driven page */
+.contact-page {
+  max-width: 560px;
+  padding: 24px;
+
+  form { display: flex; flex-direction: column; gap: 8px; }
+  button { align-self: flex-start; }
+}
+.sent-message { color: #16a34a; font-weight: 600; }
+
+/* PHONE: label on top, error under, same spacing as the Material fields */
+.phone-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+
+  label { font-size: 0.85rem; color: #555; }
+}
+.phone-error { color: #d32f2f; font-size: 0.75rem; }
+
+/*
+ * Make the phone input look like the Material "outline" inputs.
+ * ::ng-deep is needed because the <input> lives INSIDE the phone component,
+ * and Angular normally keeps a component's styles from reaching into its children.
+ * :host keeps it scoped to this page only.
+ */
+:host ::ng-deep .iti {
+  width: 100%;
+
+  input {
+    width: 100%;
+    height: 56px;                 // same height as mat-form-field outline
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border: 2px solid #5b2a9e; // your purple
+    }
+  }
+}
