@@ -13,6 +13,7 @@ import { StockCategoryService } from '../../../../utilities/services/category-st
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { notBlank, positiveNumber,reorderNotAboveStock } from '../../../../utilities/validators/custom.validator';
 
 @Component({
     selector: 'app-product-table-detail',
@@ -59,16 +60,21 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
 
     this.categories$ = this.getCategories();
     this.productForm = this.fb.group({
-      productname:['', Validators.required],
-      unitPrice:['', Validators.required],
+      productname:['', [Validators.required, notBlank()]],
+      unitPrice:['', [Validators.required, positiveNumber()]],
       quantity:['', Validators.required],
       category:['', Validators.required],
+      // When stock drops to this number, it's time to reorder. Can't be negative.
+      reorderLevel: [0, [Validators.required, Validators.min(0)]],
       unitsInStock:['', [Validators.required, Validators.min(0)]],
       store: new FormGroup({
         branch: new FormControl(''),
         code: new FormControl('')
       })
-    })
+    }, {
+      // Rules that compare fields go on the GROUP, not on one field.
+      validators: [reorderNotAboveStock()]
+    });
 
     if(this.isEdit){
       this.callExistingProduct();
@@ -100,6 +106,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       "quantityPerUnit": productForm.value.quantity,
       "unitPrice": productForm.value.unitPrice,
       "unitsInStock": Number(productForm.value.unitsInStock),
+      "reorderLevel": Number(productForm.value.reorderLevel),
       "categoryId": Number(productForm.value.category)}
 
     // console.log(productUpdate, '--- Produ Update');
@@ -118,7 +125,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       discontinued: false,
       productName: payload.value.productname,
       quantityPerUnit: payload.value.quantity,
-      reorderLevel: 0,
+      reorderLevel: Number(payload.value.reorderLevel),
       supplierId: 1,
       unitPrice: payload.value.unitPrice,
       unitsInStock: Number(payload.value.unitsInStock),
@@ -141,6 +148,8 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
       this.productForm.get('quantity')?.setValue(this.ratedProduct.quantityPerUnit);
       this.productForm.get('unitsInStock')?.setValue(this.ratedProduct.unitsInStock);
       this.productForm.get('unitPrice')?.setValue(this.ratedProduct.unitPrice);
+      this.productForm.get('category')?.setValue(this.ratedProduct.categoryId);
+      this.productForm.get('reorderLevel')?.setValue(this.ratedProduct.reorderLevel ?? 0);
     },
     error => this.errorMessage = error?.message ?? 'Failed to load product')
   }
