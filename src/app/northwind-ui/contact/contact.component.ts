@@ -4,6 +4,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { NotBlankDirective } from '../../utilities/validators/not-blank.directive';
+// imports: [FormsModule, RouterLink, NotBlankDirective, MatFormFieldModule, ...]
 
 /**
  * WHAT: A Contact / feedback page built as a TEMPLATE-DRIVEN form.
@@ -17,7 +19,7 @@ import { RouterLink } from '@angular/router';
  */
 @Component({
   selector: 'app-contact',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, NotBlankDirective],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })

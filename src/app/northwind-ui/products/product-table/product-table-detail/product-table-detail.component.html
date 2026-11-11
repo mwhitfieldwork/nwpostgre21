@@ -4,21 +4,24 @@
     <div class="product-info-container">
       <form [formGroup]="productForm" cdkFocusInitial>
         <div class="form-group">
-        <mat-form-field  class="custom-field">
-        <mat-label>Product Name</mat-label>
-        <input matInput placeholder="" class="form-control" id="name" formControlName="productname"
-        [ngClass]="{'is-invalid':!productForm.get('productname')?.valid &&
-        productForm.get('productname')?.touched}">
-        </mat-form-field>
+          <mat-form-field  class="custom-field">
+            <mat-label>Product Name</mat-label>
+            <input matInput placeholder="" class="form-control" id="name" formControlName="productname"
+            [ngClass]="{'is-invalid':!productForm.get('productname')?.valid &&
+            productForm.get('productname')?.touched}">
 
-        <span class="invalid-feedback">
-        @if (productForm.get('productname')?.hasError('required')) {
-        <span>
-        Please enter a product name.
-        </span>
-        }
-        </span>
+            @if (productForm.get('productname')?.hasError('blank')) {
+              <mat-error>Name can't be only spaces</mat-error>
+            }          
+          </mat-form-field>
 
+          <span class="invalid-feedback">
+          @if (productForm.get('productname')?.hasError('required')) {
+          <span>
+          Please enter a product name.
+          </span>
+          }
+          </span>
         </div>
         <div class="form-group">
         <mat-form-field  class="custom-field">
@@ -48,6 +51,9 @@
           <input matInput placeholder="" class="form-control" id="name" formControlName="unitPrice"
           [ngClass]="{'is-invalid':!productForm.get('unitPrice')?.valid &&
           productForm.get('unitPrice')?.touched}">
+          @if (productForm.get('unitPrice')?.hasError('notPositive')) {
+          <mat-error>Price must be more than 0</mat-error>
+          }          
           </mat-form-field>
 
           <span class="invalid-feedback">
@@ -63,8 +69,8 @@
         <mat-form-field appearance="fill" class="custom-field">
           <mat-label>Select Product</mat-label>
           <mat-select formControlName="category">
-            <mat-option [value]="">Select Product</mat-option>
-            @for(category of categories$ | async; track i; let i = $index) {
+            <mat-option value="">Select Product</mat-option>
+            @for(category of categories$ | async; track category.categoryId; let i = $index) {
               <mat-option [value]="category.categoryId">
                 {{ category.categoryName}}
               </mat-option>
@@ -90,7 +96,22 @@
             @if (productForm.get('unitsInStock')?.hasError('min')) {
             <mat-error>Stock can't be negative</mat-error>
             }
-          </mat-form-field>     
+          </mat-form-field> 
+          
+          <!-- When stock falls to this level, it's time to reorder. -->
+          <mat-form-field>
+            <mat-label>Reorder Level</mat-label>
+            <input matInput type="number" min="0" formControlName="reorderLevel">
+            @if (productForm.get('reorderLevel')?.hasError('required')) {
+              <mat-error>Reorder level is required</mat-error>
+            }
+            @if (productForm.get('reorderLevel')?.hasError('min')) {
+              <mat-error>Reorder level can't be negative</mat-error>
+            }
+            @if (productForm.hasError('reorderAboveStock')) {
+              <small class="form-error">Reorder level can't be more than units in stock</small>
+            }            
+          </mat-form-field>          
         </div>   
 
               <section class="nav-actions">
