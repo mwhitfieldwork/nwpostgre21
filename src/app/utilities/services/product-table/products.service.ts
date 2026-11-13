@@ -47,7 +47,7 @@ refresh$ = this.refreshSource.asObservable();     // the radio (listen only)
   }
 
   getCategories(): Observable<Category[]> {
-    var response = this._http.get<Category[]>(`${this.url}/Category/`)
+    var response = this._http.get<Category[]>(`${this.noapiurl}/Category/`)
       .pipe(
         tap(items => {
           //this.nwDataChanged.next(items);

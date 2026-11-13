@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject, AfterViewInit, inject, OnDestroy, ContentChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, DestroyRef, AfterViewInit, inject, OnDestroy, ContentChild, ElementRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { ProductModel } from '../../../utilities/models/product';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -6,7 +6,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig} from '@angular/material/dialog'
 import {FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray, ReactiveFormsModule, FormsModule} from '@angular/forms';
-import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map, startWith, switchMap, take } from 'rxjs/operators';
 import { ProductsService } from '../../../utilities/services/product-table/products.service';
 import { ProductTableDetailComponent } from "./product-table-detail/product-table-detail.component";
@@ -20,7 +20,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ProductInvoice } from '../../../utilities/models/productInvoice';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -63,9 +63,11 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   
   @ContentChild('h1') title!: ElementRef<HTMLElement>;
 
-    private rowFactory = inject(RowDisplayFactory);
+  private rowFactory = inject(RowDisplayFactory);
   private _userSessionService = inject(UserSessionService);
   private snackbar = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
   
   protected readonly Math = Math;
   private statuses = ['In Stock', 'Low Stock', 'Backordered'];
@@ -143,7 +145,21 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
             'discontinued',
             'rating'           
             ];
-      });    
+      }); 
+      
+    /**
+     * Is a child page (details/new, details/:id, summary) showing?
+     * WHY here and not in (activate)/(deactivate) on the router-outlet:
+     * those fire WHILE Angular is drawing, which caused the NG0100 error.
+     * Router events fire BETWEEN draws, so the value is settled before Angular checks it.
+     */
+    this.isChildActive = !!this.route.firstChild;   // right on first load (e.g. a refresh on /products/summary)
+    this.router.events
+      .pipe(
+        filter(e => e instanceof NavigationEnd),       // only after a navigation finishes
+        takeUntilDestroyed(this.destroyRef)            // auto-unsubscribe when the page closes
+      )
+      .subscribe(() => this.isChildActive = !!this.route.firstChild);      
   }
 
   ngAfterViewInit(): void {

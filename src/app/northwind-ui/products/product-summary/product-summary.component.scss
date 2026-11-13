@@ -1,5 +1,31 @@
-#main-wrapper {
-    background-color:#fff;
-    padding:50px;
-    width:95%;
+/* The PAGE decides the size; the shared table just fills its box. */
+.summary-page {
+  padding: 24px;
+  max-width: 640px;
+  /*background-color:#fff;*/         // a 2-column list doesn't need the whole screen
+
+  h2 {
+    margin: 0 0 12px;
+  }
+}
+
+.summary-card {
+  border-radius: 8px;
+  overflow: hidden;          // keeps the table's corners inside the rounded card
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Narrow the ID column so the names get the room.
+   ::ng-deep reaches into the shared table (it's a child component),
+   and :host keeps this on the summary page only. */
+:host ::ng-deep .mat-column-categoryId {
+  width: 80px;
+}
+
+/* On phones, use the full width */
+@media (max-width: 600px) {
+  .summary-page {
+    padding: 12px;
+    max-width: none;
+  }
 }
