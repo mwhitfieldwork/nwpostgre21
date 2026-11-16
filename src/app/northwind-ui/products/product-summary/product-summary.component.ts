@@ -4,10 +4,12 @@ import { map } from 'rxjs';
 import { CommonModule, Location } from '@angular/common';
 import { BasicTableComponent, TableColumn } from '../../../shared/basic-table/basic-table.component';
 import { Category } from '../../../utilities/models/category';
+import { TableCellDirective } from '../../../utilities/directives/basic-table/tabel-cell.directive';
+import { UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-product-summary',
-  imports: [CommonModule, BasicTableComponent],
+  imports: [CommonModule, BasicTableComponent, TableCellDirective, UpperCasePipe],
   templateUrl: './product-summary.component.html',
   styleUrl: './product-summary.component.scss',
 })

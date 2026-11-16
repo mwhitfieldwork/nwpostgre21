@@ -3,11 +3,14 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminUser } from '../../utilities/models/admin-user.model';
 import { UserSessionService } from '../../utilities/services/user-session/user-session.service';
+import { BasicTableComponent, TableColumn } from '../../shared/basic-table/basic-table.component';
+import { TableCellDirective } from '../../utilities/directives/basic-table/tabel-cell.directive';
+
 
 @Component({
   selector: 'app-admin-user-panel',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule,BasicTableComponent,TableCellDirective],
   templateUrl: './admin-user-panel.component.html',
   styleUrl: './admin-user-panel.component.scss',
 })
@@ -31,6 +34,26 @@ export class AdminUserPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
+  }
+
+  /**
+   * Columns for the shared table. 'admin' and 'pkid' get CUSTOM cells
+   * (a pill and an Edit button) from templates in the HTML.
+   * pkid is used for the Edit column because the button needs the user's ID.
+   */
+
+  userColumns: TableColumn<AdminUser>[] = [
+    { columnDef: 'firstname',  header: 'First name' },
+    { columnDef: 'username',   header: 'Username' },
+    { columnDef: 'occupation', header: 'Occupation' },
+    { columnDef: 'admin',      header: 'Admin' },
+    { columnDef: 'pkid',       header: '' },
+  ];
+
+  /** Edit button: load this user into the form, same as the old dropdown did. */
+  editUser(user: AdminUser): void {
+    this.selectedUserId = user.pkid;
+    this.selectUser(user.pkid);
   }
 
   loadUsers(): void {
