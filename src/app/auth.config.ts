@@ -12,6 +12,10 @@ export const authConfig: AuthConfig = {
   strictDiscoveryDocumentValidation: false,
   disableAtHashCheck: true,
 
+  // Always show Google's "Choose an account" screen, even if you're
+  // already signed in to Google, so you can switch accounts.
+  customQueryParams: { prompt: 'select_account' },
+
   // Required for localhost
   requireHttps: false
 };
