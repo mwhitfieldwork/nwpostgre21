@@ -17,6 +17,31 @@
 		width:45%;
 	}
 }
+.admin-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #f0efec;
+  color: #555;
+
+  &.is-admin { background: #efedff; color: #5b2a9e; }   // your purple
+}
+
+.edit-btn {
+  padding: 4px 12px;
+  border: 1px solid #5b2a9e;
+  border-radius: 6px;
+  background: #fff;
+  color: #5b2a9e;
+  cursor: pointer;
+
+  &:hover { background: #5b2a9e; color: #fff; }
+}
+
+/* A little space between the table and the form below it */
+app-basic-table { display: block; margin-bottom: 24px; }
 
 .admin-header {
 	font-size: 16px;

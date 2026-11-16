@@ -8,6 +8,24 @@
 	<p *ngIf="isLoading">Loading users...</p>
 	<p *ngIf="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
 
+	<!-- Shared table. Two columns get custom cells via content projection. -->
+	<app-basic-table [rows]="users" [columns]="userColumns">
+
+		<!-- Admin column: a pill instead of "true"/"false" -->
+		<ng-template appCell="admin" let-row>
+			<span class="admin-pill" [class.is-admin]="row.admin">
+				{{ row.admin ? 'Admin' : 'User' }}
+			</span>
+		</ng-template>
+
+		<!-- pkid column: an Edit button instead of the raw ID -->
+		<ng-template appCell="pkid" let-row>
+			<button type="button" class="edit-btn" (click)="editUser(row)">Edit</button>
+		</ng-template>
+
+	</app-basic-table>	
+	
+	<!-- 
 	<label for="user-select">Existing user</label>
 	<select id="user-select" 
     [(ngModel)]="selectedUserId"
@@ -18,6 +36,7 @@
 			{{ user.firstname }} ({{ user.username }})
 		</option>
 	</select>
+	-->
 
 	<form [formGroup]="userForm" (ngSubmit)="updateUser(userForm)">
 		<label for="first-name">First name</label>

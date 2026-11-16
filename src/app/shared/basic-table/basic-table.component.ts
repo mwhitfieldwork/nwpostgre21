@@ -2,6 +2,9 @@ import { AfterViewInit, Component, Input, OnChanges, ViewChild } from '@angular/
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { ContentChildren, QueryList } from '@angular/core';     // add to the @angular/core import
+import { NgTemplateOutlet } from '@angular/common';
+import { TableCellDirective } from '../../utilities/directives/basic-table/tabel-cell.directive';
 
 /** One column: which field of T to show, and its header text. */
 export interface TableColumn<T> {
@@ -20,7 +23,7 @@ export interface TableColumn<T> {
 @Component({
   selector: 'app-basic-table',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatSortModule],
+  imports: [MatTableModule, MatPaginatorModule, MatSortModule, NgTemplateOutlet],
   templateUrl: './basic-table.component.html',
   styleUrl: './basic-table.component.scss',
   host: { class: 'table-mat mat-elevation-z8' }
@@ -30,6 +33,11 @@ export class BasicTableComponent<T> implements OnChanges, AfterViewInit {
   @Input() rows: T[] = [];
   /** Which columns to show, in order. */
   @Input() columns: TableColumn<T>[] = [];
+  /**
+   * CONTENT PROJECTION: every <ng-template appCell="..."> the page puts
+   * BETWEEN <app-basic-table> and </app-basic-table> lands in this list.
+   */
+  @ContentChildren(TableCellDirective) cellTemplates!: QueryList<TableCellDirective>;
 
   /** Material's table needs a MatTableDataSource; the table makes it, not the page. */
   dataSource = new MatTableDataSource<T>([]);
@@ -44,6 +52,11 @@ export class BasicTableComponent<T> implements OnChanges, AfterViewInit {
     this.columnKeys = this.columns.map(c => c.columnDef);
   }
 
+  /** The page's custom template for a column, or undefined → plain text. */
+  templateFor(column: string) {
+    return this.cellTemplates?.find(t => t.column === column)?.template;
+  }
+  
   /** Paginator and sort only exist after the view is drawn. */
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

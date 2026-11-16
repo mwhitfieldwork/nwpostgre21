@@ -2,7 +2,12 @@
   <h2>Categories</h2>
   <!-- Shared, reusable table. T is figured out from [rows] (Category). -->
   <div class="summary-card">
-    <app-basic-table [rows]="categories" [columns]="categoryColumns" />
+    <app-basic-table [rows]="categories" [columns]="categoryColumns">
+      <!-- TEMP TEST: custom look for the categoryName column -->
+      <ng-template appCell="categoryName" let-row>
+        <strong>⭐ {{ row.categoryName | uppercase }}</strong>
+      </ng-template>
+    </app-basic-table>
   </div>
 </section>
 
