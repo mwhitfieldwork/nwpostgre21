@@ -102,6 +102,31 @@ exchangeGoogleCode(code: string): Observable<LoginResponse> {
     }
   }
 
+ /**
+   * WHAT: Is the logged-in user an admin?
+   * WHY:  To show admin-only buttons (with *appIfAdmin, next step).
+   * HOW:  Reads the "role" claim from OUR JWT, decoded the same way as
+   *       tokenExpiresAt(). No token or a broken one counts as "not admin."
+   *
+   * NOTE: This only HIDES buttons. It's not security by itself: anyone can
+   *       edit their browser. The real lock is the API checking the role
+   *       ([Authorize(Roles = "Admin")]), which comes in the security session.
+   */
+
+ 
+  isAdmin(): boolean {
+    const token = this.token;
+    if (!token) return false;
+
+    try {
+      const middle = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const data = JSON.parse(atob(middle));
+      return data.role === 'Admin';
+    } catch {
+      return false;
+    }
+  }
+
   isTokenExpired(): boolean {
     const expiresAt = this.tokenExpiresAt();
     return expiresAt === null || Date.now() >= expiresAt;

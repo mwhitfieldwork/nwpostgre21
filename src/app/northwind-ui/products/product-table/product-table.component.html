@@ -39,6 +39,15 @@
           <td mat-cell *matCellDef="let element"> {{element.unitsInStock }} </td>
         </ng-container>
 
+        <ng-container matColumnDef="stockStatus">
+          <th mat-header-cell *matHeaderCellDef>Stock</th>
+          <td mat-cell *matCellDef="let row">
+            @let status = row | stockStatus;
+            <span class="stock-pill" [class]="'stock-pill stock-' + status.toLowerCase()">
+              {{ status }}
+            </span>
+          </td>
+        </ng-container>
 
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Price </th>
@@ -88,7 +97,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
             <td mat-cell *matCellDef="let element">
                 <!-- the click event is on the directive side, not in the templated button-->
-              <span (safelinkConfirmed)="deleteProduct(element)" confirmDelete >
+              <span *appIfAdmin (safelinkConfirmed)="deleteProduct(element)" confirmDelete >
                 @if((user$ | async)?.admin){
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="3 6 5 6 21 6"></polyline>
