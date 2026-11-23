@@ -21,6 +21,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ProductInvoice } from '../../../utilities/models/productInvoice';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { StockStatusPipe } from '../../../utilities/pipes/stock-status/stock-status.pipe';
+import { IfAdminDirective } from '../../../utilities/directives/if-admin/if-admin.directive';
 
 
 @Component({
@@ -43,7 +45,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     ConfirmDeleteDirective,
     RatingComponent,
     AsyncPipe,
-    MatCheckboxModule
+    MatCheckboxModule,
+    StockStatusPipe,
+    IfAdminDirective
 ]
 })
 export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -131,6 +135,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
               'select',
               'displayName',
               'stock',
+              'stockStatus',
               'price',
               'discontinued',
               'rating',
@@ -141,6 +146,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
             'select',
             'displayName',
             'stock',
+            'stockStatus',
             'price',
             'discontinued',
             'rating'           
