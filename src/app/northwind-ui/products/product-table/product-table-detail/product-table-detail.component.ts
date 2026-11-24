@@ -14,6 +14,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { notBlank, positiveNumber,reorderNotAboveStock } from '../../../../utilities/validators/custom.validator';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+
+/** What the products page passes in when it opens this form as a dialog. No productId = Add. */
+export interface ProductDialogData {
+  productId?: string;
+}
 
 @Component({
     selector: 'app-product-table-detail',
@@ -24,6 +30,7 @@ import { notBlank, positiveNumber,reorderNotAboveStock } from '../../../../utili
         MatInputModule,
         MatFormFieldModule,
         MatSelectModule,
+        MatDialogModule,
         CommonModule
     ],
     templateUrl: './product-table-detail.component.html',
@@ -39,9 +46,12 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
   categories!:Category[];
   categories$!:Observable<Category[]>;
   private _categoryService = inject(StockCategoryService)
+  // optional: true → when opened as a PAGE these don't exist, so we get null instead of an error.
+  private dialogRef = inject<MatDialogRef<ProductTableDetailComponent> | null>(MatDialogRef, { optional: true });
+  private dialogData = inject<ProductDialogData | null>(MAT_DIALOG_DATA, { optional: true });
   private destroy$ = new Subject<void>();
 
-  @Output() closeDialog = new EventEmitter<boolean>();
+ // @Output() closeDialog = new EventEmitter<boolean>();
 
   constructor(private fb:FormBuilder,
               private route:ActivatedRoute,
@@ -51,12 +61,23 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
             ) { }
 
   ngOnInit(): void {
+    /*
     this.route.queryParams.
     pipe(map(params => params['isEdit']), 
     takeUntil(this.destroy$))
     .subscribe(isEdit => {
       this.isEdit = isEdit === 'true'; 
     });
+    */
+
+    // WHO OPENED ME? Dialog → use the data I was handed. Page → read the URL.
+    if (this.dialogData) {
+      this.productId = this.dialogData.productId ?? '';
+      this.isEdit = !!this.productId;          // has an ID → edit, none → add
+    } else {
+      this.productId = this.route.snapshot.paramMap.get('id') ?? '';
+      this.isEdit = this.route.snapshot.queryParamMap.get('isEdit') === 'true';
+    }
 
     this.categories$ = this.getCategories();
     this.productForm = this.fb.group({
@@ -87,7 +108,8 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
   }
 
   goBack() { 
-    this.location.back(); 
+    //this.location.back(); 
+    this.finish(false);   
   }
 
 
@@ -139,7 +161,7 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
   }
 
   callExistingProduct(){
-    this.productId = this.route.snapshot.paramMap.get('id') ?? '';
+    //this.productId = this.route.snapshot.paramMap.get('id') ?? '';
     //const prodId = '999' //force 500;
 
     this._productsService.getProduct(this.productId).subscribe(product => { 
@@ -158,5 +180,18 @@ export class ProductTableDetailComponent implements OnInit, OnDestroy {
     //this.closeDialog.emit(false);
     this.router.navigate(['/products']);
   }
+
+  /**
+   * WHAT: one exit door for save, create and cancel.
+   * WHY:  a dialog closes itself; a page navigates back to the list.
+   * HOW:  dialogRef only exists in dialog mode. `saved` tells whoever opened us if anything changed.
+   */
+  private finish(saved: boolean): void {
+    if (this.dialogRef) {
+      this.dialogRef.close(saved);
+    } else {
+      this.router.navigate(['/products']);
+    }
+  } 
 }
 
