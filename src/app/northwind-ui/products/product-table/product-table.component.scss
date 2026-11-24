@@ -90,6 +90,10 @@ header {
 .stock-low     { background: #fef9c3; color: #ca8a04; border-color: #fde68a; }
 .stock-ok      { background: #dcfce7; color: #16a34a; border-color: #bbf7d0; }
 
+td .icon-btn {          // "an icon-btn inside a table cell" beats a plain `button` rule
+  background: transparent;
+}
+
 /* Mobile hiding rules stay fine */
 @media screen and (max-width:595px){
   .main-wrapper {

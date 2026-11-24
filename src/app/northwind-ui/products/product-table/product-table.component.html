@@ -82,14 +82,18 @@
           <!--<td mat-cell *matCellDef="let element">
           <button  class="btn btn-primary" [routerLink]="['details', element.productId]" (click)="AddDialog()">Edit</button></td> -->
           <td mat-cell *matCellDef="let element">
-            @if((user$ | async)?.admin){
-              <span (click)="onSelectProductDetails(element.productId)">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            @if ((user$ | async)?.admin) {
+              <!-- A real <button>: Tab reaches it, Enter/Space click it, and the dialog can return focus here. -->
+              <button type="button" class="icon-btn"
+                      [attr.aria-label]="'Edit ' + element.productName"
+                      (click)="onSelectProductDetails(element.productId)">
+                <!-- aria-hidden: the picture is decoration; the aria-label already says what it does -->
+                <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                 </svg>
-              </span>
+              </button>
             }
-            <!-- <button  class="btn btn-primary" (click)="onSelectProductDetails(element.productId)">Edit</button></td> -->
+          </td>
         </ng-container>
 
         @if(isAdmin){

@@ -9,7 +9,7 @@ import {FormGroup, FormControl, FormBuilder, Validators, AbstractControl, Valida
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map, startWith, switchMap, take } from 'rxjs/operators';
 import { ProductsService } from '../../../utilities/services/product-table/products.service';
-import { ProductTableDetailComponent } from "./product-table-detail/product-table-detail.component";
+import { ProductTableDetailComponent, ProductDialogData } from "./product-table-detail/product-table-detail.component";
 import { ConfirmDeleteDirective } from '../../../utilities/directives/safe-link/confirmDelete.directive';
 import { RatingComponent } from "../../../shared/rating/rating.component";
 import { RowDisplayFactory } from '../../../utilities/factories/row-display.factory';
@@ -23,7 +23,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { StockStatusPipe } from '../../../utilities/pipes/stock-status/stock-status.pipe';
 import { IfAdminDirective } from '../../../utilities/directives/if-admin/if-admin.directive';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-product-table',
@@ -72,6 +72,8 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   private snackbar = inject(MatSnackBar);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
+  private dialog = inject(MatDialog);
+  private breakpoints = inject(BreakpointObserver);   // CDK tool that answers "how wide is the screen?"  
   
   protected readonly Math = Math;
   private statuses = ['In Stock', 'Low Stock', 'Backordered'];
@@ -111,8 +113,7 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private _productsService: ProductsService, 
-    private router:Router,
-    private dialog: MatDialog) { 
+    private router:Router) { 
     }
 
   get user$() {
@@ -189,7 +190,8 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  onSelectProductDetails(productId:string){
+  /*
+  (onSelectProductDetails(productId:string){
     this.router.navigate(['/products', 'details', productId], {
       queryParams: { isEdit: true }
     });
@@ -198,7 +200,46 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
   onSelectNewProductDetails(){
     this.router.navigate(['/products', 'details', 'new']);;
   }
+ */
 
+ onSelectProductDetails(productId: string) {
+  if (this.isPhone()) {
+    // Phone → full page (dialogs are cramped on small screens)
+    this.router.navigate(['/products', 'details', productId], { queryParams: { isEdit: true } });
+    return;
+  }
+  this.openProductDialog({ productId });   // Desktop → dialog with the ID handed over
+}
+
+onSelectNewProductDetails() {
+  if (this.isPhone()) {
+    this.router.navigate(['/products', 'details', 'new']);
+    return;
+  }
+  this.openProductDialog({});              // no ID → the form knows it's "Add"
+}
+
+/** True on phone-sized screens. Same idea as a CSS media query, but in TypeScript. */
+private isPhone(): boolean {
+  return this.breakpoints.isMatched('(max-width: 768px)');
+}
+
+/**
+ * WHAT: pops the product form up over the table.
+ * WHY:  keeps the user on the list (no page change) on desktop.
+ * HOW:  the dialog moves keyboard focus inside on open (autoFocus) and puts it back on the
+ *       Edit/Add button you clicked when it closes (restoreFocus). Esc closes it for free.
+ */
+private openProductDialog(data: ProductDialogData): void {
+  this.dialog.open<ProductTableDetailComponent, ProductDialogData, boolean>(ProductTableDetailComponent, {
+    data,
+    width: '560px',
+    maxWidth: '95vw',
+    autoFocus: 'first-tabbable',
+    restoreFocus: true,
+  });
+} 
+ 
   addRating(products:ProductModel[]):void {
   }
 /**
