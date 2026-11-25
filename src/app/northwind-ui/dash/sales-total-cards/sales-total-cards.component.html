@@ -5,7 +5,7 @@
           @for (card of (cards$ | async) ?? []; track card.title; let i = $index) {
               <div class="dashboard-card h-100 w-100 total-orders">
                 <article class="d-block gap-3">
-                  <h3 class="text-uppercase text-secondary">{{ card.title }}</h3>
+                  <h2 class="h3 text-uppercase text-secondary">{{ card.title }}</h2>
                   <h4 class="text-primary">{{ card.subtitle }}</h4>
                   <p
                   [tickerText]="card.isCurrency 
