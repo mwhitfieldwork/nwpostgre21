@@ -88,10 +88,23 @@ header {
 .stock-out     { background: #fee2e2; color: #dc2626; border-color: #fecaca; }
 .stock-reorder { background: #ffedd5; color: #ea580c; border-color: #fed7aa; }
 .stock-low     { background: #fef9c3; color: #ca8a04; border-color: #fde68a; }
-.stock-ok      { background: #dcfce7; color: #16a34a; border-color: #bbf7d0; }
+.stock-ok      { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
 
 td .icon-btn {          // "an icon-btn inside a table cell" beats a plain `button` rule
   background: transparent;
+}
+
+// Visually hidden but still read by screen readers.
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Mobile hiding rules stay fine */

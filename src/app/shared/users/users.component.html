@@ -1,9 +1,11 @@
 <div>
-    <button (click)="onSelectUser(user!.id)">
-        <img [src]="imagePath" alt="{{user?.name}}">
-        <span class="firstname">{{signInUser?.firstname}}</span>
-        <span class="occupation">{{signInUser?.occupation}}</span>
-    </button>
-    <div>
-    </div>
+  <!-- aria-label = what a screen reader says. Describe what the button DOES. -->
+  <button type="button"
+          [attr.aria-label]="'Profile for ' + (signInUser?.firstname ?? 'current user')"
+          (click)="onSelectUser(user!.id)">
+    <!-- alt="": the picture is decoration now; the aria-label already names the button -->
+    <img [src]="imagePath" alt="">
+    <span class="firstname">{{ signInUser?.firstname }}</span>
+    <span class="occupation">{{ signInUser?.occupation }}</span>
+  </button>
 </div>
