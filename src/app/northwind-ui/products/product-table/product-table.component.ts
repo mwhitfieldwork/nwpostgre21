@@ -41,7 +41,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     ReactiveFormsModule,
     RouterOutlet,
     RouterLink,
-    ProductTableDetailComponent,
     ConfirmDeleteDirective,
     RatingComponent,
     AsyncPipe,
@@ -122,6 +121,15 @@ export class ProductTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
+/**
+ * WHAT: products$ delivers the list of products, a fresh list every time refresh$ rings.
+ * WHY:  so the table reloads itself after a save or delete, not only when the page opens.
+ *       refresh$ is a DOORBELL (plain Subject): it only rings, it holds nothing. A page that
+ *       opens late would miss earlier rings, so startWith "rings it once" to load right away.
+ *       (A BehaviorSubject is a WHITEBOARD: latecomers see the latest value, no startWith needed.)
+ * HOW:  the `| async` pipe in the HTML subscribes when the page opens and unsubscribes when
+ *       it closes. refresh$ never finishes on its own, but the async pipe turns it off for us.
+ */ 
     this.products$ = this._productsService.refresh$.pipe(
       startWith(undefined),
       switchMap(() => this.getProducts())
